@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 export const metadata: Metadata = {
   title: 'DA CASH BACK — Nền tảng hoàn phí giao dịch Crypto & Forex',
@@ -41,9 +42,4 @@ export default function RootLayout({
         />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body style={{ background: '#0B0B0B', color: '#F8F5E9' }}>
-        {children}
-      </body>
-    </html>
-  );
-}
+      <body style={{ background: '#0B0B0B', color: '#F
