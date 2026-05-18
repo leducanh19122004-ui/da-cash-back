@@ -3,8 +3,9 @@ import HeroSection from './components/HeroSection';
 import StatsSection from './components/StatsSection';
 import ExchangesSection from './components/ExchangesSection';
 import HowItWorks from './components/HowItWorks';
-import CashbackLookup from './components/CashbackLookup';
+import CashbackActivity from './components/CashbackActivity';
 import BenefitsSection from './components/BenefitsSection';
+import SafetySection from './components/SafetySection';
 import TrustSafety from './components/TrustSafety';
 import FAQ from './components/FAQ';
 import Testimonials from './components/Testimonials';
@@ -20,8 +21,9 @@ export default function HomePage() {
         <StatsSection />
         <ExchangesSection />
         <HowItWorks />
-        <CashbackLookup />
+        <CashbackActivity />
         <BenefitsSection />
+        <SafetySection />
         <TrustSafety />
         <FAQ />
         <Testimonials />
