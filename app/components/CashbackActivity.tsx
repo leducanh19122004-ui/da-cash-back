@@ -109,7 +109,7 @@ export default function CashbackActivity() {
   const [newTxId, setNewTxId]   = useState<string | null>(null);
   const [updatedStat, setUpdatedStat] = useState<keyof CashbackStats | null>(null);
   const [, setTick] = useState(0); // force re-render for relative times
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   // Re-render timestamps every 30s
   useEffect(() => {
