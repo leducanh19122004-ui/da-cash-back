@@ -136,3 +136,175 @@ export const langNames: Record<Lang, string> = {
   th: '🇹🇭 ภาษาไทย',
   id: '🇮🇩 Bahasa Indonesia',
 };
+
+// ─── PATCH: inject new fields into existing translations ──────────
+// This extends the Translations interface with new sections
+declare module './index' {}
+
+export interface TranslationsExtra {
+  heroCard: {
+    title: string; liveActivity: string; verifiedUid: string;
+    totalLabel: string; monthLabel: string; exchangesLabel: string;
+    recentLabel: string; mockDataLabel: string; privacyNote: string;
+    periodicUpdate: string;
+  };
+  time: {
+    justNow: string; secondsAgo: string; minutesAgo: string;
+    hoursAgo: string; daysAgo: string;
+  };
+  activity: {
+    sectionBadge: string; sectionTitle: string; mockBadge: string;
+    totalLabel: string; monthLabel: string; verifiedLabel: string;
+    liveFeedTitle: string; privacyNote: string; disclaimer: string;
+    disclaimerMock: string;
+  };
+  testimonials: {
+    badge: string; title: string; subtitle: string; mockLabel: string;
+    privacyNote: string; fullNote: string;
+    badges: { verifiedUid: string; cashbackRecorded: string; privacyProtected: string; };
+    exchange: string;
+  };
+}
+
+export const extraTranslations: Record<Lang, TranslationsExtra> = {
+  vi: {
+    heroCard: {
+      title: 'Hoạt động cashback', liveActivity: 'Live Activity', verifiedUid: '✓ Đã xác minh UID',
+      totalLabel: 'Tổng cashback đã ghi nhận', monthLabel: 'Cashback tháng này',
+      exchangesLabel: 'Sàn hỗ trợ', recentLabel: 'Hoàn phí gần đây',
+      mockDataLabel: 'Dữ liệu minh họa', privacyNote: 'Thông tin tài khoản được ẩn để bảo vệ quyền riêng tư.',
+      periodicUpdate: 'Cập nhật định kỳ',
+    },
+    time: { justNow:'vừa xong', secondsAgo:'{n} giây trước', minutesAgo:'{n} phút trước', hoursAgo:'{n} giờ trước', daysAgo:'{n} ngày trước' },
+    activity: {
+      sectionBadge:'Minh bạch & Thời gian thực', sectionTitle:'Hoạt động cashback gần đây',
+      mockBadge:'Dữ liệu minh họa — cập nhật ngẫu nhiên để minh họa hoạt động',
+      totalLabel:'Tổng cashback đã ghi nhận', monthLabel:'Cashback trong tháng',
+      verifiedLabel:'Tài khoản đã xác minh', liveFeedTitle:'Giao dịch cashback gần đây',
+      privacyNote:'Thông tin tài khoản đã được ẩn để bảo vệ quyền riêng tư',
+      disclaimer:'Dữ liệu hiển thị mang tính minh họa. Cashback thực tế phụ thuộc vào tài khoản đã xác minh và chính sách từng sàn.',
+      disclaimerMock:'Số liệu được cập nhật định kỳ từ hệ thống đối soát. Cashback phụ thuộc vào chính sách từng sàn.',
+    },
+    testimonials: {
+      badge:'Phản hồi', title:'Phản hồi từ người dùng đã xác minh',
+      subtitle:'Các phản hồi bên dưới là ví dụ giao diện. Đánh giá thực tế sẽ được cập nhật sau khi hoàn tất các kỳ cashback đầu tiên.',
+      mockLabel:'Đánh giá minh họa giao diện',
+      privacyNote:'Email/UID được ẩn để bảo vệ quyền riêng tư người dùng.',
+      fullNote:'Email/UID được ẩn một phần để bảo vệ quyền riêng tư. Một số phản hồi có thể là dữ liệu minh họa giao diện cho đến khi hệ thống cập nhật đánh giá xác minh thực tế.',
+      badges:{ verifiedUid:'Đã xác minh UID', cashbackRecorded:'Cashback đã ghi nhận', privacyProtected:'Tài khoản được ẩn danh' },
+      exchange:'Sàn sử dụng',
+    },
+  },
+  en: {
+    heroCard: {
+      title:'Cashback Activity', liveActivity:'Live Activity', verifiedUid:'✓ UID Verified',
+      totalLabel:'Total Cashback Recorded', monthLabel:'This Month Cashback',
+      exchangesLabel:'Exchanges', recentLabel:'Recent Cashback',
+      mockDataLabel:'Sample Data', privacyNote:'Account information is masked to protect privacy.',
+      periodicUpdate:'Periodic Updates',
+    },
+    time: { justNow:'just now', secondsAgo:'{n}s ago', minutesAgo:'{n} min ago', hoursAgo:'{n}h ago', daysAgo:'{n}d ago' },
+    activity: {
+      sectionBadge:'Transparent & Real-Time', sectionTitle:'Recent Cashback Activity',
+      mockBadge:'Sample data — randomly updated for illustration',
+      totalLabel:'Total Cashback Recorded', monthLabel:'Monthly Cashback',
+      verifiedLabel:'Verified Accounts', liveFeedTitle:'Recent Cashback Transactions',
+      privacyNote:'Account information is masked to protect privacy',
+      disclaimer:'Data shown is for illustration. Actual cashback depends on verified accounts and each exchange\'s policy.',
+      disclaimerMock:'Figures are updated periodically from reconciliation. Cashback depends on each exchange\'s policy.',
+    },
+    testimonials: {
+      badge:'Feedback', title:'Verified User Reviews',
+      subtitle:'Reviews below are interface examples. Real reviews will be updated after the first cashback cycles are completed.',
+      mockLabel:'Interface sample review',
+      privacyNote:'Emails/UIDs are partially masked for privacy.',
+      fullNote:'Emails and UIDs are partially masked for privacy. Some feedback may be sample interface data until verified reviews are updated.',
+      badges:{ verifiedUid:'Verified UID', cashbackRecorded:'Cashback Recorded', privacyProtected:'Privacy Protected' },
+      exchange:'Exchange Used',
+    },
+  },
+  ko: {
+    heroCard: {
+      title:'캐시백 활동', liveActivity:'실시간 활동', verifiedUid:'✓ UID 인증 완료',
+      totalLabel:'총 캐시백 기록', monthLabel:'이번 달 캐시백',
+      exchangesLabel:'지원 거래소', recentLabel:'최근 환급',
+      mockDataLabel:'예시 데이터', privacyNote:'개인정보 보호를 위해 계정 정보가 마스킹됩니다.',
+      periodicUpdate:'주기적 업데이트',
+    },
+    time: { justNow:'방금 전', secondsAgo:'{n}초 전', minutesAgo:'{n}분 전', hoursAgo:'{n}시간 전', daysAgo:'{n}일 전' },
+    activity: {
+      sectionBadge:'투명성 & 실시간', sectionTitle:'최근 캐시백 활동',
+      mockBadge:'예시 데이터 — 활동 시뮬레이션을 위해 무작위 업데이트',
+      totalLabel:'총 캐시백 기록', monthLabel:'월간 캐시백',
+      verifiedLabel:'인증된 계정', liveFeedTitle:'최근 캐시백 거래',
+      privacyNote:'개인정보 보호를 위해 계정 정보가 마스킹됩니다',
+      disclaimer:'표시된 데이터는 예시입니다. 실제 캐시백은 인증된 계정과 각 거래소의 정책에 따라 다릅니다.',
+      disclaimerMock:'수치는 정산 시스템에서 주기적으로 업데이트됩니다.',
+    },
+    testimonials: {
+      badge:'피드백', title:'인증된 사용자 리뷰',
+      subtitle:'아래 리뷰는 인터페이스 예시입니다. 실제 리뷰는 첫 번째 캐시백 주기 완료 후 업데이트됩니다.',
+      mockLabel:'인터페이스 예시 리뷰',
+      privacyNote:'이메일/UID는 개인정보 보호를 위해 일부 마스킹됩니다.',
+      fullNote:'개인정보 보호를 위해 이메일과 UID는 일부 마스킹됩니다. 일부 피드백은 실제 검증 리뷰가 업데이트되기 전까지 인터페이스 예시 데이터일 수 있습니다.',
+      badges:{ verifiedUid:'UID 인증 완료', cashbackRecorded:'캐시백 기록됨', privacyProtected:'익명 처리됨' },
+      exchange:'사용 거래소',
+    },
+  },
+  th: {
+    heroCard: {
+      title:'กิจกรรมแคชแบ็ก', liveActivity:'กิจกรรมสด', verifiedUid:'✓ ยืนยัน UID แล้ว',
+      totalLabel:'แคชแบ็กทั้งหมดที่บันทึก', monthLabel:'แคชแบ็กเดือนนี้',
+      exchangesLabel:'ตลาดที่รองรับ', recentLabel:'แคชแบ็กล่าสุด',
+      mockDataLabel:'ข้อมูลตัวอย่าง', privacyNote:'ข้อมูลบัญชีถูกปกปิดเพื่อปกป้องความเป็นส่วนตัว',
+      periodicUpdate:'อัปเดตเป็นระยะ',
+    },
+    time: { justNow:'เมื่อกี้', secondsAgo:'{n} วิที่แล้ว', minutesAgo:'{n} นาทีที่แล้ว', hoursAgo:'{n} ชม.ที่แล้ว', daysAgo:'{n} วันที่แล้ว' },
+    activity: {
+      sectionBadge:'โปร่งใสและเรียลไทม์', sectionTitle:'กิจกรรมแคชแบ็กล่าสุด',
+      mockBadge:'ข้อมูลตัวอย่าง — อัปเดตแบบสุ่มเพื่อแสดงการทำงาน',
+      totalLabel:'แคชแบ็กทั้งหมดที่บันทึก', monthLabel:'แคชแบ็กรายเดือน',
+      verifiedLabel:'บัญชีที่ยืนยันแล้ว', liveFeedTitle:'ธุรกรรมแคชแบ็กล่าสุด',
+      privacyNote:'ข้อมูลบัญชีถูกปกปิดเพื่อปกป้องความเป็นส่วนตัว',
+      disclaimer:'ข้อมูลที่แสดงเป็นเพียงตัวอย่าง แคชแบ็กจริงขึ้นอยู่กับบัญชีที่ยืนยันและนโยบายของแต่ละตลาด',
+      disclaimerMock:'ตัวเลขอัปเดตเป็นระยะจากระบบกระทบยอด',
+    },
+    testimonials: {
+      badge:'ความคิดเห็น', title:'รีวิวจากผู้ใช้ที่ยืนยันแล้ว',
+      subtitle:'รีวิวด้านล่างเป็นตัวอย่างอินเทอร์เฟซ รีวิวจริงจะอัปเดตหลังรอบแคชแบ็กแรกเสร็จสิ้น',
+      mockLabel:'รีวิวตัวอย่างอินเทอร์เฟซ',
+      privacyNote:'อีเมล/UID ถูกปกปิดบางส่วนเพื่อความเป็นส่วนตัว',
+      fullNote:'อีเมลและ UID ถูกปกปิดบางส่วนเพื่อความเป็นส่วนตัว รีวิวบางส่วนอาจเป็นข้อมูลตัวอย่าง',
+      badges:{ verifiedUid:'ยืนยัน UID แล้ว', cashbackRecorded:'บันทึกแคชแบ็กแล้ว', privacyProtected:'ปกป้องความเป็นส่วนตัว' },
+      exchange:'ตลาดที่ใช้',
+    },
+  },
+  id: {
+    heroCard: {
+      title:'Aktivitas Cashback', liveActivity:'Aktivitas Langsung', verifiedUid:'✓ UID Terverifikasi',
+      totalLabel:'Total Cashback Tercatat', monthLabel:'Cashback Bulan Ini',
+      exchangesLabel:'Exchange', recentLabel:'Cashback Terbaru',
+      mockDataLabel:'Data Contoh', privacyNote:'Informasi akun disembunyikan untuk melindungi privasi.',
+      periodicUpdate:'Pembaruan Berkala',
+    },
+    time: { justNow:'baru saja', secondsAgo:'{n} dtk lalu', minutesAgo:'{n} mnt lalu', hoursAgo:'{n} jam lalu', daysAgo:'{n} hari lalu' },
+    activity: {
+      sectionBadge:'Transparan & Real-Time', sectionTitle:'Aktivitas Cashback Terbaru',
+      mockBadge:'Data contoh — diperbarui secara acak untuk ilustrasi',
+      totalLabel:'Total Cashback Tercatat', monthLabel:'Cashback Bulanan',
+      verifiedLabel:'Akun Terverifikasi', liveFeedTitle:'Transaksi Cashback Terbaru',
+      privacyNote:'Informasi akun disembunyikan untuk melindungi privasi',
+      disclaimer:'Data yang ditampilkan bersifat ilustrasi. Cashback aktual tergantung pada akun terverifikasi dan kebijakan masing-masing exchange.',
+      disclaimerMock:'Angka diperbarui secara berkala dari sistem rekonsiliasi.',
+    },
+    testimonials: {
+      badge:'Ulasan', title:'Ulasan Pengguna Terverifikasi',
+      subtitle:'Ulasan di bawah adalah contoh antarmuka. Ulasan nyata akan diperbarui setelah siklus cashback pertama selesai.',
+      mockLabel:'Ulasan contoh antarmuka',
+      privacyNote:'Email/UID disembunyikan sebagian untuk privasi.',
+      fullNote:'Email dan UID disembunyikan sebagian untuk privasi. Beberapa ulasan mungkin merupakan data contoh antarmuka.',
+      badges:{ verifiedUid:'UID Terverifikasi', cashbackRecorded:'Cashback Tercatat', privacyProtected:'Privasi Terlindungi' },
+      exchange:'Exchange Digunakan',
+    },
+  },
+};

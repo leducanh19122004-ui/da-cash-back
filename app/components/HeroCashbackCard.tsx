@@ -1,287 +1,185 @@
 'use client';
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { useLang } from '../contexts/LanguageContext';
+import { extraTranslations } from '../translations';
 import {
-  USE_MOCK_CASHBACK_DATA,
-  CashbackTransaction,
-  loadOrInitStats,
-  saveStats,
-  getInitialTransactions,
-  generateMockCashbackEvent,
-  getRandomDelay,
-  getRelativeTime,
-  formatCurrency,
+  USE_MOCK_CASHBACK_DATA, CashbackTransaction,
+  loadOrInitStats, saveStats, getInitialTransactions,
+  generateMockCashbackEvent, getRandomDelay, formatRelativeTime, formatCurrency,
 } from '../lib/cashback';
 
-// ─── Animated counter ─────────────────────────────────────────────
-function AnimatedCounter({
-  target, duration = 900, flash = false,
-}: { target: number; duration?: number; flash?: boolean }) {
-  const [display, setDisplay] = useState(target);
+function AnimatedCounter({ target, duration=900, flash=false }: { target:number; duration?:number; flash?:boolean }) {
+  const [disp, setDisp] = useState(target);
   const [flashing, setFlashing] = useState(false);
-  const prevRef = useRef(target);
-  const frameRef = useRef<number>(0);
-
+  const prev = useRef(target);
+  const fr   = useRef<number>(0);
   useEffect(() => {
-    const start = prevRef.current;
-    const diff = target - start;
-    if (Math.abs(diff) < 0.005) { setDisplay(target); return; }
-    const startTime = performance.now();
-    const tick = (now: number) => {
-      const t = Math.min((now - startTime) / duration, 1);
-      const ease = 1 - Math.pow(1 - t, 3);
-      setDisplay(parseFloat((start + diff * ease).toFixed(2)));
-      if (t < 1) { frameRef.current = requestAnimationFrame(tick); }
-      else { setDisplay(target); prevRef.current = target; }
+    const start=prev.current; const diff=target-start;
+    if (Math.abs(diff)<0.005){setDisp(target);return;}
+    const t0=performance.now();
+    const tick=(now:number)=>{
+      const t=Math.min((now-t0)/duration,1);
+      const e=1-Math.pow(1-t,3);
+      setDisp(parseFloat((start+diff*e).toFixed(2)));
+      if(t<1){fr.current=requestAnimationFrame(tick);}
+      else{setDisp(target);prev.current=target;}
     };
-    frameRef.current = requestAnimationFrame(tick);
-    if (flash) { setFlashing(true); setTimeout(() => setFlashing(false), 900); }
-    return () => cancelAnimationFrame(frameRef.current);
-  }, [target, duration, flash]);
-
+    fr.current=requestAnimationFrame(tick);
+    if(flash){setFlashing(true);setTimeout(()=>setFlashing(false),900);}
+    return()=>cancelAnimationFrame(fr.current);
+  },[target,duration,flash]);
   return (
-    <span style={{
-      display: 'inline-block',
-      transition: 'color 0.4s ease',
-      animation: flashing ? 'num-flash 0.9s ease forwards' : 'none',
-    }}>
-      ${display.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+    <span style={{ display:'inline-block', transition:'color 0.4s', animation:flashing?'num-flash 0.9s ease forwards':'none' }}>
+      ${disp.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
     </span>
   );
 }
 
-// ─── Single transaction row ────────────────────────────────────────
-function TxRow({ tx, isNew }: { tx: CashbackTransaction; isNew: boolean }) {
+function TxRow({ tx, isNew, lang }: { tx:CashbackTransaction; isNew:boolean; lang:string }) {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setMounted(true), 30); return () => clearTimeout(t); }, []);
-  const isCrypto = tx.type === 'crypto';
+  useEffect(()=>{const t=setTimeout(()=>setMounted(true),30);return()=>clearTimeout(t);},[]);
+  const isCrypto = tx.type==='crypto';
   return (
     <div style={{
-      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      padding: '0.5rem 0', borderBottom: '1px solid rgba(255,255,255,0.045)',
-      opacity: mounted ? 1 : 0,
-      transform: mounted ? 'none' : 'translateY(-8px)',
-      transition: 'opacity 0.35s ease, transform 0.35s ease',
-      background: isNew && mounted ? 'rgba(212,175,55,0.04)' : 'transparent',
+      display:'flex', justifyContent:'space-between', alignItems:'center',
+      padding:'0.48rem 0', borderBottom:'1px solid rgba(255,255,255,0.042)',
+      opacity:mounted?1:0, transform:mounted?'none':'translateY(-8px)',
+      transition:'opacity 0.32s ease,transform 0.32s ease',
+      background:isNew&&mounted?'rgba(212,175,55,0.04)':'transparent',
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', minWidth: 0 }}>
+      <div style={{display:'flex',alignItems:'center',gap:'0.5rem',minWidth:0}}>
         <div style={{
-          width: '28px', height: '28px', borderRadius: '50%', flexShrink: 0,
-          background: isCrypto ? 'rgba(99,179,237,0.12)' : 'rgba(72,199,142,0.12)',
-          border: `1px solid ${isCrypto ? 'rgba(99,179,237,0.25)' : 'rgba(72,199,142,0.25)'}`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '0.58rem', fontWeight: 800,
-          color: isCrypto ? '#63B3ED' : '#48C78E',
-        }}>
-          {tx.exchange.slice(0, 2).toUpperCase()}
-        </div>
-        <div style={{ minWidth: 0 }}>
-          <p style={{ fontSize: '0.78rem', fontWeight: 700, color: '#F8F5E9', lineHeight: 1 }}>{tx.exchange}</p>
-          <p style={{ fontSize: '0.64rem', color: '#555', marginTop: '0.15rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '110px' }}>
-            {tx.maskedAccount}
-          </p>
+          width:'27px',height:'27px',borderRadius:'50%',flexShrink:0,
+          background:isCrypto?'rgba(99,179,237,0.12)':'rgba(72,199,142,0.12)',
+          border:`1px solid ${isCrypto?'rgba(99,179,237,0.25)':'rgba(72,199,142,0.25)'}`,
+          display:'flex',alignItems:'center',justifyContent:'center',
+          fontSize:'0.57rem',fontWeight:800,
+          color:isCrypto?'#63B3ED':'#48C78E',
+        }}>{tx.exchange.slice(0,2).toUpperCase()}</div>
+        <div style={{minWidth:0}}>
+          <p style={{fontSize:'0.76rem',fontWeight:700,color:'#F8F5E9',lineHeight:1}}>{tx.exchange}</p>
+          <p style={{fontSize:'0.62rem',color:'#555',marginTop:'0.12rem',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:'105px'}}>{tx.maskedAccount}</p>
         </div>
       </div>
-      <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: '0.5rem' }}>
-        <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#4CAF50', whiteSpace: 'nowrap' }}>
-          +{formatCurrency(tx.amount)}
-        </p>
-        <p style={{ fontSize: '0.62rem', color: '#555', marginTop: '0.12rem' }}>{getRelativeTime(tx.timestampMs)}</p>
+      <div style={{textAlign:'right',flexShrink:0,marginLeft:'0.45rem'}}>
+        <p style={{fontSize:'0.8rem',fontWeight:700,color:'#4CAF50',whiteSpace:'nowrap'}}>+{formatCurrency(tx.amount)}</p>
+        <p style={{fontSize:'0.6rem',color:'#555',marginTop:'0.1rem'}}>{formatRelativeTime(tx.timestampMs, lang as 'vi')}</p>
       </div>
     </div>
   );
 }
 
-// ─── Live Cashback Card ────────────────────────────────────────────
 export default function HeroCashbackCard() {
-  const [stats, setStats] = useState(() => loadOrInitStats());
-  const [txList, setTxList] = useState<CashbackTransaction[]>(() => getInitialTransactions(5));
-  const [newTxId, setNewTxId] = useState<string | null>(null);
-  const [flashTotal, setFlashTotal] = useState(false);
-  const [, setTick] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const { lang } = useLang();
+  const hc = extraTranslations[lang as keyof typeof extraTranslations]?.heroCard ?? extraTranslations.vi.heroCard;
+  const [stats,setStats]     = useState(()=>loadOrInitStats());
+  const [txList,setTxList]   = useState<CashbackTransaction[]>(()=>getInitialTransactions(5));
+  const [newTxId,setNewTxId] = useState<string|null>(null);
+  const [flashTot,setFlashTot] = useState(false);
+  const [,setTick]            = useState(0);
+  const timerRef = useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
+  const cardRef  = useRef<HTMLDivElement>(null);
+  const [tilt,setTilt]       = useState({x:0,y:0});
+  const [hovered,setHovered] = useState(false);
+  const [mounted,setMounted] = useState(false);
 
-  // Mount animation
-  useEffect(() => { const t = setTimeout(() => setMounted(true), 80); return () => clearTimeout(t); }, []);
+  useEffect(()=>{const t=setTimeout(()=>setMounted(true),80);return()=>clearTimeout(t);},[]);
+  useEffect(()=>{const iv=setInterval(()=>setTick(t=>t+1),25_000);return()=>clearInterval(iv);},[]);
 
-  // Timestamp refresh
-  useEffect(() => {
-    const iv = setInterval(() => setTick(t => t + 1), 25_000);
-    return () => clearInterval(iv);
-  }, []);
-
-  // Live feed
-  const scheduleNext = useCallback(() => {
-    timerRef.current = setTimeout(() => {
-      const ev = generateMockCashbackEvent();
-      setTxList(prev => [ev, ...prev].slice(0, 6));
-      setNewTxId(ev.id);
-      setTimeout(() => setNewTxId(null), 2500);
-      setStats(prev => {
-        const next = { ...prev, totalCashback: prev.totalCashback + ev.amount, monthCashback: prev.monthCashback + ev.amount };
-        saveStats(next);
-        return next;
+  const scheduleNext = useCallback(()=>{
+    timerRef.current=setTimeout(()=>{
+      const ev=generateMockCashbackEvent();
+      setTxList(p=>[ev,...p].slice(0,6));
+      setNewTxId(ev.id); setTimeout(()=>setNewTxId(null),2500);
+      setStats(p=>{
+        const n={...p,totalCashback:p.totalCashback+ev.amount,monthCashback:p.monthCashback+ev.amount};
+        saveStats(n); return n;
       });
-      setFlashTotal(true);
-      setTimeout(() => setFlashTotal(false), 1000);
+      setFlashTot(true); setTimeout(()=>setFlashTot(false),1000);
       scheduleNext();
     }, getRandomDelay());
-  }, []);
+  },[]);
 
-  useEffect(() => {
-    const init = setTimeout(() => scheduleNext(), 4500);
-    return () => { clearTimeout(init); clearTimeout(timerRef.current); };
-  }, [scheduleNext]);
+  useEffect(()=>{
+    const init=setTimeout(()=>scheduleNext(),4500);
+    return()=>{clearTimeout(init);clearTimeout(timerRef.current);};
+  },[scheduleNext]);
 
-  // Hover tilt — very subtle
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = (e.clientX - cx) / (rect.width / 2);
-    const dy = (e.clientY - cy) / (rect.height / 2);
-    setTilt({ x: dy * -3, y: dx * 3 }); // max 3deg
+  const onMove=(e:React.MouseEvent<HTMLDivElement>)=>{
+    if(!cardRef.current)return;
+    const r=cardRef.current.getBoundingClientRect();
+    const dx=(e.clientX-(r.left+r.width/2))/(r.width/2);
+    const dy=(e.clientY-(r.top+r.height/2))/(r.height/2);
+    setTilt({x:dy*-2.5,y:dx*2.5});
   };
-  const handleMouseLeave = () => { setTilt({ x: 0, y: 0 }); setIsHovered(false); };
-  const handleMouseEnter = () => setIsHovered(true);
-
-  const isMock = USE_MOCK_CASHBACK_DATA;
 
   return (
-    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }} className="hero-dashboard">
-      {/* Glow behind card */}
-      <div style={{
-        position: 'absolute',
-        top: '50%', left: '50%',
-        transform: 'translate(-50%,-50%)',
-        width: '420px', height: '420px',
-        background: 'radial-gradient(circle, rgba(212,175,55,0.16) 0%, transparent 70%)',
-        borderRadius: '50%',
-        animation: 'glow-pulse 4s ease-in-out infinite',
-        pointerEvents: 'none',
-        zIndex: 0,
-      }} />
+    <div style={{position:'relative',display:'flex',justifyContent:'center'}} className="hero-dashboard">
+      {/* Glow */}
+      <div style={{position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',
+        width:'400px',height:'400px',background:'radial-gradient(circle,rgba(212,175,55,0.14) 0%,transparent 70%)',
+        borderRadius:'50%',animation:'glow-pulse 4.5s ease-in-out infinite',pointerEvents:'none',zIndex:0}} />
 
-      {/* Card */}
-      <div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        onMouseEnter={handleMouseEnter}
+      <div ref={cardRef} onMouseMove={onMove}
+        onMouseLeave={()=>{setTilt({x:0,y:0});setHovered(false);}}
+        onMouseEnter={()=>setHovered(true)}
         style={{
-          position: 'relative', zIndex: 1,
-          width: '100%', maxWidth: '380px',
-          background: 'rgba(13,13,13,0.92)',
-          backdropFilter: 'blur(20px)',
-          border: `1px solid ${isHovered ? 'rgba(212,175,55,0.55)' : 'rgba(212,175,55,0.28)'}`,
-          borderRadius: '1.5rem',
-          padding: '1.6rem',
-          boxShadow: isHovered
-            ? '0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(212,175,55,0.12)'
-            : '0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(212,175,55,0.06)',
-          transform: `
-            ${mounted ? 'translateY(0) scale(1)' : 'translateY(16px) scale(0.97)'}
-            perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)
-          `,
-          opacity: mounted ? 1 : 0,
-          transition: 'opacity 0.6s ease, transform 0.45s cubic-bezier(0.23,1,0.32,1), border-color 0.3s ease, box-shadow 0.3s ease',
-          animation: mounted ? 'float 6s ease-in-out infinite' : 'none',
-          willChange: 'transform',
-        }}
-      >
-        {/* ── Card Header ─────────────────────────────────── */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.1rem' }}>
+          position:'relative',zIndex:1,width:'100%',maxWidth:'375px',
+          background:'rgba(10,10,10,0.93)',backdropFilter:'blur(22px)',
+          border:`1px solid ${hovered?'rgba(212,175,55,0.55)':'rgba(212,175,55,0.28)'}`,
+          borderRadius:'1.5rem',padding:'1.5rem',
+          boxShadow:hovered?'0 22px 62px rgba(0,0,0,0.65),0 0 42px rgba(212,175,55,0.12)':'0 14px 44px rgba(0,0,0,0.52),0 0 22px rgba(212,175,55,0.07)',
+          transform:`${mounted?'translateY(0) scale(1)':'translateY(18px) scale(0.965)'} perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+          opacity:mounted?1:0,
+          transition:'opacity 0.6s ease,border-color 0.28s,box-shadow 0.28s,transform 0.4s cubic-bezier(0.23,1,0.32,1)',
+          animation:mounted?'float 6s ease-in-out infinite':'none',willChange:'transform',
+        }}>
+
+        {/* Header */}
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'1rem'}}>
           <div>
-            <p style={{ fontSize: '0.72rem', fontWeight: 700, color: '#B8B8B8', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
-              Hoạt động cashback
-            </p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <span className="live-dot-anim" style={{
-                width: '7px', height: '7px', borderRadius: '50%',
-                background: '#4ade80', flexShrink: 0, display: 'inline-block',
-              }} />
-              <span style={{ fontSize: '0.68rem', color: '#4ade80', fontWeight: 600 }}>Live Activity</span>
+            <p style={{fontSize:'0.68rem',fontWeight:700,color:'#B8B8B8',letterSpacing:'0.08em',textTransform:'uppercase',marginBottom:'0.18rem'}}>{hc.title}</p>
+            <div style={{display:'flex',alignItems:'center',gap:'0.38rem'}}>
+              <span className="live-dot-anim" style={{width:'7px',height:'7px',borderRadius:'50%',background:'#4ade80',flexShrink:0,display:'inline-block'}} />
+              <span style={{fontSize:'0.65rem',color:'#4ade80',fontWeight:600}}>{hc.liveActivity}</span>
             </div>
           </div>
-          <div style={{
-            padding: '0.3rem 0.7rem', borderRadius: '999px',
-            background: 'rgba(212,175,55,0.12)', border: '1px solid rgba(212,175,55,0.35)',
-            fontSize: '0.65rem', fontWeight: 700, color: '#D4AF37',
-          }}>
-            ✓ Đã xác minh UID
+          <div style={{padding:'0.28rem 0.65rem',borderRadius:'999px',background:'rgba(212,175,55,0.12)',border:'1px solid rgba(212,175,55,0.35)',fontSize:'0.62rem',fontWeight:700,color:'#D4AF37',whiteSpace:'nowrap'}}>
+            {hc.verifiedUid}
           </div>
         </div>
 
-        {/* ── Main stat ───────────────────────────────────── */}
-        <div style={{
-          marginBottom: '0.9rem', paddingBottom: '0.9rem',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
-        }}>
-          <p style={{ fontSize: '0.68rem', color: '#666', marginBottom: '0.3rem', fontWeight: 500 }}>
-            Tổng cashback đã ghi nhận
+        {/* Total */}
+        <div style={{marginBottom:'0.85rem',paddingBottom:'0.85rem',borderBottom:'1px solid rgba(255,255,255,0.055)'}}>
+          <p style={{fontSize:'0.64rem',color:'#666',marginBottom:'0.28rem',fontWeight:500}}>{hc.totalLabel}</p>
+          <p style={{fontSize:'1.8rem',fontWeight:900,lineHeight:1,background:'linear-gradient(135deg,#FFD700,#D4AF37)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text'}}>
+            <AnimatedCounter target={stats.totalCashback} duration={900} flash={flashTot} />
           </p>
-          <p style={{
-            fontSize: '1.85rem', fontWeight: 900, lineHeight: 1,
-            background: 'linear-gradient(135deg,#FFD700,#D4AF37)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          }}>
-            <AnimatedCounter target={stats.totalCashback} duration={900} flash={flashTotal} />
-          </p>
-          {isMock && (
-            <p style={{ fontSize: '0.6rem', color: '#444', marginTop: '0.25rem', fontStyle: 'italic' }}>
-              Dữ liệu minh họa
-            </p>
-          )}
+          {USE_MOCK_CASHBACK_DATA && <p style={{fontSize:'0.58rem',color:'#3a3a3a',marginTop:'0.22rem',fontStyle:'italic'}}>{hc.mockDataLabel}</p>}
         </div>
 
-        {/* ── Secondary stats ─────────────────────────────── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem', marginBottom: '1rem' }}>
-          {[
-            { label: 'Cashback tháng này', value: `$${stats.monthCashback.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`, gold: true },
-            { label: 'Sàn hỗ trợ', value: '13 sàn', gold: false },
-          ].map(item => (
-            <div key={item.label} style={{
-              background: 'rgba(255,255,255,0.025)', borderRadius: '0.75rem',
-              padding: '0.7rem 0.8rem', border: '1px solid rgba(212,175,55,0.1)',
-            }}>
-              <p style={{ fontSize: '0.62rem', color: '#666', marginBottom: '0.2rem', fontWeight: 500 }}>{item.label}</p>
-              <p style={{ fontSize: '1rem', fontWeight: 800, color: item.gold ? '#D4AF37' : '#F8F5E9' }}>{item.value}</p>
-            </div>
-          ))}
+        {/* Secondary stats */}
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.55rem',marginBottom:'0.9rem'}}>
+          <div style={{background:'rgba(255,255,255,0.022)',borderRadius:'0.65rem',padding:'0.65rem 0.75rem',border:'1px solid rgba(212,175,55,0.09)'}}>
+            <p style={{fontSize:'0.58rem',color:'#666',marginBottom:'0.18rem',fontWeight:500}}>{hc.monthLabel}</p>
+            <p style={{fontSize:'0.95rem',fontWeight:800,color:'#D4AF37'}}>${stats.monthCashback.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</p>
+          </div>
+          <div style={{background:'rgba(255,255,255,0.022)',borderRadius:'0.65rem',padding:'0.65rem 0.75rem',border:'1px solid rgba(212,175,55,0.09)'}}>
+            <p style={{fontSize:'0.58rem',color:'#666',marginBottom:'0.18rem',fontWeight:500}}>{hc.exchangesLabel}</p>
+            <p style={{fontSize:'0.95rem',fontWeight:800,color:'#F8F5E9'}}>13</p>
+          </div>
         </div>
 
-        {/* ── Recent transactions ─────────────────────────── */}
+        {/* Recent list */}
         <div>
-          <p style={{ fontSize: '0.65rem', color: '#555', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '0.55rem' }}>
-            Hoàn phí gần đây
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {txList.slice(0, 5).map(tx => (
-              <TxRow key={tx.id} tx={tx} isNew={tx.id === newTxId} />
-            ))}
-          </div>
+          <p style={{fontSize:'0.62rem',color:'#555',fontWeight:600,letterSpacing:'0.06em',textTransform:'uppercase',marginBottom:'0.5rem'}}>{hc.recentLabel}</p>
+          {txList.slice(0,5).map(tx=><TxRow key={tx.id} tx={tx} isNew={tx.id===newTxId} lang={lang} />)}
         </div>
 
-        {/* ── Footer note ─────────────────────────────────── */}
-        <div style={{
-          marginTop: '0.875rem', paddingTop: '0.75rem',
-          borderTop: '1px solid rgba(255,255,255,0.04)',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem',
-        }}>
-          <p style={{ fontSize: '0.6rem', color: '#444', lineHeight: 1.5 }}>
-            Thông tin tài khoản được ẩn để bảo vệ quyền riêng tư.
-          </p>
-          <span style={{
-            fontSize: '0.58rem', color: '#333', whiteSpace: 'nowrap',
-            padding: '0.15rem 0.4rem', borderRadius: '4px',
-            border: '1px solid rgba(255,255,255,0.06)',
-          }}>
-            Cập nhật định kỳ
-          </span>
+        {/* Footer */}
+        <div style={{marginTop:'0.8rem',paddingTop:'0.65rem',borderTop:'1px solid rgba(255,255,255,0.038)',display:'flex',alignItems:'center',justifyContent:'space-between',gap:'0.4rem'}}>
+          <p style={{fontSize:'0.58rem',color:'#3d3d3d',lineHeight:1.45}}>{hc.privacyNote}</p>
+          <span style={{fontSize:'0.56rem',color:'#2e2e2e',whiteSpace:'nowrap',padding:'0.12rem 0.38rem',borderRadius:'4px',border:'1px solid rgba(255,255,255,0.055)'}}>{hc.periodicUpdate}</span>
         </div>
       </div>
     </div>
