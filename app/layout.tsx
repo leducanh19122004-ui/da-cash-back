@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { LanguageProvider } from './contexts/LanguageContext';
-import GlobalBackground from './components/GlobalBackground';
+import GlobalAnimatedBackground from './components/GlobalAnimatedBackground';
 
 export const metadata: Metadata = {
   title: 'DA CASH BACK — Nền tảng hoàn phí giao dịch Crypto & Forex',
@@ -13,8 +13,12 @@ export const metadata: Metadata = {
     description: 'Đăng ký sàn qua link đối tác, giao dịch như bình thường và nhận hoàn phí định kỳ.',
     type: 'website', locale: 'vi_VN', siteName: 'DA CASH BACK',
   },
-  twitter: { card:'summary_large_image', title:'DA CASH BACK — Hoàn phí giao dịch Crypto & Forex', description:'Nền tảng cashback giao dịch minh bạch, an toàn.' },
-  robots: { index:true, follow:true },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'DA CASH BACK — Hoàn phí giao dịch Crypto & Forex',
+    description: 'Nền tảng cashback giao dịch minh bạch, an toàn.',
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -23,13 +27,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
+        />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body style={{ background: '#050505', color: '#F8F5E9' }}>
+      <body>
         <LanguageProvider>
-          <GlobalBackground />
-          {children}
+          {/*
+           * app-root: base layer, background đen
+           * GlobalAnimatedBackground: fixed, z-index 0, pointer-events none
+           * app-content: relative, z-index 10 — toàn bộ UI nằm trên nền
+           */}
+          <div className="app-root">
+            <GlobalAnimatedBackground />
+            <div className="app-content">
+              {children}
+            </div>
+          </div>
         </LanguageProvider>
       </body>
     </html>
