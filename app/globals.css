@@ -62,3 +62,122 @@
 ::-webkit-scrollbar-track { background: #0B0B0B; }
 ::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.3); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(212,175,55,0.5); }
+
+/* ═══════════════════════════════════════════════════════════════
+   HERO ANIMATIONS — Premium motion system
+═══════════════════════════════════════════════════════════════ */
+
+/* Float — card hover effect */
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* Slow drift for light orbs */
+@keyframes orb-drift-1 {
+  0%,100% { transform: translate(0,0) scale(1); opacity:0.35; }
+  33%     { transform: translate(40px,-30px) scale(1.08); opacity:0.45; }
+  66%     { transform: translate(-20px,20px) scale(0.95); opacity:0.3; }
+}
+@keyframes orb-drift-2 {
+  0%,100% { transform: translate(0,0) scale(1); opacity:0.25; }
+  40%     { transform: translate(-50px,30px) scale(1.1); opacity:0.35; }
+  70%     { transform: translate(30px,-20px) scale(0.92); opacity:0.2; }
+}
+
+/* Glow pulse behind card */
+@keyframes glow-pulse {
+  0%,100% { opacity:0.12; transform:scale(1); }
+  50%     { opacity:0.22; transform:scale(1.06); }
+}
+
+/* Live dot blink */
+@keyframes live-dot {
+  0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(74,222,128,0.6); }
+  50%     { opacity:0.6; box-shadow:0 0 0 5px rgba(74,222,128,0); }
+}
+
+/* Fade up + blur — staggered text reveal */
+@keyframes fade-up-blur {
+  from { opacity:0; transform:translateY(18px); filter:blur(4px); }
+  to   { opacity:1; transform:translateY(0);    filter:blur(0); }
+}
+
+/* Slide in from top — new tx item */
+@keyframes slide-in-top {
+  from { opacity:0; transform:translateY(-10px) scaleY(0.95); }
+  to   { opacity:1; transform:translateY(0)     scaleY(1); }
+}
+
+/* Shine sweep — button hover */
+@keyframes shine-sweep {
+  from { left:-80%; }
+  to   { left:120%; }
+}
+
+/* Number flash when updated */
+@keyframes num-flash {
+  0%   { color:#F8F5E9; }
+  30%  { color:#FFD700; text-shadow:0 0 12px rgba(255,215,0,0.6); }
+  100% { color:#FFD700; text-shadow:none; }
+}
+
+/* Stat card highlight pulse */
+@keyframes stat-pulse {
+  0%,100% { box-shadow:0 0 0 0 rgba(212,175,55,0); border-color:rgba(212,175,55,0.2); }
+  50%     { box-shadow:0 0 18px rgba(212,175,55,0.2); border-color:rgba(212,175,55,0.55); }
+}
+
+/* Badge stagger */
+@keyframes badge-in {
+  from { opacity:0; transform:translateY(8px) scale(0.95); }
+  to   { opacity:1; transform:translateY(0)   scale(1); }
+}
+
+/* Subtle gradient shift for background */
+@keyframes gradient-shift {
+  0%,100% { background-position: 0% 50%; }
+  50%     { background-position: 100% 50%; }
+}
+
+/* prefers-reduced-motion: disable non-essential animations */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float, .animate-orb, .animate-glow, .live-dot { animation: none !important; }
+  [data-animate] { animation: none !important; transition: none !important; }
+}
+
+/* Utility classes for animations */
+.animate-float      { animation: float 5s ease-in-out infinite; }
+.animate-fade-up    { animation: fade-up-blur 0.7s ease both; }
+.live-dot-anim      { animation: live-dot 2.2s ease-in-out infinite; }
+
+/* Shine button base */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
+  transition: none;
+  pointer-events: none;
+}
+.btn-shine:hover::after {
+  animation: shine-sweep 0.5s ease forwards;
+}
+
+/* Scroll-reveal via IntersectionObserver state */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
