@@ -7,7 +7,7 @@ export default function SafetySection() {
   const s = safetyTranslations[lang as keyof typeof safetyTranslations] ?? safetyTranslations.vi;
 
   return (
-    <section id="safety" style={{ padding: '6rem 1.5rem', background: 'transparent' }}>
+    <section id="safety" style={{ padding: '6rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
         {/* Header */}
@@ -27,7 +27,7 @@ export default function SafetySection() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }} className="safety-grid">
 
           {/* CAN NEED */}
-          <div style={{ background: 'rgba(13,13,13,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '1.25rem', padding: '1.75rem', overflow: 'hidden' }}>
+          <div style={{ background: 'rgba(8,7,5,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '1.25rem', padding: '1.75rem', overflow: 'hidden' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(212,175,55,0.15)' }}>
               <span style={{ fontSize: '1.25rem' }}>✅</span>
               <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#D4AF37' }}>{s.canNeedTitle}</h3>

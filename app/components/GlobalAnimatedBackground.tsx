@@ -1,171 +1,203 @@
 'use client';
 import { useEffect, useRef } from 'react';
 
-interface Candle { o: number; h: number; l: number; c: number; }
-
-function genCandles(n: number, base = 42800): Candle[] {
-  const out: Candle[] = [];
-  let p = base;
-  for (let i = 0; i < n; i++) {
-    const body = (Math.random() - 0.47) * p * 0.022;
-    const o = p, c = p + body;
-    const wick = p * 0.009;
-    out.push({ o, c, h: Math.max(o,c)+Math.random()*wick, l: Math.min(o,c)-Math.random()*wick });
-    p = c;
-  }
-  return out;
-}
-
-function calcEma(prices: number[], period: number): number[] {
-  const k = 2 / (period + 1);
-  return prices.reduce((acc: number[], p, i) => {
-    acc.push(i === 0 ? p : p * k + acc[i-1] * (1-k));
-    return acc;
-  }, []);
+// ── Seeded noise helper (deterministic so no hydration flash) ────
+function noise(x: number, y: number, t: number): number {
+  return Math.sin(x * 0.8 + t * 0.3) * Math.cos(y * 0.6 + t * 0.2) * 0.5 + 0.5;
 }
 
 export default function GlobalAnimatedBackground() {
-  const ref = useRef<HTMLCanvasElement>(null);
-  const raf = useRef<number>(0);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef    = useRef<number>(0);
 
   useEffect(() => {
-    const canvas = ref.current;
+    const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+    let W = 0, H = 0, t = 0;
+
+    const resize = () => {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    };
     resize();
     window.addEventListener('resize', resize);
 
-    const N = 280;
-    const candles = genCandles(N);
-    const closes  = candles.map(c => c.c);
-    const ema9    = calcEma(closes, 9);
-    const ema21   = calcEma(closes, 21);
-    const ema55   = calcEma(closes, 55);
+    // ── Static particle positions (stable across frames) ─────────
+    const PARTICLE_COUNT = 55;
+    const particles = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
+      x: (i * 137.508) % 1,      // golden-ratio distribution
+      y: (i * 97.31)  % 1,
+      r: 0.6 + (i % 5) * 0.28,
+      speed: 0.00018 + (i % 7) * 0.000055,
+      phase: (i * 2.399) % (Math.PI * 2),
+      drift: (i % 3 - 1) * 0.00008,
+    }));
 
-    const CW = 14, GAP = 5, STEP = CW + GAP;
-    const SPEED = 0.35;
-    let offset = 0, frame = 0;
+    // ── Abstract finance curve waypoints ─────────────────────────
+    const LINE_SEGMENTS = 6;
+    const linePhases = Array.from({ length: LINE_SEGMENTS }, (_, i) => ({
+      amp:   0.04 + (i % 3) * 0.03,
+      freq:  0.4  + i * 0.15,
+      phase: (i * 1.3) % (Math.PI * 2),
+      speed: 0.003 + i * 0.0008,
+      y:     0.12 + i * 0.135,
+      alpha: 0.06 + (i % 2) * 0.04,
+      width: 0.7  + (i % 3) * 0.4,
+    }));
 
     const draw = () => {
-      const W = canvas.width, H = canvas.height;
-      if (!W || !H) { raf.current = requestAnimationFrame(draw); return; }
+      if (!W || !H) { rafRef.current = requestAnimationFrame(draw); return; }
       ctx.clearRect(0, 0, W, H);
 
-      // 1. Gold glow orbs
-      [
-        { cx:W*.15, cy:H*.3,  r:W*.38, a:.13, ph:0   },
-        { cx:W*.85, cy:H*.65, r:W*.32, a:.10, ph:2.1 },
-        { cx:W*.5,  cy:H*.9,  r:W*.28, a:.08, ph:4.2 },
-      ].forEach(g => {
-        const pulse = .75 + .25*Math.sin(frame*.012 + g.ph);
-        const grd = ctx.createRadialGradient(g.cx, g.cy, 0, g.cx, g.cy, g.r*pulse);
-        grd.addColorStop(0,  `rgba(212,175,55,${g.a*pulse})`);
-        grd.addColorStop(.5, `rgba(212,175,55,${g.a*.22*pulse})`);
-        grd.addColorStop(1,   'rgba(212,175,55,0)');
-        ctx.fillStyle = grd; ctx.fillRect(0,0,W,H);
+      // ── 1. Base dark gradient ───────────────────────────────────
+      const base = ctx.createLinearGradient(0, 0, W, H);
+      base.addColorStop(0,    '#050505');
+      base.addColorStop(0.45, '#060504');
+      base.addColorStop(1,    '#040404');
+      ctx.fillStyle = base;
+      ctx.fillRect(0, 0, W, H);
+
+      // ── 2. Large gold glow orbs — slow, majestic drift ─────────
+      const orbs = [
+        { cx: 0.12 + Math.sin(t * 0.004) * 0.06, cy: 0.25 + Math.cos(t * 0.003) * 0.08, r: 0.42, a: 0.13 },
+        { cx: 0.88 + Math.cos(t * 0.003) * 0.05, cy: 0.70 + Math.sin(t * 0.005) * 0.07, r: 0.38, a: 0.11 },
+        { cx: 0.50 + Math.sin(t * 0.006) * 0.08, cy: 0.05 + Math.cos(t * 0.004) * 0.04, r: 0.30, a: 0.08 },
+        { cx: 0.25 + Math.cos(t * 0.005) * 0.04, cy: 0.88 + Math.sin(t * 0.004) * 0.05, r: 0.28, a: 0.07 },
+      ];
+      orbs.forEach(({ cx, cy, r, a }) => {
+        const gx = cx * W, gy = cy * H, gr = r * Math.max(W, H);
+        const pulse = 0.82 + 0.18 * Math.sin(t * 0.015 + cx * 5);
+        const grd = ctx.createRadialGradient(gx, gy, 0, gx, gy, gr * pulse);
+        grd.addColorStop(0,    `rgba(212,175,55,${a * pulse})`);
+        grd.addColorStop(0.35, `rgba(212,175,55,${a * 0.3 * pulse})`);
+        grd.addColorStop(0.7,  `rgba(180,140,30,${a * 0.06 * pulse})`);
+        grd.addColorStop(1,     'rgba(212,175,55,0)');
+        ctx.fillStyle = grd;
+        ctx.fillRect(0, 0, W, H);
       });
 
-      // 2. Grid
-      ctx.strokeStyle = 'rgba(212,175,55,0.08)'; ctx.lineWidth = .8;
-      for (let i=1; i<8; i++) {
-        const y = H*i/8;
-        ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+      // ── 3. Dot-matrix grid — fine, elegant ─────────────────────
+      const dotStep = 44;
+      const dotA    = 0.055;
+      ctx.fillStyle = `rgba(212,175,55,${dotA})`;
+      for (let x = dotStep / 2; x < W; x += dotStep) {
+        for (let y = dotStep / 2; y < H; y += dotStep) {
+          const n  = noise(x / W * 4, y / H * 4, t * 0.008);
+          const fa = dotA * (0.5 + n * 0.5);
+          ctx.globalAlpha = fa;
+          ctx.beginPath();
+          ctx.arc(x, y, 0.9, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
-      const vStep = STEP*5, vOff = offset % vStep;
-      for (let x=-vOff; x<W+vStep; x+=vStep) {
-        ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // ── 4. Horizontal hair-lines (trading terminal vibe) ────────
+      ctx.strokeStyle = 'rgba(212,175,55,0.055)';
+      ctx.lineWidth   = 0.7;
+      for (let i = 1; i < 9; i++) {
+        const y = H * i / 9;
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      }
+      // Vertical (very sparse)
+      ctx.strokeStyle = 'rgba(212,175,55,0.035)';
+      for (let i = 1; i < 5; i++) {
+        const x = W * i / 5;
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
       }
 
-      // 3. Visible slice
-      const si = Math.max(0, Math.floor(offset/STEP)-2);
-      const vc = Math.ceil(W/STEP)+6;
-      const vis = candles.slice(si, si+vc);
-      if (!vis.length) { raf.current=requestAnimationFrame(draw); return; }
+      // ── 5. Abstract finance sine-curves ────────────────────────
+      linePhases.forEach(lp => {
+        const yBase = lp.y * H;
+        ctx.strokeStyle = `rgba(212,175,55,${lp.alpha})`;
+        ctx.lineWidth   = lp.width;
+        ctx.lineJoin    = 'round';
+        ctx.shadowColor = `rgba(212,175,55,${lp.alpha * 0.6})`;
+        ctx.shadowBlur  = 4;
+        ctx.beginPath();
+        for (let px = 0; px <= W; px += 4) {
+          const progress = px / W;
+          const wave1 = Math.sin(progress * Math.PI * lp.freq + t * lp.speed + lp.phase) * lp.amp;
+          const wave2 = Math.sin(progress * Math.PI * lp.freq * 1.7 + t * lp.speed * 1.3) * lp.amp * 0.4;
+          const py = yBase + (wave1 + wave2) * H;
+          px === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+      });
+      ctx.shadowBlur = 0;
 
-      const pMin = Math.min(...vis.map(c=>c.l));
-      const pMax = Math.max(...vis.map(c=>c.h));
-      const pRng = pMax - pMin || 1;
-      const pad  = H*.09, cH = H - pad*2;
-      const toY  = (p:number) => pad + cH*(1-(p-pMin)/pRng);
-      const xOf  = (i:number) => i*STEP - (offset%STEP);
-
-      // 4. Candles
-      vis.forEach((cd,i) => {
-        if (si+i>=N) return;
-        const x=xOf(i), up=cd.c>=cd.o;
-        ctx.strokeStyle = up ? 'rgba(52,211,153,0.6)' : 'rgba(239,68,68,0.5)';
-        ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(x+CW/2,toY(cd.h)); ctx.lineTo(x+CW/2,toY(cd.l)); ctx.stroke();
-        const top=toY(Math.max(cd.o,cd.c)), bH=Math.max(toY(Math.min(cd.o,cd.c))-top, 1.5);
-        ctx.fillStyle   = up ? 'rgba(52,211,153,0.30)' : 'rgba(239,68,68,0.25)';
-        ctx.strokeStyle = up ? 'rgba(52,211,153,0.65)' : 'rgba(239,68,68,0.60)';
-        ctx.lineWidth = .9;
-        ctx.fillRect(x,top,CW,bH); ctx.strokeRect(x,top,CW,bH);
+      // ── 6. Glowing diagonal accent lines ───────────────────────
+      [[0.0, 0.6, 0.55, 0.0], [1.0, 0.3, 0.45, 1.0]].forEach(([x1r, y1r, x2r, y2r], i) => {
+        const prog = (Math.sin(t * 0.005 + i * Math.PI) + 1) / 2;
+        const grd = ctx.createLinearGradient(x1r * W, y1r * H, x2r * W, y2r * H);
+        grd.addColorStop(0,         'rgba(212,175,55,0)');
+        grd.addColorStop(prog,      `rgba(212,175,55,0.10)`);
+        grd.addColorStop(Math.min(prog + 0.15, 1), 'rgba(212,175,55,0.06)');
+        grd.addColorStop(1,         'rgba(212,175,55,0)');
+        ctx.strokeStyle = grd;
+        ctx.lineWidth   = 0.9;
+        ctx.beginPath();
+        ctx.moveTo(x1r * W, y1r * H);
+        ctx.lineTo(x2r * W, y2r * H);
+        ctx.stroke();
       });
 
-      // 5. EMA lines
-      const drawLine = (vals:number[], color:string, lw:number, dash:number[]=[]) => {
-        ctx.strokeStyle=color; ctx.lineWidth=lw; ctx.lineJoin='round'; ctx.setLineDash(dash);
-        ctx.beginPath(); let s=false;
-        vis.forEach((_,i)=>{ const di=si+i; if(di>=vals.length)return;
-          const x=xOf(i)+CW/2, y=toY(vals[di]);
-          if(!s){ctx.moveTo(x,y);s=true;}else ctx.lineTo(x,y); });
-        ctx.stroke(); ctx.setLineDash([]);
-      };
-      drawLine(ema9,  'rgba(255,215,0,0.6)',   1.8);
-      drawLine(ema21, 'rgba(99,179,237,0.48)', 1.4);
-      drawLine(ema55, 'rgba(196,132,252,0.38)',1.2,[6,4]);
+      // ── 7. Floating gold particles ──────────────────────────────
+      particles.forEach((p, i) => {
+        const age   = t * p.speed + p.phase;
+        const px    = ((p.x + Math.sin(age * 0.7 + i) * 0.04 + p.drift * t) % 1 + 1) % 1;
+        const py    = ((p.y + Math.cos(age * 0.5 + i * 0.8) * 0.03) % 1 + 1) % 1;
+        const twink = 0.3 + 0.7 * Math.abs(Math.sin(t * 0.018 + p.phase));
+        const alpha = 0.08 + twink * 0.10;
 
-      // 6. Price area + line
-      const fg = ctx.createLinearGradient(0,pad,0,H-pad);
-      fg.addColorStop(0,  'rgba(212,175,55,0.12)');
-      fg.addColorStop(.6, 'rgba(212,175,55,0.04)');
-      fg.addColorStop(1,  'rgba(212,175,55,0)');
-      ctx.beginPath(); let fx=0;
-      vis.forEach((cd,i)=>{ if(si+i>=N)return;
-        const x=xOf(i)+CW/2, y=toY(cd.c);
-        if(i===0){ctx.moveTo(x,y);fx=x;}else ctx.lineTo(x,y); });
-      ctx.lineTo(xOf(vis.length-1)+CW/2,H-pad); ctx.lineTo(fx,H-pad); ctx.closePath();
-      ctx.fillStyle=fg; ctx.fill();
+        // Glow halo
+        const grd = ctx.createRadialGradient(px * W, py * H, 0, px * W, py * H, p.r * 3.5);
+        grd.addColorStop(0,   `rgba(212,175,55,${alpha})`);
+        grd.addColorStop(0.5, `rgba(212,175,55,${alpha * 0.3})`);
+        grd.addColorStop(1,    'rgba(212,175,55,0)');
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.arc(px * W, py * H, p.r * 3.5, 0, Math.PI * 2);
+        ctx.fill();
 
-      ctx.strokeStyle='rgba(212,175,55,0.60)'; ctx.lineWidth=1.8; ctx.lineJoin='round';
-      ctx.beginPath();
-      vis.forEach((cd,i)=>{ if(si+i>=N)return;
-        const x=xOf(i)+CW/2, y=toY(cd.c); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
-      ctx.stroke();
+        // Core dot
+        ctx.fillStyle = `rgba(240,200,80,${alpha * 1.5})`;
+        ctx.beginPath();
+        ctx.arc(px * W, py * H, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
 
-      // 7. Volume bars
-      const vT=H*.92, vHH=H*.06, mV=Math.max(...vis.map(c=>Math.abs(c.c-c.o)))||1;
-      vis.forEach((cd,i)=>{ if(si+i>=N)return;
-        const vol=Math.abs(cd.c-cd.o)/mV, up=cd.c>=cd.o;
-        ctx.fillStyle=up?'rgba(52,211,153,0.2)':'rgba(239,68,68,0.16)';
-        ctx.fillRect(xOf(i), vT+vHH*(1-vol), CW, vHH*vol); });
+      // ── 8. Corner gold accent vignette ─────────────────────────
+      const vig = ctx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.9);
+      vig.addColorStop(0,  'rgba(0,0,0,0)');
+      vig.addColorStop(0.7,'rgba(0,0,0,0.15)');
+      vig.addColorStop(1,  'rgba(0,0,0,0.5)');
+      ctx.fillStyle = vig;
+      ctx.fillRect(0, 0, W, H);
 
-      // 8. Particles
-      ctx.fillStyle='rgba(212,175,55,0.08)';
-      for(let i=0;i<14;i++){
-        const px=((i*139.5+frame*.1)%(W+20)+W)%W;
-        const py=((i*83.7+Math.sin(frame*.008+i*.9)*80)%H+H)%H;
-        ctx.beginPath(); ctx.arc(px,py,1.2+(i%3)*.5,0,Math.PI*2); ctx.fill();
-      }
-
-      offset += SPEED;
-      if (offset >= N*STEP) offset = 0;
-      frame++;
-      raf.current = requestAnimationFrame(draw);
+      t++;
+      rafRef.current = requestAnimationFrame(draw);
     };
 
-    raf.current = requestAnimationFrame(draw);
-    return () => { cancelAnimationFrame(raf.current); window.removeEventListener('resize', resize); };
+    rafRef.current = requestAnimationFrame(draw);
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener('resize', resize);
+    };
   }, []);
 
   return (
-    <canvas ref={ref} aria-hidden="true" style={{
-      position:'fixed', inset:0, zIndex:0,
-      pointerEvents:'none', width:'100%', height:'100%',
-    }} />
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      style={{
+        position: 'fixed', inset: 0, zIndex: 0,
+        pointerEvents: 'none', width: '100%', height: '100%',
+      }}
+    />
   );
 }

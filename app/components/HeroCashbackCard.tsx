@@ -125,7 +125,7 @@ export default function HeroCashbackCard() {
         onMouseEnter={()=>setHovered(true)}
         style={{
           position:'relative',zIndex:1,width:'100%',maxWidth:'375px',
-          background:'rgba(10,10,10,0.93)',backdropFilter:'blur(22px)',
+          background:'rgba(8,7,5,0.88)',backdropFilter:'blur(22px)',
           border:`1px solid ${hovered?'rgba(212,175,55,0.55)':'rgba(212,175,55,0.28)'}`,
           borderRadius:'1.5rem',padding:'1.5rem',
           boxShadow:hovered?'0 22px 62px rgba(0,0,0,0.65),0 0 42px rgba(212,175,55,0.12)':'0 14px 44px rgba(0,0,0,0.52),0 0 22px rgba(212,175,55,0.07)',

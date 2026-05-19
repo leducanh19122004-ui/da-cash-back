@@ -10,11 +10,11 @@ export default function StatsSection() {
     { icon: '📊', v: s.s4v, l: s.s4l, sub: s.s4s },
   ];
   return (
-    <section style={{ padding: '4rem 1.5rem', background: 'transparent', borderTop: '1px solid rgba(212,175,55,0.1)', borderBottom: '1px solid rgba(212,175,55,0.1)' }}>
+    <section style={{ padding: '4rem 1.5rem', background: 'rgba(5,5,5,0)', borderTop: '1px solid rgba(212,175,55,0.1)', borderBottom: '1px solid rgba(212,175,55,0.1)' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1.5rem' }} className="stats-grid">
           {items.map(item => (
-            <div key={item.l} style={{ background: '#111111', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '1.25rem', padding: '1.75rem 1.25rem', textAlign: 'center', transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease', cursor: 'default' }}
+            <div key={item.l} style={{ background: 'rgba(8,7,5,0.62)', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '1.25rem', padding: '1.75rem 1.25rem', textAlign: 'center', transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease', cursor: 'default' }}
               onMouseEnter={e => { const el = e.currentTarget; el.style.transform = 'translateY(-4px)'; el.style.borderColor = 'rgba(212,175,55,0.5)'; el.style.boxShadow = '0 8px 32px rgba(212,175,55,0.12)'; }}
               onMouseLeave={e => { const el = e.currentTarget; el.style.transform = 'none'; el.style.borderColor = 'rgba(212,175,55,0.2)'; el.style.boxShadow = 'none'; }}>
               <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{item.icon}</div>

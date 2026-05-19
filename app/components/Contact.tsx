@@ -25,7 +25,7 @@ export default function Contact() {
     { icon: '📍', label: ct.address, value: ct.address, href: undefined },
   ];
   return (
-    <section id="contact" style={{ padding: '6rem 1.5rem', background: 'transparent' }}>
+    <section id="contact" style={{ padding: '6rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{ct.badge}</p>
@@ -36,7 +36,7 @@ export default function Contact() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#F8F5E9', marginBottom: '0.5rem' }}>{ct.channels}</h3>
             {contactInfo.map(info => (
-              <div key={info.label} style={{ display: 'flex', gap: '0.875rem', alignItems: 'center', background: '#111111', border: '1px solid rgba(212,175,55,0.15)', borderRadius: '0.875rem', padding: '0.875rem 1.125rem' }}>
+              <div key={info.label} style={{ display: 'flex', gap: '0.875rem', alignItems: 'center', background: 'rgba(8,7,5,0.62)', border: '1px solid rgba(212,175,55,0.15)', borderRadius: '0.875rem', padding: '0.875rem 1.125rem' }}>
                 <span style={{ fontSize: '1.25rem', flexShrink: 0 }}>{info.icon}</span>
                 <div>
                   <p style={{ fontSize: '0.75rem', color: '#666', marginBottom: '0.15rem' }}>{info.label}</p>
@@ -49,14 +49,14 @@ export default function Contact() {
               <p style={{ fontSize: '0.8rem', color: '#888', lineHeight: 1.65 }}>{ct.response}</p>
             </div>
           </div>
-          <div style={{ background: '#111111', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '1.25rem', padding: '2rem' }}>
+          <div style={{ background: 'rgba(8,7,5,0.62)', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '1.25rem', padding: '2rem' }}>
             {submitted ? (
               <div style={{ textAlign: 'center', padding: '2rem 0' }}>
                 <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#F8F5E9', marginBottom: '0.5rem' }}>{ct.successTitle}</h3>
                 <p style={{ color: '#888', fontSize: '0.9rem' }}>{ct.successDesc}</p>
                 <button onClick={() => { setSubmitted(false); setForm({ name: '', contact: '', message: '' }); }}
-                  style={{ marginTop: '1.5rem', padding: '0.625rem 1.5rem', background: 'transparent', border: '1.5px solid #D4AF37', color: '#D4AF37', borderRadius: '0.625rem', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem' }}>
+                  style={{ marginTop: '1.5rem', padding: '0.625rem 1.5rem', background: 'rgba(5,5,5,0)', border: '1.5px solid #D4AF37', color: '#D4AF37', borderRadius: '0.625rem', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem' }}>
                   {ct.sendAnother}
                 </button>
               </div>

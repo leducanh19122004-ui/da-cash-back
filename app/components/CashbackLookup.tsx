@@ -30,14 +30,14 @@ export default function CashbackLookup() {
   };
   const inputStyle = (hasError: boolean): React.CSSProperties => ({ width: '100%', padding: '0.875rem 1rem', background: '#1A1A1A', border: `1.5px solid ${hasError ? '#ef4444' : 'rgba(212,175,55,0.25)'}`, borderRadius: '0.625rem', color: '#F8F5E9', fontSize: '0.95rem', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'Inter, sans-serif' });
   return (
-    <section id="cashback-lookup" style={{ padding: '6rem 1.5rem', background: '#0B0B0B' }}>
+    <section id="cashback-lookup" style={{ padding: '6rem 1.5rem', background: 'rgba(6,5,4,0.55)' }}>
       <div style={{ maxWidth: '700px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{lk.badge}</p>
           <h2 style={{ fontSize: 'clamp(1.75rem,3vw,2.5rem)', fontWeight: 900, color: '#F8F5E9', marginBottom: '1rem' }}>{lk.title}</h2>
           <p style={{ color: '#888', lineHeight: 1.7 }}>{lk.desc}</p>
         </div>
-        <div style={{ background: '#111111', border: '1px solid rgba(212,175,55,0.25)', borderRadius: '1.5rem', padding: '2.5rem', boxShadow: '0 8px 40px rgba(0,0,0,0.4)' }}>
+        <div style={{ background: 'rgba(8,7,5,0.62)', border: '1px solid rgba(212,175,55,0.25)', borderRadius: '1.5rem', padding: '2.5rem', boxShadow: '0 8px 40px rgba(0,0,0,0.4)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '1.5rem' }}>
             <div>
               <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#B8B8B8', marginBottom: '0.5rem' }}>{lk.selectEx}</label>

@@ -12,7 +12,7 @@ export default function BenefitsSection() {
     { icon: '🔒', title: b.b6t, desc: b.b6d },
   ];
   return (
-    <section id="benefits" style={{ padding: '6rem 1.5rem', background: 'transparent' }}>
+    <section id="benefits" style={{ padding: '6rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{b.badge}</p>
@@ -21,7 +21,7 @@ export default function BenefitsSection() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1.25rem' }} className="benefits-grid">
           {items.map(item => (
-            <div key={item.title} style={{ background: '#111111', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '1.25rem', padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease' }}
+            <div key={item.title} style={{ background: 'rgba(8,7,5,0.62)', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '1.25rem', padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease' }}
               onMouseEnter={e => { const el = e.currentTarget; el.style.transform = 'translateY(-4px)'; el.style.borderColor = 'rgba(212,175,55,0.55)'; el.style.boxShadow = '0 8px 32px rgba(212,175,55,0.12)'; }}
               onMouseLeave={e => { const el = e.currentTarget; el.style.transform = 'none'; el.style.borderColor = 'rgba(212,175,55,0.2)'; el.style.boxShadow = 'none'; }}>
               <div style={{ fontSize: '2rem' }}>{item.icon}</div>

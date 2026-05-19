@@ -55,7 +55,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div style={{ padding: '1.5rem', background: '#0D0D0D', borderRadius: '0.875rem', border: '1px solid rgba(212,175,55,0.1)', marginBottom: '2rem' }}>
+        <div style={{ padding: '1.5rem', background: 'rgba(5,4,3,0.58)', borderRadius: '0.875rem', border: '1px solid rgba(212,175,55,0.1)', marginBottom: '2rem' }}>
           <p style={{ fontSize: '0.78rem', color: '#555', lineHeight: 1.75, textAlign: 'center' }}>
             <strong style={{ color: '#666' }}>Disclaimer: </strong>{ft.disclaimer}
           </p>

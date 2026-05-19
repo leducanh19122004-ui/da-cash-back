@@ -6,7 +6,7 @@ export default function ExchangeCard({ exchange }: Props) {
   const { t } = useLang();
   const isCrypto = exchange.type === 'crypto';
   return (
-    <div style={{ background: '#111111', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '1.25rem', padding: '1.5rem', display: 'flex', flexDirection: 'column', transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease', cursor: 'default' }}
+    <div style={{ background: 'rgba(8,7,5,0.62)', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '1.25rem', padding: '1.5rem', display: 'flex', flexDirection: 'column', transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease', cursor: 'default' }}
       onMouseEnter={e => { const el = e.currentTarget; el.style.transform = 'translateY(-4px)'; el.style.borderColor = 'rgba(212,175,55,0.55)'; el.style.boxShadow = '0 8px 32px rgba(212,175,55,0.14)'; }}
       onMouseLeave={e => { const el = e.currentTarget; el.style.transform = 'none'; el.style.borderColor = 'rgba(212,175,55,0.2)'; el.style.boxShadow = 'none'; }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>

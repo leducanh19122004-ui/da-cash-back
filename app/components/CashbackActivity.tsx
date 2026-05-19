@@ -80,7 +80,7 @@ export default function CashbackActivity(){
   useEffect(()=>{const init=setTimeout(()=>scheduleNext(),4000);return()=>{clearTimeout(init);clearTimeout(timerRef.current);};},[scheduleNext]);
 
   return(
-    <section id="cashback-activity" style={{padding:'6rem 1.5rem',background:'transparent'}}>
+    <section id="cashback-activity" style={{padding:'6rem 1.5rem',background:'rgba(5,5,5,0)'}}>
       <div style={{maxWidth:'1100px',margin:'0 auto'}}>
         <div style={{textAlign:'center',marginBottom:'2.5rem'}}>
           <p style={{fontSize:'0.8rem',fontWeight:700,color:'#D4AF37',letterSpacing:'0.15em',textTransform:'uppercase',marginBottom:'0.6rem'}}>{ac.sectionBadge}</p>
@@ -97,7 +97,7 @@ export default function CashbackActivity(){
           <StatCard label={ac.monthLabel}  value={stats.monthCashback}  format="usdt" updated={upd==='monthCashback'} />
           <StatCard label={ac.verifiedLabel} value={stats.verifiedAccounts} format="int" updated={upd==='verifiedAccounts'} />
         </div>
-        <div style={{background:'rgba(13,13,13,0.85)',backdropFilter:'blur(12px)',border:'1px solid rgba(212,175,55,0.2)',borderRadius:'1.25rem',padding:'1.5rem 1.75rem'}}>
+        <div style={{background:'rgba(8,7,5,0.75)',backdropFilter:'blur(12px)',border:'1px solid rgba(212,175,55,0.2)',borderRadius:'1.25rem',padding:'1.5rem 1.75rem'}}>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1rem'}}>
             <div style={{display:'flex',alignItems:'center',gap:'0.45rem'}}>
               <span style={{width:'7px',height:'7px',borderRadius:'50%',background:'#4CAF50',display:'inline-block',boxShadow:'0 0 5px rgba(76,175,80,0.55)'}}/>

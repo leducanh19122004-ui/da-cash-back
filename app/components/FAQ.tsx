@@ -6,7 +6,7 @@ export default function FAQ() {
   const faq = t.faq;
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   return (
-    <section id="faq" style={{ padding: '6rem 1.5rem', background: 'transparent' }}>
+    <section id="faq" style={{ padding: '6rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{faq.badge}</p>
@@ -15,7 +15,7 @@ export default function FAQ() {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {faq.items.map((item, idx) => (
-            <div key={idx} style={{ background: '#111111', border: `1px solid ${openIdx === idx ? 'rgba(212,175,55,0.5)' : 'rgba(212,175,55,0.2)'}`, borderRadius: '0.875rem', overflow: 'hidden', transition: 'border-color 0.25s ease, box-shadow 0.25s ease', boxShadow: openIdx === idx ? '0 4px 20px rgba(212,175,55,0.08)' : 'none' }}>
+            <div key={idx} style={{ background: 'rgba(8,7,5,0.62)', border: `1px solid ${openIdx === idx ? 'rgba(212,175,55,0.5)' : 'rgba(212,175,55,0.2)'}`, borderRadius: '0.875rem', overflow: 'hidden', transition: 'border-color 0.25s ease, box-shadow 0.25s ease', boxShadow: openIdx === idx ? '0 4px 20px rgba(212,175,55,0.08)' : 'none' }}>
               <button onClick={() => setOpenIdx(openIdx === idx ? null : idx)} aria-expanded={openIdx === idx}
                 style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem 1.5rem', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
                 <span style={{ fontSize: '0.95rem', fontWeight: 600, color: '#F8F5E9', flex: 1 }}>{item.q}</span>
