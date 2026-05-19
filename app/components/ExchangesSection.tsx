@@ -9,7 +9,7 @@ export default function ExchangesSection() {
   const ex = t.exchanges;
   const filtered = filter === 'all' ? exchanges : exchanges.filter(e => e.type === filter);
   return (
-    <section id="exchanges" style={{ padding: '6rem 1.5rem', background: '#0B0B0B' }}>
+    <section id="exchanges" style={{ padding: '6rem 1.5rem', background: 'transparent' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{ex.badge}</p>

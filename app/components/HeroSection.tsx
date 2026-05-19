@@ -174,7 +174,7 @@ export default function HeroSection() {
         alignItems: 'center',
         overflow: 'hidden',
         paddingTop: '5rem',
-        background: 'linear-gradient(160deg,#080808 0%,#0B0B0B 50%,#0a0a0a 100%)',
+        background: 'transparent',
       }}
     >
       <FloatingGlowBackground />

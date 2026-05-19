@@ -10,7 +10,7 @@ export default function StatsSection() {
     { icon: '📊', v: s.s4v, l: s.s4l, sub: s.s4s },
   ];
   return (
-    <section style={{ padding: '4rem 1.5rem', background: '#0B0B0B', borderTop: '1px solid rgba(212,175,55,0.1)', borderBottom: '1px solid rgba(212,175,55,0.1)' }}>
+    <section style={{ padding: '4rem 1.5rem', background: 'transparent', borderTop: '1px solid rgba(212,175,55,0.1)', borderBottom: '1px solid rgba(212,175,55,0.1)' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1.5rem' }} className="stats-grid">
           {items.map(item => (

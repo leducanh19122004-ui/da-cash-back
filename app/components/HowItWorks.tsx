@@ -10,7 +10,7 @@ export default function HowItWorks() {
     { step: '04', icon: '💰', title: h.s4t, desc: h.s4d },
   ];
   return (
-    <section id="how-it-works" style={{ padding: '6rem 1.5rem', background: '#0D0D0D' }}>
+    <section id="how-it-works" style={{ padding: '6rem 1.5rem', background: 'transparent' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{h.badge}</p>

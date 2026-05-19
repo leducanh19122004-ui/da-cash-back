@@ -6,7 +6,7 @@ export default function FAQ() {
   const faq = t.faq;
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   return (
-    <section id="faq" style={{ padding: '6rem 1.5rem', background: '#0D0D0D' }}>
+    <section id="faq" style={{ padding: '6rem 1.5rem', background: 'transparent' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{faq.badge}</p>
