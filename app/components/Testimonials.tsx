@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useLang } from '../contexts/LanguageContext';
 import { extraTranslations } from '../translations';
 import { USE_MOCK_CASHBACK_DATA } from '../lib/cashback';
@@ -242,36 +242,23 @@ export default function Testimonials() {
     ?? extraTranslations.vi.testimonials;
   const isMock = USE_MOCK_CASHBACK_DATA;
 
-  const trackRef  = useRef<HTMLDivElement>(null);
-  const posRef    = useRef(0);
-  const animRef   = useRef<number>(0);
-  const activeRef = useRef(false);
-  const pausedRef = useRef(false);
-  const SPEED = 0.5;
+  // CSS animation-play-state approach — reliable across all browsers
+  const [running, setRunning] = useState(false);   // section hover → run
+  const [paused,  setPaused]  = useState(false);   // card hover → pause
 
-  useEffect(() => {
-    const animate = () => {
-      if (activeRef.current && !pausedRef.current && trackRef.current) {
-        posRef.current += SPEED;
-        const half = trackRef.current.scrollWidth / 2;
-        if (posRef.current >= half) posRef.current = 0;
-        trackRef.current.style.transform = `translateX(-${posRef.current}px)`;
-      }
-      animRef.current = requestAnimationFrame(animate);
-    };
-    animRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animRef.current);
-  }, []);
+  const playState = running && !paused ? 'running' : 'paused';
 
   const badgeLabels = {
     verifiedUid:      ts.badges.verifiedUid,
     cashbackRecorded: ts.badges.cashbackRecorded,
     privacyProtected: ts.badges.privacyProtected,
   };
-  const cards = [...ALL_TESTIMONIALS, ...ALL_TESTIMONIALS];
+  // Duplicate 3× for smooth infinite loop with many cards
+  const cards = [...ALL_TESTIMONIALS, ...ALL_TESTIMONIALS, ...ALL_TESTIMONIALS];
 
   return (
     <section style={{ padding:'6rem 0 5rem', background:'transparent', overflow:'hidden' }}>
+      {/* Header */}
       <div style={{ maxWidth:'1100px', margin:'0 auto', padding:'0 1.5rem', marginBottom:'2.5rem', textAlign:'center' }}>
         <p style={{ fontSize:'0.8rem', fontWeight:700, color:'#D4AF37', letterSpacing:'0.15em', textTransform:'uppercase', marginBottom:'0.6rem' }}>
           {ts.badge}
@@ -279,28 +266,48 @@ export default function Testimonials() {
         <h2 style={{ fontSize:'clamp(1.6rem,3vw,2.25rem)', fontWeight:900, color:'#F8F5E9', marginBottom:'0.75rem' }}>
           {ts.title}
         </h2>
-        <p style={{ fontSize:'0.85rem', color:'#666', lineHeight:1.7, fontStyle:'italic', maxWidth:'620px', margin:'0 auto' }}>
+        <p style={{ fontSize:'0.85rem', color:'#666', lineHeight:1.7, fontStyle:'italic', maxWidth:'620px', margin:'0 auto 0.6rem' }}>
           {ts.subtitle}
+        </p>
+        <p style={{ fontSize:'0.75rem', color:'#555' }}>
+          ↔ Di chuột vào khu vực bên dưới để cuộn
         </p>
       </div>
 
-      {/* Carousel */}
+      {/* Carousel wrapper — hover activates scroll */}
       <div
-        style={{ position:'relative', overflow:'hidden', cursor:'default' }}
-        onMouseEnter={() => { activeRef.current = true; }}
-        onMouseLeave={() => { activeRef.current = false; }}
+        style={{ position:'relative', overflow:'hidden', cursor:'grab' }}
+        onMouseEnter={() => setRunning(true)}
+        onMouseLeave={() => setRunning(false)}
       >
         {/* Fade masks */}
-        <div style={{ position:'absolute',top:0,left:0,bottom:0,width:'80px',
-          background:'linear-gradient(to right,rgba(5,5,5,0.95),transparent)',zIndex:2,pointerEvents:'none' }} />
-        <div style={{ position:'absolute',top:0,right:0,bottom:0,width:'80px',
-          background:'linear-gradient(to left,rgba(5,5,5,0.95),transparent)',zIndex:2,pointerEvents:'none' }} />
+        <div style={{ position:'absolute', top:0, left:0, bottom:0, width:'90px',
+          background:'linear-gradient(to right, rgba(5,5,5,1), transparent)',
+          zIndex:2, pointerEvents:'none' }} />
+        <div style={{ position:'absolute', top:0, right:0, bottom:0, width:'90px',
+          background:'linear-gradient(to left, rgba(5,5,5,1), transparent)',
+          zIndex:2, pointerEvents:'none' }} />
 
-        <div ref={trackRef} style={{ display:'flex', gap:'1rem', padding:'1.5rem 1.5rem', willChange:'transform' }}>
+        {/* Scrolling track — CSS marquee */}
+        <div style={{
+          display: 'flex',
+          width: 'max-content',
+          gap: '1rem',
+          padding: '1.5rem 1rem',
+          animationName: 'testimonial-marquee',
+          animationDuration: '90s',
+          animationTimingFunction: 'linear',
+          animationIterationCount: 'infinite',
+          animationPlayState: playState,
+          willChange: 'transform',
+        }}>
           {cards.map((item, idx) => (
-            <div key={`${item.id}-${idx}`}
-              onMouseEnter={() => { pausedRef.current = true; }}
-              onMouseLeave={() => { pausedRef.current = false; }}>
+            <div
+              key={`${item.id}-${idx}`}
+              onMouseEnter={() => setPaused(true)}
+              onMouseLeave={() => setPaused(false)}
+              style={{ cursor: 'default' }}
+            >
               <TestimonialCard item={item} badgeLabels={badgeLabels} exchangeLabel={ts.exchange} />
             </div>
           ))}
@@ -308,11 +315,23 @@ export default function Testimonials() {
       </div>
 
       {/* Notes */}
-      <div style={{ maxWidth:'1100px', margin:'1.5rem auto 0', padding:'0 1.5rem', textAlign:'center', display:'flex', flexDirection:'column', gap:'0.4rem', alignItems:'center' }}>
+      <div style={{ maxWidth:'1100px', margin:'1.5rem auto 0', padding:'0 1.5rem', textAlign:'center',
+        display:'flex', flexDirection:'column', gap:'0.4rem', alignItems:'center' }}>
         <p style={{ fontSize:'0.7rem', color:'#444', fontStyle:'italic' }}>{ts.privacyNote}</p>
         {isMock && <p style={{ fontSize:'0.68rem', color:'#3a3a3a', fontStyle:'italic' }}>{ts.mockLabel}</p>}
         <p style={{ fontSize:'0.68rem', color:'#383838', maxWidth:'580px', lineHeight:1.6 }}>{ts.fullNote}</p>
       </div>
+
+      {/* Keyframe — defined inline to avoid globals.css dependency */}
+      <style>{`
+        @keyframes testimonial-marquee {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-33.333%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          [style*="testimonial-marquee"] { animation: none !important; }
+        }
+      `}</style>
     </section>
   );
 }
