@@ -216,3 +216,54 @@ header  { position: relative; z-index: 50 !important; }
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ── Testimonials marquee ────────────────────────────────────── */
+@keyframes testimonial-marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+.testimonials-wrapper {
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+}
+
+/* Track — paused by default, runs on section hover */
+.testimonials-track {
+  display: flex;
+  width: max-content;
+  gap: 1rem;
+  padding: 1.5rem 1rem;
+  animation: testimonial-marquee 90s linear infinite;
+  animation-play-state: paused;
+  will-change: transform;
+}
+
+/* Run when hovering the wrapper */
+.testimonials-wrapper:hover .testimonials-track {
+  animation-play-state: running;
+}
+
+/* Pause when hovering an individual card */
+.testimonials-track:has(.testimonial-card:hover) {
+  animation-play-state: paused;
+}
+
+/* Fade masks */
+.testimonials-wrapper::before,
+.testimonials-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 90px;
+  z-index: 2;
+  pointer-events: none;
+}
+.testimonials-wrapper::before { left: 0;  background: linear-gradient(to right, rgba(5,5,5,1), transparent); }
+.testimonials-wrapper::after  { right: 0; background: linear-gradient(to left,  rgba(5,5,5,1), transparent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonials-track { animation: none !important; }
+}
