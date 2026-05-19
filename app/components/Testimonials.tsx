@@ -78,6 +78,48 @@ const ALL_TESTIMONIALS: TestimonialItem[] = [
     badges:['verifiedUid','cashbackRecorded','privacyProtected'],
     text:'Die Verifizierung ist unkompliziert – nur die UID wird benötigt, kein Passwort, keine 2FA. Die Cashback-Übersicht ist übersichtlich und verständlich gestaltet.' },
 
+  // ── KR x3 ────────────────────────────────────────────────────────────
+  { id:'kr-a1', name:'H*** Jeon',    email:'h***jeon@naver.com',   country:'South Korea', flag:'🇰🇷',
+    exchange:'Binance',   exchangeType:'crypto' as const, avatar:'H', rating:5, locale:'ko',
+    badges:['verifiedUid','cashbackRecorded'] as ('verifiedUid'|'cashbackRecorded'|'privacyProtected')[],
+    text:'캐시백 받는 과정이 생각보다 간단했어요. UID만 입력하면 되고, 나머지는 시스템이 알아서 처리해 줍니다.' },
+  { id:'kr-a2', name:'Y*** Cho',     email:'y***cho@kakao.com',    country:'South Korea', flag:'🇰🇷',
+    exchange:'MEXC',      exchangeType:'crypto' as const, avatar:'Y', rating:5, locale:'ko',
+    badges:['verifiedUid','privacyProtected'] as ('verifiedUid'|'cashbackRecorded'|'privacyProtected')[],
+    text:'비밀번호나 OTP 없이 UID만으로 등록할 수 있어서 편리했습니다. 캐시백 내역도 확인하기 쉬웠어요.' },
+  { id:'kr-a3', name:'S*** Lim',     email:'s***lim@gmail.com',    country:'South Korea', flag:'🇰🇷',
+    exchange:'Bybit',     exchangeType:'crypto' as const, avatar:'S', rating:4, locale:'ko',
+    badges:['verifiedUid'] as ('verifiedUid'|'cashbackRecorded'|'privacyProtected')[],
+    text:'거래 수수료 일부를 돌려받을 수 있다는 점이 실용적입니다. 가입 과정도 복잡하지 않아서 좋았어요.' },
+
+  // ── VN x4 ────────────────────────────────────────────────────────────
+  { id:'vn-a1', name:'T*** Nguyễn',  email:'t***nguyen@gmail.com', country:'Vietnam',     flag:'🇻🇳',
+    exchange:'OKX',       exchangeType:'crypto' as const, avatar:'T', rating:5, locale:'vi',
+    badges:['verifiedUid','cashbackRecorded'] as ('verifiedUid'|'cashbackRecorded'|'privacyProtected')[],
+    text:'Đăng ký đơn giản, chỉ cần UID là xong. Không yêu cầu thêm bất kỳ thông tin nhạy cảm nào.' },
+  { id:'vn-a2', name:'L*** Phạm',    email:'l***pham@gmail.com',   country:'Vietnam',     flag:'🇻🇳',
+    exchange:'Bybit',     exchangeType:'crypto' as const, avatar:'L', rating:5, locale:'vi',
+    badges:['verifiedUid','cashbackRecorded','privacyProtected'] as ('verifiedUid'|'cashbackRecorded'|'privacyProtected')[],
+    text:'Dùng được 2 tháng rồi, cashback về đúng hẹn. Không cần mật khẩu hay 2FA, chỉ cần UID là xong.' },
+  { id:'vn-a3', name:'M*** Trần',    email:'m***tran@outlook.com', country:'Vietnam',     flag:'🇻🇳',
+    exchange:'Exness',    exchangeType:'forex' as const,  avatar:'M', rating:4, locale:'vi',
+    badges:['verifiedUid','privacyProtected'] as ('verifiedUid'|'cashbackRecorded'|'privacyProtected')[],
+    text:'Giao diện khá sạch, dễ tra cứu lịch sử cashback. Thông tin tài khoản được ẩn một phần, cảm giác an tâm hơn.' },
+  { id:'vn-a4', name:'K*** Lê',      email:'k***le@gmail.com',     country:'Vietnam',     flag:'🇻🇳',
+    exchange:'Binance',   exchangeType:'crypto' as const, avatar:'K', rating:5, locale:'vi',
+    badges:['verifiedUid','cashbackRecorded'] as ('verifiedUid'|'cashbackRecorded'|'privacyProtected')[],
+    text:'Không cần lo lắng về bảo mật vì không ai yêu cầu mật khẩu hay private key. Quy trình rõ ràng.' },
+
+  // ── Short & natural x2 ────────────────────────────────────────────────
+  { id:'sg-s1', name:'B*** Lim',     email:'b***lim@gmail.com',    country:'Singapore',   flag:'🇸🇬',
+    exchange:'Bitget',    exchangeType:'crypto' as const, avatar:'B', rating:5, locale:'en',
+    badges:['verifiedUid'] as ('verifiedUid'|'cashbackRecorded'|'privacyProtected')[],
+    text:'Quick setup, no password required. Does what it says.' },
+  { id:'vn-s1', name:'A*** Hoàng',   email:'a***hoang@gmail.com',  country:'Vietnam',     flag:'🇻🇳',
+    exchange:'MEXC',      exchangeType:'crypto' as const, avatar:'A', rating:5, locale:'vi',
+    badges:['verifiedUid','cashbackRecorded'] as ('verifiedUid'|'cashbackRecorded'|'privacyProtected')[],
+    text:'Nhanh, gọn, không rắc rối.' },
+
   // ── New 8 (user-specified, native language) ───────────────────────
   { id:'jp-x1', name:'T*** Sato',     email:'t***@gmail.com',      country:'Japan',       flag:'🇯🇵',
     exchange:'IC Markets', exchangeType:'forex' as const, avatar:'T', rating:5, locale:'ja',
