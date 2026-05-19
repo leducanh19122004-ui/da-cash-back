@@ -4,23 +4,22 @@ import { useLang } from '../contexts/LanguageContext';
 
 interface Props { exchange: Exchange; }
 
+const DEALS_BASE = 'https://danetwork.asia/deals.html';
+
 export default function ExchangeCard({ exchange }: Props) {
   const { t } = useLang();
   const isCrypto = exchange.type === 'crypto';
+  const dealsUrl = `${DEALS_BASE}?exchange=${exchange.id}`;
 
   return (
     <div
       className="exchange-card"
       style={{
-        width: '290px',
-        flexShrink: 0,
-        background: 'rgba(8,7,5,0.78)',
+        width: '290px', flexShrink: 0,
+        background: 'rgba(8,7,5,0.82)',
         border: '1px solid rgba(212,175,55,0.22)',
-        borderRadius: '1.25rem',
-        padding: '1.4rem',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0',
+        borderRadius: '1.25rem', padding: '1.4rem',
+        display: 'flex', flexDirection: 'column',
         backdropFilter: 'blur(8px)',
         transition: 'transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease',
         cursor: 'default',
@@ -28,7 +27,7 @@ export default function ExchangeCard({ exchange }: Props) {
       onMouseEnter={e => {
         const el = e.currentTarget;
         el.style.transform = 'translateY(-5px) scale(1.01)';
-        el.style.borderColor = 'rgba(212,175,55,0.6)';
+        el.style.borderColor = 'rgba(212,175,55,0.62)';
         el.style.boxShadow = '0 12px 36px rgba(212,175,55,0.18), 0 0 0 1px rgba(212,175,55,0.08)';
       }}
       onMouseLeave={e => {
@@ -83,31 +82,36 @@ export default function ExchangeCard({ exchange }: Props) {
 
       {/* Description */}
       <p style={{
-        fontSize: '0.8rem', color: '#888', lineHeight: 1.55,
-        marginBottom: '1rem', flexGrow: 1,
+        fontSize: '0.8rem', color: '#888', lineHeight: 1.55, marginBottom: '1rem', flexGrow: 1,
         display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
       }}>
         {(t.exchangeDesc as Record<string, string>)[exchange.id] || exchange.description}
       </p>
 
-      {/* Buttons */}
-      <div style={{ display: 'flex', gap: '0.5rem' }}>
+      {/* Primary buttons: Đăng ký + Hướng dẫn */}
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
         <a
-          href={exchange.refLink}
+          href={exchange.refLink !== '#' ? exchange.refLink : undefined}
+          target={exchange.refLink !== '#' ? '_blank' : undefined}
+          rel="noopener noreferrer"
           style={{
             flex: 1, padding: '0.55rem', textAlign: 'center', textDecoration: 'none',
             fontWeight: 700, fontSize: '0.82rem',
             background: 'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)',
             color: '#050505', borderRadius: '0.6rem',
             transition: 'opacity 0.2s, transform 0.2s',
+            opacity: exchange.refLink === '#' ? 0.5 : 1,
+            cursor: exchange.refLink === '#' ? 'not-allowed' : 'pointer',
           }}
-          onMouseEnter={e => { e.currentTarget.style.opacity='0.85'; e.currentTarget.style.transform='translateY(-1px)'; }}
-          onMouseLeave={e => { e.currentTarget.style.opacity='1'; e.currentTarget.style.transform='none'; }}
+          onMouseEnter={e => { if (exchange.refLink !== '#') { e.currentTarget.style.opacity='0.85'; e.currentTarget.style.transform='translateY(-1px)'; } }}
+          onMouseLeave={e => { e.currentTarget.style.opacity = exchange.refLink === '#' ? '0.5' : '1'; e.currentTarget.style.transform='none'; }}
         >
           {t.exchanges.register}
         </a>
         <a
-          href={exchange.guideLink}
+          href={exchange.guideLink !== '#' ? exchange.guideLink : undefined}
+          target={exchange.guideLink !== '#' ? '_blank' : undefined}
+          rel="noopener noreferrer"
           style={{
             flex: 1, padding: '0.55rem', textAlign: 'center', textDecoration: 'none',
             fontWeight: 600, fontSize: '0.82rem',
@@ -120,6 +124,40 @@ export default function ExchangeCard({ exchange }: Props) {
           {t.exchanges.guide}
         </a>
       </div>
+
+      {/* Secondary: Xem chi tiết → danetwork.asia/deals */}
+      <a
+        href={dealsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: 'block', width: '100%', padding: '0.45rem',
+          textAlign: 'center', textDecoration: 'none',
+          fontWeight: 500, fontSize: '0.75rem',
+          background: 'transparent',
+          border: '1px solid rgba(212,175,55,0.28)',
+          color: 'rgba(212,175,55,0.75)',
+          borderRadius: '0.55rem',
+          letterSpacing: '0.02em',
+          transition: 'border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s',
+        }}
+        onMouseEnter={e => {
+          const el = e.currentTarget;
+          el.style.borderColor = 'rgba(212,175,55,0.65)';
+          el.style.color = '#D4AF37';
+          el.style.background = 'rgba(212,175,55,0.06)';
+          el.style.boxShadow = '0 0 10px rgba(212,175,55,0.12)';
+        }}
+        onMouseLeave={e => {
+          const el = e.currentTarget;
+          el.style.borderColor = 'rgba(212,175,55,0.28)';
+          el.style.color = 'rgba(212,175,55,0.75)';
+          el.style.background = 'transparent';
+          el.style.boxShadow = 'none';
+        }}
+      >
+        ↗ {t.exchanges.viewDetails}
+      </a>
     </div>
   );
 }

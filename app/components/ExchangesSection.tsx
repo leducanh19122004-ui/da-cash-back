@@ -16,7 +16,7 @@ export default function ExchangesSection() {
   const cards    = Array.from({ length: minReps * 2 }, (_, i) => filtered[i % filtered.length]);
   const CARD_W   = 290 + 16; // card width + gap
   const halfW    = filtered.length * minReps * CARD_W; // px for one full set
-  const duration = Math.max(filtered.length * 9, 30);  // 9s per card, min 30s
+  const duration = Math.max(filtered.length * 4, 18);  // 4s per card — faster, still smooth
 
   return (
     <section id="exchanges" style={{ padding: '5rem 0', background: 'transparent' }}>
