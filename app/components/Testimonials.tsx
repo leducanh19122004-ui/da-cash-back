@@ -264,7 +264,7 @@ export default function Testimonials() {
         <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: 1.7, fontStyle: 'italic', maxWidth: '620px', margin: '0 auto 0.5rem' }}>
           {ts.subtitle}
         </p>
-        <p style={{ fontSize: '0.72rem', color: '#555' }}>↔ Di chuột vào khu vực bên dưới để cuộn</p>
+        <p style={{ fontSize: '0.72rem', color: '#555', letterSpacing: '0.04em' }}>↔ Hover vào từng card để dừng — cuộn tự động</p>
       </div>
 
       {/* Carousel — pure CSS hover, no JS needed */}

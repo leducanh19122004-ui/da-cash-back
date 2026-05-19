@@ -235,19 +235,20 @@ header  { position: relative; z-index: 50 !important; }
   width: max-content;
   gap: 1rem;
   padding: 1.5rem 1rem;
-  animation: testimonial-marquee 90s linear infinite;
-  animation-play-state: paused;
+  /* Auto-scroll always — pause only on individual card hover */
+  animation: testimonial-marquee 80s linear infinite;
+  animation-play-state: running;
   will-change: transform;
 }
 
-/* Run when hovering the wrapper */
-.testimonials-wrapper:hover .testimonials-track {
-  animation-play-state: running;
-}
-
-/* Pause when hovering an individual card */
+/* Pause when hovering an individual card so user can read */
 .testimonials-track:has(.testimonial-card:hover) {
   animation-play-state: paused;
+}
+
+/* Also pause entire track on wrapper hover for touch/accessibility */
+.testimonials-wrapper:hover .testimonials-track:not(:has(.testimonial-card:hover)) {
+  animation-play-state: running;
 }
 
 /* Fade masks */
