@@ -155,7 +155,6 @@ export default function HeroCashbackCard() {
           <p style={{fontSize:'1.8rem',fontWeight:900,lineHeight:1,background:'linear-gradient(135deg,#FFD700,#D4AF37)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text'}}>
             <AnimatedCounter target={stats.totalCashback} duration={900} flash={flashTot} />
           </p>
-          {USE_MOCK_CASHBACK_DATA && <p style={{fontSize:'0.58rem',color:'#3a3a3a',marginTop:'0.22rem',fontStyle:'italic'}}>{hc.mockDataLabel}</p>}
         </div>
 
         {/* Secondary stats */}

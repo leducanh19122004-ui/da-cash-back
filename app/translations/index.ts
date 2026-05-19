@@ -308,3 +308,74 @@ export const extraTranslations: Record<Lang, TranslationsExtra> = {
     },
   },
 };
+
+// ── Safety section translations ────────────────────────────────────
+export interface SafetyTranslations {
+  badge: string; title: string; desc: string;
+  canNeedTitle: string; neverAskTitle: string;
+  canNeed: string[]; neverAsk: string[];
+  warningTitle: string; warningText: string; warningLink: string;
+}
+
+export const safetyTranslations: Record<Lang, SafetyTranslations> = {
+  vi: {
+    badge: 'Bảo mật tài khoản',
+    title: 'An toàn tài khoản là ưu tiên số 1',
+    desc: 'DA CASH BACK hoạt động dựa trên chương trình đối tác chính thức. Chúng tôi không cần và không bao giờ yêu cầu quyền kiểm soát tài khoản của bạn.',
+    canNeedTitle: 'DA CASH BACK có thể cần',
+    neverAskTitle: 'DA CASH BACK KHÔNG BAO GIỜ yêu cầu',
+    canNeed: ['UID tài khoản sàn giao dịch', 'Email hoặc Telegram để liên hệ hỗ trợ', 'Tên sàn bạn đã đăng ký', 'Xác nhận đã đăng ký qua link đối tác DA CASH BACK'],
+    neverAsk: ['Mật khẩu tài khoản sàn', 'Mã OTP / 2FA xác thực', 'Seed phrase hoặc private key', 'API key có quyền rút tiền', 'Chuyển tiền vào ví hoặc tài khoản cá nhân', 'Nạp tiền để "mở khóa" hoặc "kích hoạt" cashback'],
+    warningTitle: 'Cảnh báo mạo danh',
+    warningText: 'Nếu có bất kỳ ai mạo danh DA CASH BACK yêu cầu {highlight}, hãy dừng lại ngay và liên hệ kênh hỗ trợ chính thức qua',
+    warningLink: 'mật khẩu, OTP, private key hoặc chuyển tiền riêng',
+  },
+  en: {
+    badge: 'Account Security',
+    title: 'Account Safety Is Our #1 Priority',
+    desc: 'DA CASH BACK operates through official partner programs. We do not need and will never request control over your trading account.',
+    canNeedTitle: 'DA CASH BACK May Need',
+    neverAskTitle: 'DA CASH BACK Will NEVER Ask For',
+    canNeed: ['Your exchange account UID', 'Email or Telegram for support contact', 'Name of the exchange you registered with', 'Confirmation that you registered via DA CASH BACK partner link'],
+    neverAsk: ['Your exchange account password', 'OTP / 2FA authentication code', 'Seed phrase or private key', 'API key with withdrawal permissions', 'Money transfers to any personal wallet or account', 'Deposits to "unlock" or "activate" cashback'],
+    warningTitle: 'Impersonation Warning',
+    warningText: 'If anyone impersonating DA CASH BACK asks for {highlight}, stop immediately and contact official support via',
+    warningLink: 'your password, OTP, private key, or money transfers',
+  },
+  ko: {
+    badge: '계정 보안',
+    title: '계정 안전이 최우선입니다',
+    desc: 'DA CASH BACK은 공식 파트너 프로그램을 통해 운영됩니다. 저희는 귀하의 거래 계정에 대한 통제권을 필요로 하지 않으며 절대 요청하지 않습니다.',
+    canNeedTitle: 'DA CASH BACK이 필요할 수 있는 것',
+    neverAskTitle: 'DA CASH BACK이 절대 요청하지 않는 것',
+    canNeed: ['거래소 계정 UID', '지원 연락을 위한 이메일 또는 텔레그램', '등록한 거래소 이름', 'DA CASH BACK 파트너 링크를 통해 등록했음을 확인'],
+    neverAsk: ['거래소 계정 비밀번호', 'OTP / 2FA 인증 코드', '시드 구문 또는 개인 키', '출금 권한이 있는 API 키', '개인 지갑 또는 계좌로의 송금', '캐시백을 "잠금 해제"하거나 "활성화"하기 위한 입금'],
+    warningTitle: '사칭 경고',
+    warningText: 'DA CASH BACK을 사칭하는 누군가가 {highlight}을 요청한다면 즉시 중단하고 공식 지원 채널로 문의하세요',
+    warningLink: '비밀번호, OTP, 개인 키 또는 송금',
+  },
+  th: {
+    badge: 'ความปลอดภัยของบัญชี',
+    title: 'ความปลอดภัยของบัญชีคืออันดับ 1',
+    desc: 'DA CASH BACK ดำเนินงานผ่านโปรแกรมพาร์ทเนอร์อย่างเป็นทางการ เราไม่ต้องการและจะไม่ขอสิทธิ์ควบคุมบัญชีการเทรดของคุณ',
+    canNeedTitle: 'DA CASH BACK อาจต้องการ',
+    neverAskTitle: 'DA CASH BACK จะไม่ขอสิ่งเหล่านี้',
+    canNeed: ['UID บัญชีตลาดของคุณ', 'อีเมลหรือ Telegram สำหรับติดต่อสนับสนุน', 'ชื่อตลาดที่คุณสมัคร', 'การยืนยันว่าสมัครผ่านลิงก์พาร์ทเนอร์ DA CASH BACK'],
+    neverAsk: ['รหัสผ่านบัญชีตลาด', 'รหัส OTP / 2FA', 'Seed phrase หรือ private key', 'API key ที่มีสิทธิ์ถอนเงิน', 'การโอนเงินไปยังกระเป๋าหรือบัญชีส่วนตัว', 'การฝากเงินเพื่อ "ปลดล็อก" หรือ "เปิดใช้งาน" แคชแบ็ก'],
+    warningTitle: 'คำเตือนการแอบอ้าง',
+    warningText: 'หากมีใครแอบอ้างเป็น DA CASH BACK และขอ {highlight} ให้หยุดทันทีและติดต่อช่องทางสนับสนุนอย่างเป็นทางการผ่าน',
+    warningLink: 'รหัสผ่าน, OTP, private key หรือการโอนเงิน',
+  },
+  id: {
+    badge: 'Keamanan Akun',
+    title: 'Keamanan Akun Adalah Prioritas #1',
+    desc: 'DA CASH BACK beroperasi melalui program partner resmi. Kami tidak memerlukan dan tidak akan pernah meminta kendali atas akun trading Anda.',
+    canNeedTitle: 'DA CASH BACK Mungkin Membutuhkan',
+    neverAskTitle: 'DA CASH BACK TIDAK PERNAH Meminta',
+    canNeed: ['UID akun exchange Anda', 'Email atau Telegram untuk kontak dukungan', 'Nama exchange yang Anda daftarkan', 'Konfirmasi bahwa Anda mendaftar melalui link partner DA CASH BACK'],
+    neverAsk: ['Kata sandi akun exchange', 'Kode OTP / 2FA', 'Seed phrase atau private key', 'API key dengan izin penarikan', 'Transfer uang ke dompet atau akun pribadi', 'Setoran untuk "membuka kunci" atau "mengaktifkan" cashback'],
+    warningTitle: 'Peringatan Peniruan',
+    warningText: 'Jika ada yang berpura-pura menjadi DA CASH BACK dan meminta {highlight}, segera hentikan dan hubungi dukungan resmi melalui',
+    warningLink: 'kata sandi, OTP, private key, atau transfer uang',
+  },
+};
