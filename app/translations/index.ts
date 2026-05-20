@@ -693,3 +693,69 @@ export const memberPrivilegesTranslations: Record<import('./index').Lang, Member
     benefits: ['Rebate biaya berkala','Tanpa biaya tambahan','Tanpa password/API penarikan','Riwayat transaksi jelas','Mendukung banyak Crypto & Forex','Trading seperti biasa'],
   },
 };
+
+// ── Compact Trust Section ─────────────────────────────────────────
+export interface TrustCompactTranslations {
+  badge: string; title: string; subtitle: string;
+  row1label: string; row1text: string;
+  row2label: string; row2text: string;
+  row3label: string; row3text: string;
+}
+
+export const trustCompactTranslations: Record<import('./index').Lang, TrustCompactTranslations> = {
+  vi: {
+    badge: 'Cam kết',
+    title: 'Cam kết an toàn & minh bạch',
+    subtitle: 'DA Cashback chỉ dùng UID để xác minh cashback, không giữ tiền và không can thiệp vào tài khoản giao dịch của bạn.',
+    row1label: '✅ Chỉ cần',
+    row1text: 'UID tài khoản sàn và xác nhận đăng ký qua link đối tác DA Cashback.',
+    row2label: '🚫 Không yêu cầu',
+    row2text: 'Mật khẩu, mã OTP/2FA, seed phrase, private key hoặc API key có quyền rút tiền.',
+    row3label: '⚠️ Lưu ý',
+    row3text: 'DA Cashback không cung cấp lời khuyên đầu tư và không cam kết lợi nhuận. Giao dịch tài chính luôn có rủi ro.',
+  },
+  en: {
+    badge: 'Commitment',
+    title: 'Safety & Transparency Commitment',
+    subtitle: 'DA Cashback only uses your UID to verify cashback eligibility. We do not hold funds or interfere with your trading account.',
+    row1label: '✅ Only needs',
+    row1text: 'Your exchange account UID and confirmation of registration via DA Cashback partner link.',
+    row2label: '🚫 Never asks for',
+    row2text: 'Passwords, OTP/2FA codes, seed phrases, private keys, or withdrawal API keys.',
+    row3label: '⚠️ Note',
+    row3text: 'DA Cashback does not provide investment advice and makes no profit guarantees. Financial trading always carries risk.',
+  },
+  ko: {
+    badge: '약속',
+    title: '안전 & 투명성 약속',
+    subtitle: 'DA Cashback은 캐시백 자격 확인을 위해 UID만 사용합니다. 자금을 보관하거나 거래 계정에 개입하지 않습니다.',
+    row1label: '✅ 필요한 것',
+    row1text: '거래소 계정 UID와 DA Cashback 파트너 링크를 통한 등록 확인.',
+    row2label: '🚫 요청하지 않는 것',
+    row2text: '비밀번호, OTP/2FA 코드, 시드 구문, 개인 키, 또는 출금 API 키.',
+    row3label: '⚠️ 참고',
+    row3text: 'DA Cashback은 투자 조언을 제공하지 않으며 수익을 보장하지 않습니다. 금융 거래에는 항상 리스크가 있습니다.',
+  },
+  th: {
+    badge: 'ความมุ่งมั่น',
+    title: 'ความมุ่งมั่นด้านความปลอดภัย & โปร่งใส',
+    subtitle: 'DA Cashback ใช้เพียง UID เพื่อยืนยันสิทธิ์แคชแบ็ก ไม่เก็บเงินและไม่แทรกแซงบัญชีเทรดของคุณ',
+    row1label: '✅ ต้องการเพียง',
+    row1text: 'UID บัญชีตลาดและการยืนยันการสมัครผ่านลิงก์พาร์ทเนอร์ DA Cashback',
+    row2label: '🚫 ไม่ขอ',
+    row2text: 'รหัสผ่าน, OTP/2FA, seed phrase, private key หรือ API key ถอนเงิน',
+    row3label: '⚠️ หมายเหตุ',
+    row3text: 'DA Cashback ไม่ให้คำแนะนำการลงทุนและไม่รับประกันผลกำไร การเทรดมีความเสี่ยง',
+  },
+  id: {
+    badge: 'Komitmen',
+    title: 'Komitmen Keamanan & Transparansi',
+    subtitle: 'DA Cashback hanya menggunakan UID untuk memverifikasi kelayakan cashback. Kami tidak menyimpan dana atau mengintervensi akun trading Anda.',
+    row1label: '✅ Hanya butuh',
+    row1text: 'UID akun exchange dan konfirmasi pendaftaran melalui link partner DA Cashback.',
+    row2label: '🚫 Tidak pernah meminta',
+    row2text: 'Kata sandi, kode OTP/2FA, seed phrase, private key, atau API key penarikan.',
+    row3label: '⚠️ Catatan',
+    row3text: 'DA Cashback tidak memberikan saran investasi dan tidak menjamin keuntungan. Trading keuangan selalu berisiko.',
+  },
+};

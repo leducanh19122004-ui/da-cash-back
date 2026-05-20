@@ -5,8 +5,7 @@ import StatsSection from './components/StatsSection';
 import ExchangesSection from './components/ExchangesSection';
 import HowItWorks from './components/HowItWorks';
 import CashbackActivity from './components/CashbackActivity';
-import SafetySection from './components/SafetySection';
-import TrustSafety from './components/TrustSafety';
+import TrustCompactSection from './components/TrustCompactSection';
 import FAQ from './components/FAQ';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
@@ -18,14 +17,12 @@ export default function HomePage() {
       <Header />
       <main>
         <HeroSection />
-        {/* ⭐ Merged flagship: Đặc quyền thành viên DA Cashback */}
         <MemberPrivilegesSection />
         <StatsSection />
         <ExchangesSection />
         <HowItWorks />
         <CashbackActivity />
-        <SafetySection />
-        <TrustSafety />
+        <TrustCompactSection />
         <FAQ />
         <Testimonials />
         <Contact />
