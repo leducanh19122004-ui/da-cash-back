@@ -8,11 +8,11 @@ export default function TrustSafety() {
     { icon: '✅', text: tr.p3 }, { icon: '🔍', text: tr.p4 }, { icon: '⛔', text: tr.p5 },
   ];
   return (
-    <section id="trust" style={{ padding: '6rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
+    <section id="trust" style={{ padding: '4rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
           <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{tr.badge}</p>
-          <h2 style={{ fontSize: 'clamp(1.75rem,3vw,2.5rem)', fontWeight: 900, color: '#F8F5E9', marginBottom: '1rem' }}>{tr.title}</h2>
+          <h2 style={{ fontSize: 'clamp(1.35rem,2.5vw,1.75rem)', fontWeight: 800, color: '#F8F5E9', marginBottom: '1rem' }}>{tr.title}</h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'start' }} className="trust-grid">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

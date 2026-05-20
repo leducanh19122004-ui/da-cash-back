@@ -19,15 +19,15 @@ export default function ExchangesSection() {
   const duration = Math.max(filtered.length * 3, 15);  // 4s per card — faster, still smooth
 
   return (
-    <section id="exchanges" style={{ padding: '5rem 0', background: 'transparent' }}>
+    <section id="exchanges" style={{ padding: '3.5rem 0', background: 'transparent' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.5rem' }}>
 
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
           <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
             {ex.badge}
           </p>
-          <h2 style={{ fontSize: 'clamp(1.75rem,3vw,2.5rem)', fontWeight: 900, color: '#F8F5E9', marginBottom: '1rem' }}>
+          <h2 style={{ fontSize: 'clamp(1.35rem,2.5vw,1.75rem)', fontWeight: 800, color: '#F8F5E9', marginBottom: '0.6rem' }}>
             {ex.title}
           </h2>
           <p style={{ color: '#777', maxWidth: '520px', margin: '0 auto 1.5rem', lineHeight: 1.7, fontSize: '0.9rem' }}>

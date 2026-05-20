@@ -7,15 +7,15 @@ export default function SafetySection() {
   const s = safetyTranslations[lang as keyof typeof safetyTranslations] ?? safetyTranslations.vi;
 
   return (
-    <section id="safety" style={{ padding: '6rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
+    <section id="safety" style={{ padding: '4rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
           <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
             {s.badge}
           </p>
-          <h2 style={{ fontSize: 'clamp(1.6rem,3vw,2.25rem)', fontWeight: 900, color: '#F8F5E9', marginBottom: '0.75rem' }}>
+          <h2 style={{ fontSize: 'clamp(1.35rem,2.5vw,1.75rem)', fontWeight: 800, color: '#F8F5E9', marginBottom: '0.75rem' }}>
             {s.title}
           </h2>
           <p style={{ color: '#888', maxWidth: '520px', margin: '0 auto', lineHeight: 1.7, fontSize: '0.9rem' }}>

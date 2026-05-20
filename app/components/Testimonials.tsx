@@ -252,13 +252,13 @@ export default function Testimonials() {
   const cards = [...ALL_TESTIMONIALS, ...ALL_TESTIMONIALS, ...ALL_TESTIMONIALS];
 
   return (
-    <section style={{ padding: '6rem 0 5rem', background: 'rgba(5,5,5,0)', overflow: 'hidden' }}>
+    <section style={{ padding: '4rem 0 3rem', background: 'rgba(5,5,5,0)', overflow: 'hidden' }}>
       {/* Header */}
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 1.5rem', marginBottom: '2rem', textAlign: 'center' }}>
         <p style={{ fontSize: '0.8rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
           {ts.badge}
         </p>
-        <h2 style={{ fontSize: 'clamp(1.6rem,3vw,2.25rem)', fontWeight: 900, color: '#F8F5E9', marginBottom: '0.75rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.35rem,2.5vw,1.75rem)', fontWeight: 800, color: '#F8F5E9', marginBottom: '0.75rem' }}>
           {ts.title}
         </h2>
         <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: 1.7, fontStyle: 'italic', maxWidth: '620px', margin: '0 auto 0.5rem' }}>

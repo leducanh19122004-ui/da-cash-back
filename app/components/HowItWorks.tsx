@@ -10,11 +10,11 @@ export default function HowItWorks() {
     { step: '04', icon: '💰', title: h.s4t, desc: h.s4d },
   ];
   return (
-    <section id="how-it-works" style={{ padding: '6rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
+    <section id="how-it-works" style={{ padding: '4rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{h.badge}</p>
-          <h2 style={{ fontSize: 'clamp(1.75rem,3vw,2.5rem)', fontWeight: 900, color: '#F8F5E9', marginBottom: '1rem' }}>{h.title}</h2>
+          <h2 style={{ fontSize: 'clamp(1.4rem,2.5vw,1.85rem)', fontWeight: 800, color: '#F8F5E9', marginBottom: '0.75rem' }}>{h.title}</h2>
           <p style={{ color: '#888', maxWidth: '500px', margin: '0 auto', lineHeight: 1.7 }}>{h.desc}</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1.5rem', position: 'relative' }} className="steps-grid">

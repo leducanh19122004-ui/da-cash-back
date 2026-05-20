@@ -1,10 +1,10 @@
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
+import BenefitsSection from './components/BenefitsSection';
 import StatsSection from './components/StatsSection';
 import ExchangesSection from './components/ExchangesSection';
 import HowItWorks from './components/HowItWorks';
 import CashbackActivity from './components/CashbackActivity';
-import BenefitsSection from './components/BenefitsSection';
 import SafetySection from './components/SafetySection';
 import TrustSafety from './components/TrustSafety';
 import FAQ from './components/FAQ';
@@ -18,11 +18,12 @@ export default function HomePage() {
       <Header />
       <main>
         <HeroSection />
+        {/* ⭐ Flagship section — placed prominently after hero */}
+        <BenefitsSection />
         <StatsSection />
         <ExchangesSection />
         <HowItWorks />
         <CashbackActivity />
-        <BenefitsSection />
         <SafetySection />
         <TrustSafety />
         <FAQ />
