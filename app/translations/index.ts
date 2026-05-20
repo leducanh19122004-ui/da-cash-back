@@ -602,6 +602,7 @@ export interface MemberPrivilegesTranslations {
   m3: { icon:string; title:string; sub:string; desc:string; };
   // Secondary benefits (pills)
   secondaryTitle: string;
+  secondaryCardTitle: string;
   benefits: string[];
 }
 
@@ -619,6 +620,7 @@ export const memberPrivilegesTranslations: Record<import('./index').Lang, Member
     m3: { icon:'🌐', title:'Hệ Sinh Thái DA Network', sub:'Kết nối & cơ hội hợp tác',
       desc:'Kết nối với DA Network để tiếp cận thêm deal sàn, chương trình affiliate và cơ hội hợp tác trong thị trường crypto.' },
     secondaryTitle: 'Và còn nhiều lợi ích khác',
+    secondaryCardTitle: 'Quyền lợi cashback cốt lõi',
     benefits: ['Hoàn phí định kỳ','Không mất thêm phí','Không yêu cầu mật khẩu / API rút tiền','Theo dõi lịch sử rõ ràng','Hỗ trợ nhiều sàn Crypto & Forex','Giao dịch như bình thường'],
   },
   en: {
@@ -634,6 +636,7 @@ export const memberPrivilegesTranslations: Record<import('./index').Lang, Member
     m3: { icon:'🌐', title:'DA Network Ecosystem', sub:'Connect & collaborate',
       desc:'Connect with DA Network to access more exchange deals, affiliate programs, and collaboration opportunities in the crypto market.' },
     secondaryTitle: 'And many more benefits',
+    secondaryCardTitle: 'Core cashback benefits',
     benefits: ['Periodic fee rebates','No extra cost','No password / withdrawal API required','Clear transaction history','Supports many Crypto & Forex exchanges','Trade as usual'],
   },
   ko: {
@@ -649,6 +652,7 @@ export const memberPrivilegesTranslations: Record<import('./index').Lang, Member
     m3: { icon:'🌐', title:'DA Network 생태계', sub:'연결 및 협업',
       desc:'DA Network와 연결하여 더 많은 거래소 딜, 어필리에이트 프로그램, 크립토 시장 협업 기회를 얻으세요.' },
     secondaryTitle: '그 외 다양한 혜택',
+    secondaryCardTitle: '핵심 캐시백 혜택',
     benefits: ['정기 수수료 환급','추가 비용 없음','비밀번호/출금 API 불필요','명확한 거래 내역','다양한 Crypto & Forex 지원','평소처럼 거래'],
   },
   th: {
@@ -664,6 +668,7 @@ export const memberPrivilegesTranslations: Record<import('./index').Lang, Member
     m3: { icon:'🌐', title:'ระบบนิเวศ DA Network', sub:'เชื่อมต่อและร่วมมือ',
       desc:'เชื่อมต่อกับ DA Network เพื่อเข้าถึงดีล exchange โปรแกรม affiliate และโอกาสร่วมมือในตลาด crypto' },
     secondaryTitle: 'และสิทธิประโยชน์อื่นๆ อีกมาก',
+    secondaryCardTitle: 'สิทธิประโยชน์แคชแบ็กหลัก',
     benefits: ['คืนค่าธรรมเนียมสม่ำเสมอ','ไม่มีค่าใช้จ่ายเพิ่มเติม','ไม่ต้องการรหัสผ่าน/API ถอนเงิน','ติดตามประวัติชัดเจน','รองรับหลาย Crypto & Forex','เทรดตามปกติ'],
   },
   id: {
@@ -679,6 +684,7 @@ export const memberPrivilegesTranslations: Record<import('./index').Lang, Member
     m3: { icon:'🌐', title:'Ekosistem DA Network', sub:'Terhubung & berkolaborasi',
       desc:'Terhubung dengan DA Network untuk mengakses lebih banyak deal exchange, program affiliate, dan peluang kolaborasi di pasar crypto.' },
     secondaryTitle: 'Dan masih banyak keuntungan lainnya',
+    secondaryCardTitle: 'Manfaat cashback inti',
     benefits: ['Rebate biaya berkala','Tanpa biaya tambahan','Tanpa password/API penarikan','Riwayat transaksi jelas','Mendukung banyak Crypto & Forex','Trading seperti biasa'],
   },
 };

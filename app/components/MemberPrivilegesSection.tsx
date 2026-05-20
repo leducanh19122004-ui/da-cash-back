@@ -10,20 +10,20 @@ export default function MemberPrivilegesSection() {
 
   const mainCards = [p.m1, p.m2, p.m3];
   const accentColors = [
-    { border: 'rgba(212,175,55,', glow: 'rgba(212,175,55,', icon: 'rgba(212,175,55,' },
-    { border: 'rgba(99,179,237,',  glow: 'rgba(99,179,237,',  icon: 'rgba(99,179,237,'  },
-    { border: 'rgba(167,139,250,', glow: 'rgba(167,139,250,', icon: 'rgba(167,139,250,' },
+    'rgba(212,175,55,',   // gold — Telegram
+    'rgba(99,179,237,',   // blue — KOL
+    'rgba(167,139,250,',  // purple — DA Network
   ];
 
   return (
-    <section id="member-privileges" style={{ position: 'relative', padding: '8rem 1.5rem', overflow: 'hidden' }}>
+    <section id="member-privileges" style={{ position:'relative', padding:'8rem 1.5rem', overflow:'hidden' }}>
 
-      {/* ── Background ─────────────────────────────── */}
+      {/* ── Background ─────────────────────────────────── */}
       <div style={{ position:'absolute', inset:0, zIndex:0, pointerEvents:'none',
         background:`
-          radial-gradient(ellipse 80% 60% at 50% 45%, rgba(212,175,55,0.085) 0%, transparent 65%),
-          radial-gradient(ellipse 50% 40% at 8%  55%, rgba(212,175,55,0.055) 0%, transparent 55%),
-          radial-gradient(ellipse 50% 40% at 92% 55%, rgba(212,175,55,0.05)  0%, transparent 55%)
+          radial-gradient(ellipse 85% 65% at 50% 45%, rgba(212,175,55,0.09) 0%, transparent 65%),
+          radial-gradient(ellipse 50% 40% at 5%  55%, rgba(212,175,55,0.06) 0%, transparent 55%),
+          radial-gradient(ellipse 50% 40% at 95% 55%, rgba(212,175,55,0.05) 0%, transparent 55%)
         `,
       }} />
       <div style={{ position:'absolute', inset:0, zIndex:0, pointerEvents:'none',
@@ -32,17 +32,16 @@ export default function MemberPrivilegesSection() {
         maskImage:'radial-gradient(ellipse 95% 80% at 50% 50%, black 20%, transparent 75%)',
         WebkitMaskImage:'radial-gradient(ellipse 95% 80% at 50% 50%, black 20%, transparent 75%)',
       }} />
-      {/* Accent lines top/bottom */}
       {[0,1].map(i=>(
         <div key={i} style={{ position:'absolute',[i===0?'top':'bottom']:0,
-          left:'8%',right:'8%',height:'1px', zIndex:1,
-          background:`linear-gradient(90deg,transparent,rgba(212,175,55,${i===0?0.5:0.3}) 30%,rgba(212,175,55,${i===0?0.75:0.5}) 50%,rgba(212,175,55,${i===0?0.5:0.3}) 70%,transparent)`,
+          left:'8%',right:'8%',height:'1px',zIndex:1,
+          background:`linear-gradient(90deg,transparent,rgba(212,175,55,${i===0?0.55:0.32}) 30%,rgba(212,175,55,${i===0?0.75:0.52}) 50%,rgba(212,175,55,${i===0?0.55:0.32}) 70%,transparent)`,
         }} />
       ))}
 
       <div style={{ maxWidth:'1180px', margin:'0 auto', position:'relative', zIndex:2 }}>
 
-        {/* ── HEADER ───────────────────────────────── */}
+        {/* ── HEADER ───────────────────────────────────── */}
         <div style={{ textAlign:'center', marginBottom:'3.5rem' }}>
           <div style={{
             display:'inline-flex', alignItems:'center', gap:'0.5rem',
@@ -52,58 +51,39 @@ export default function MemberPrivilegesSection() {
           }}>
             {p.badge}
           </div>
-          <h2 style={{
-            fontSize:'clamp(2.1rem,4.5vw,3.5rem)', fontWeight:900,
-            lineHeight:1.1, letterSpacing:'-0.02em', color:'#F8F5E9', marginBottom:'1.1rem',
-          }}>
-            {p.title.split('DA Cashback')[0]}
-            <span style={{ background:'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
-              DA Cashback
-            </span>
-            {p.title.split('DA Cashback')[1] || ''}
+          <h2 style={{ fontSize:'clamp(2.1rem,4.5vw,3.5rem)', fontWeight:900,
+            lineHeight:1.1, letterSpacing:'-0.02em', color:'#F8F5E9', marginBottom:'1.1rem' }}>
+            {p.title.includes('DA Cashback') ? (
+              <>
+                {p.title.split('DA Cashback')[0]}
+                <span style={{ background:'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
+                  DA Cashback
+                </span>
+                {p.title.split('DA Cashback')[1] || ''}
+              </>
+            ) : p.title}
           </h2>
           <p style={{ color:'#999', maxWidth:'620px', margin:'0 auto', lineHeight:1.78, fontSize:'0.975rem' }}>
             {p.subtitle}
           </p>
         </div>
 
-        {/* ── 3 MAIN CARDS (flagship) ───────────────── */}
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'1.5rem', marginBottom:'2.75rem' }}
+        {/* ── 3 MAIN CARDS (flagship, full row) ──────── */}
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'1.5rem', marginBottom:'1.5rem' }}
           className="mp-main-grid">
           {mainCards.map((card, idx) => (
-            <MainCard key={idx} card={card} colors={accentColors[idx]} />
+            <MainCard key={idx} card={card} ac={accentColors[idx]} />
           ))}
         </div>
 
-        {/* ── SECONDARY BENEFITS (pills) ───────────── */}
-        <div style={{ marginBottom:'2.5rem' }}>
-          <p style={{
-            textAlign:'center', fontSize:'0.8rem', fontWeight:700,
-            color:'#666', letterSpacing:'0.08em', textTransform:'uppercase',
-            marginBottom:'1rem',
-          }}>
-            {p.secondaryTitle}
-          </p>
-          <div style={{ display:'flex', flexWrap:'wrap', gap:'0.6rem', justifyContent:'center' }}>
-            {p.benefits.map((b,i) => (
-              <span key={i} style={{
-                padding:'0.38rem 0.9rem', borderRadius:'999px',
-                background:'rgba(212,175,55,0.07)', border:'1px solid rgba(212,175,55,0.2)',
-                fontSize:'0.8rem', fontWeight:500, color:'#B0B0B0',
-                letterSpacing:'0.01em',
-                transition:'border-color 0.2s, color 0.2s, background 0.2s',
-                cursor:'default',
-              }}
-              onMouseEnter={e=>{const el=e.currentTarget;el.style.borderColor='rgba(212,175,55,0.5)';el.style.color='#D4AF37';el.style.background='rgba(212,175,55,0.12)';}}
-              onMouseLeave={e=>{const el=e.currentTarget;el.style.borderColor='rgba(212,175,55,0.2)';el.style.color='#B0B0B0';el.style.background='rgba(212,175,55,0.07)';}}>
-                ✦ {b}
-              </span>
-            ))}
-          </div>
-        </div>
+        {/* ── 1 SECONDARY CARD (full width, compact) ─── */}
+        <CoreBenefitsCard
+          title={p.secondaryCardTitle ?? p.secondaryTitle}
+          benefits={p.benefits}
+        />
 
-        {/* ── CTA ──────────────────────────────────── */}
-        <div style={{ textAlign:'center' }}>
+        {/* ── CTA ──────────────────────────────────────── */}
+        <div style={{ textAlign:'center', marginTop:'2.5rem' }}>
           <a
             href="https://t.me/jacksondz"
             target="_blank" rel="noopener noreferrer"
@@ -133,67 +113,105 @@ export default function MemberPrivilegesSection() {
       <style>{`
         @media(max-width:900px){ .mp-main-grid{ grid-template-columns:1fr !important; }}
         @media(min-width:560px) and (max-width:900px){ .mp-main-grid{ grid-template-columns:1fr 1fr !important; }}
+        @media(max-width:560px){ .core-bullets{ grid-template-columns:1fr !important; }}
       `}</style>
     </section>
   );
 }
 
-// ── Main card sub-component ───────────────────────────────────────
-interface CardColors { border: string; glow: string; icon: string; }
+// ── Main privilege card ────────────────────────────────────────────
 interface CardData { icon:string; title:string; sub:string; desc:string; }
-
-function MainCard({ card, colors }: { card: CardData; colors: CardColors }) {
+function MainCard({ card, ac }: { card:CardData; ac:string }) {
   const [hov, setHov] = useState(false);
-  const c = colors;
   return (
     <div
       style={{
-        background:'rgba(8,7,4,0.85)',
-        border:`1.5px solid ${hov ? `${c.border}0.65)` : `${c.border}0.28)`}`,
+        background:'rgba(7,6,3,0.88)',
+        border:`1.5px solid ${hov?`${ac}0.7)`:`${ac}0.3)`}`,
         borderRadius:'1.5rem', padding:'2.1rem',
-        display:'flex', flexDirection:'column', gap:'1.2rem',
-        backdropFilter:'blur(16px)',
-        transform: hov ? 'translateY(-8px)' : 'none',
+        display:'flex', flexDirection:'column', gap:'1.25rem',
+        backdropFilter:'blur(18px)',
+        transform: hov ? 'translateY(-9px)' : 'none',
         boxShadow: hov
-          ? `0 20px 56px ${c.glow}0.2), 0 0 0 1px ${c.glow}0.1)`
-          : `0 4px 20px rgba(0,0,0,0.3)`,
+          ? `0 22px 60px ${ac}0.24), 0 0 0 1px ${ac}0.12), inset 0 1px 0 ${ac}0.08)`
+          : `0 4px 24px rgba(0,0,0,0.35)`,
         transition:'transform 0.3s ease, border-color 0.3s, box-shadow 0.3s',
         cursor:'default',
       }}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
+      onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
     >
-      {/* Icon */}
+      {/* Icon glow */}
       <div style={{
-        width:'66px', height:'66px', borderRadius:'1.2rem',
-        background:`linear-gradient(135deg,${c.icon}0.2),${c.icon}0.07))`,
-        border:`1.5px solid ${c.icon}0.45)`,
+        width:'68px', height:'68px', borderRadius:'1.2rem',
+        background:`linear-gradient(135deg,${ac}0.22),${ac}0.08))`,
+        border:`1.5px solid ${ac}0.5)`,
         display:'flex', alignItems:'center', justifyContent:'center',
-        fontSize:'1.85rem',
-        boxShadow: hov ? `0 0 28px ${c.glow}0.35)` : `0 0 14px ${c.glow}0.14)`,
+        fontSize:'1.9rem',
+        boxShadow: hov ? `0 0 32px ${ac}0.45)` : `0 0 16px ${ac}0.18)`,
         transition:'box-shadow 0.3s',
       }}>
         {card.icon}
       </div>
-
-      {/* Titles */}
       <div>
-        <h3 style={{ fontSize:'1.12rem', fontWeight:800, color:'#F8F5E9', marginBottom:'0.3rem', lineHeight:1.25 }}>
+        <h3 style={{ fontSize:'1.12rem', fontWeight:800, color:'#F8F5E9', marginBottom:'0.32rem', lineHeight:1.25 }}>
           {card.title}
         </h3>
-        <p style={{
-          fontSize:'0.78rem', fontWeight:700,
-          color: hov ? '#D4AF37' : '#999',
-          letterSpacing:'0.04em', transition:'color 0.3s',
-        }}>
+        <p style={{ fontSize:'0.78rem', fontWeight:700,
+          color: hov ? '#D4AF37' : '#888',
+          letterSpacing:'0.04em', transition:'color 0.3s' }}>
           {card.sub}
         </p>
       </div>
-
-      {/* Description */}
-      <p style={{ fontSize:'0.9rem', color:'#B0B0B0', lineHeight:1.7, flexGrow:1 }}>
+      <p style={{ fontSize:'0.9rem', color:'#B0B0B0', lineHeight:1.72, flexGrow:1 }}>
         {card.desc}
       </p>
+    </div>
+  );
+}
+
+// ── Core cashback benefits card (secondary, full-width) ────────────
+function CoreBenefitsCard({ title, benefits }: { title:string; benefits:string[] }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <div
+      style={{
+        background:'rgba(7,6,3,0.75)',
+        border:`1px solid ${hov?'rgba(212,175,55,0.32)':'rgba(212,175,55,0.15)'}`,
+        borderRadius:'1.25rem', padding:'1.75rem 2rem',
+        backdropFilter:'blur(12px)',
+        boxShadow: hov ? '0 8px 32px rgba(212,175,55,0.1)' : 'none',
+        transition:'border-color 0.3s, box-shadow 0.3s',
+        cursor:'default',
+      }}
+      onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
+    >
+      {/* Card header */}
+      <div style={{ display:'flex', alignItems:'center', gap:'0.6rem', marginBottom:'1.25rem' }}>
+        <div style={{
+          width:'36px', height:'36px', borderRadius:'0.65rem',
+          background:'rgba(212,175,55,0.1)', border:'1px solid rgba(212,175,55,0.3)',
+          display:'flex', alignItems:'center', justifyContent:'center',
+          fontSize:'1rem',
+        }}>
+          🔑
+        </div>
+        <h3 style={{ fontSize:'0.95rem', fontWeight:700, color:'#D4AF37', letterSpacing:'0.02em' }}>
+          {title}
+        </h3>
+      </div>
+
+      {/* 2-column bullet grid */}
+      <div
+        className="core-bullets"
+        style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.55rem 2rem' }}
+      >
+        {benefits.map((b,i) => (
+          <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:'0.5rem' }}>
+            <span style={{ color:'rgba(212,175,55,0.7)', fontSize:'0.75rem', flexShrink:0, marginTop:'0.2rem', fontWeight:700 }}>✓</span>
+            <span style={{ fontSize:'0.855rem', color:'#999', lineHeight:1.55 }}>{b}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
