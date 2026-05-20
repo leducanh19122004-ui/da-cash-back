@@ -591,3 +591,94 @@ export const privilegesTranslations: Record<import('./index').Lang, PrivilegesTr
     },
   },
 };
+
+// ── Merged section: MemberPrivileges ─────────────────────────────
+export interface MemberPrivilegesTranslations {
+  badge: string; title: string; subtitle: string;
+  ctaText: string; disclaimer: string;
+  // 3 main cards
+  m1: { icon:string; title:string; sub:string; desc:string; };
+  m2: { icon:string; title:string; sub:string; desc:string; };
+  m3: { icon:string; title:string; sub:string; desc:string; };
+  // Secondary benefits (pills)
+  secondaryTitle: string;
+  benefits: string[];
+}
+
+export const memberPrivilegesTranslations: Record<import('./index').Lang, MemberPrivilegesTranslations> = {
+  vi: {
+    badge: '✦ Dành riêng cho thành viên ✦',
+    title: 'Đặc quyền thành viên DA Cashback',
+    subtitle: 'Không chỉ hoàn phí giao dịch, DA Cashback còn mở ra cộng đồng tín hiệu, đào tạo KOL Crypto và cơ hội phát triển trong hệ sinh thái DA Network.',
+    ctaText: 'Tham gia DA Cashback ngay',
+    disclaimer: 'Giao dịch tài chính luôn có rủi ro. Signal không phải cam kết lợi nhuận.',
+    m1: { icon:'📡', title:'Nhóm Tín Hiệu Telegram', sub:'Signal giao dịch mỗi ngày',
+      desc:'Nhận signal giao dịch đều mỗi ngày từ cộng đồng DA Cashback. Tỷ lệ thắng mục tiêu lên tới 80% theo thống kê nội bộ.' },
+    m2: { icon:'🎓', title:'Đào Tạo KOL Crypto', sub:'Định hướng xây dựng thương hiệu',
+      desc:'Có cơ hội được định hướng xây dựng thương hiệu cá nhân, phát triển cộng đồng và làm affiliate crypto bởi những người có kinh nghiệm lâu năm.' },
+    m3: { icon:'🌐', title:'Hệ Sinh Thái DA Network', sub:'Kết nối & cơ hội hợp tác',
+      desc:'Kết nối với DA Network để tiếp cận thêm deal sàn, chương trình affiliate và cơ hội hợp tác trong thị trường crypto.' },
+    secondaryTitle: 'Và còn nhiều lợi ích khác',
+    benefits: ['Hoàn phí định kỳ','Không mất thêm phí','Không yêu cầu mật khẩu / API rút tiền','Theo dõi lịch sử rõ ràng','Hỗ trợ nhiều sàn Crypto & Forex','Giao dịch như bình thường'],
+  },
+  en: {
+    badge: '✦ Exclusive for Members ✦',
+    title: 'DA Cashback Member Privileges',
+    subtitle: 'More than just fee rebates — DA Cashback opens the door to a signal community, KOL Crypto training, and growth opportunities in the DA Network ecosystem.',
+    ctaText: 'Join DA Cashback Now',
+    disclaimer: 'Financial trading always carries risk. Signals are not profit guarantees.',
+    m1: { icon:'📡', title:'Telegram Signal Group', sub:'Daily trading signals',
+      desc:'Receive daily trading signals from the DA Cashback community. Target win rate up to 80% based on internal statistics.' },
+    m2: { icon:'🎓', title:'Crypto KOL Training', sub:'Build your personal brand',
+      desc:'Get mentored to build your personal brand, grow a community, and master crypto affiliate by experienced professionals.' },
+    m3: { icon:'🌐', title:'DA Network Ecosystem', sub:'Connect & collaborate',
+      desc:'Connect with DA Network to access more exchange deals, affiliate programs, and collaboration opportunities in the crypto market.' },
+    secondaryTitle: 'And many more benefits',
+    benefits: ['Periodic fee rebates','No extra cost','No password / withdrawal API required','Clear transaction history','Supports many Crypto & Forex exchanges','Trade as usual'],
+  },
+  ko: {
+    badge: '✦ 회원 전용 특별 혜택 ✦',
+    title: 'DA Cashback 회원 특별 혜택',
+    subtitle: '단순한 수수료 환급 그 이상 — DA Cashback은 시그널 커뮤니티, KOL 교육, DA Network 생태계 성장 기회를 제공합니다.',
+    ctaText: '지금 DA Cashback 가입',
+    disclaimer: '금융 거래에는 항상 리스크가 있습니다. 시그널은 수익을 보장하지 않습니다.',
+    m1: { icon:'📡', title:'텔레그램 시그널 그룹', sub:'매일 트레이딩 시그널',
+      desc:'DA Cashback 커뮤니티에서 매일 트레이딩 시그널을 받으세요. 내부 통계 기준 목표 승률 최대 80%.' },
+    m2: { icon:'🎓', title:'크립토 KOL 교육', sub:'개인 브랜드 구축',
+      desc:'경험 많은 전문가의 멘토링으로 개인 브랜드 구축, 커뮤니티 성장, 크립토 어필리에이트를 배울 수 있습니다.' },
+    m3: { icon:'🌐', title:'DA Network 생태계', sub:'연결 및 협업',
+      desc:'DA Network와 연결하여 더 많은 거래소 딜, 어필리에이트 프로그램, 크립토 시장 협업 기회를 얻으세요.' },
+    secondaryTitle: '그 외 다양한 혜택',
+    benefits: ['정기 수수료 환급','추가 비용 없음','비밀번호/출금 API 불필요','명확한 거래 내역','다양한 Crypto & Forex 지원','평소처럼 거래'],
+  },
+  th: {
+    badge: '✦ สิทธิพิเศษสำหรับสมาชิก ✦',
+    title: 'สิทธิพิเศษสมาชิก DA Cashback',
+    subtitle: 'มากกว่าแค่คืนค่าธรรมเนียม — DA Cashback เปิดประตูสู่ชุมชน Signal, การอบรม KOL Crypto และโอกาสในระบบนิเวศ DA Network',
+    ctaText: 'เข้าร่วม DA Cashback เลย',
+    disclaimer: 'การเทรดมีความเสี่ยง Signal ไม่ใช่การรับประกันผลกำไร',
+    m1: { icon:'📡', title:'กลุ่ม Signal Telegram', sub:'Signal ทุกวัน',
+      desc:'รับ Signal การเทรดทุกวันจากชุมชน DA Cashback อัตราชนะเป้าหมายสูงสุด 80% ตามสถิติภายใน' },
+    m2: { icon:'🎓', title:'อบรม KOL Crypto', sub:'สร้างแบรนด์ส่วนตัว',
+      desc:'รับการแนะนำในการสร้างแบรนด์ส่วนตัว พัฒนาชุมชน และทำ affiliate crypto จากผู้เชี่ยวชาญ' },
+    m3: { icon:'🌐', title:'ระบบนิเวศ DA Network', sub:'เชื่อมต่อและร่วมมือ',
+      desc:'เชื่อมต่อกับ DA Network เพื่อเข้าถึงดีล exchange โปรแกรม affiliate และโอกาสร่วมมือในตลาด crypto' },
+    secondaryTitle: 'และสิทธิประโยชน์อื่นๆ อีกมาก',
+    benefits: ['คืนค่าธรรมเนียมสม่ำเสมอ','ไม่มีค่าใช้จ่ายเพิ่มเติม','ไม่ต้องการรหัสผ่าน/API ถอนเงิน','ติดตามประวัติชัดเจน','รองรับหลาย Crypto & Forex','เทรดตามปกติ'],
+  },
+  id: {
+    badge: '✦ Eksklusif untuk Anggota ✦',
+    title: 'Keistimewaan Anggota DA Cashback',
+    subtitle: 'Lebih dari sekadar rebate biaya — DA Cashback membuka komunitas sinyal, pelatihan KOL Crypto, dan peluang berkembang di ekosistem DA Network.',
+    ctaText: 'Bergabung DA Cashback Sekarang',
+    disclaimer: 'Trading keuangan selalu memiliki risiko. Sinyal bukan jaminan keuntungan.',
+    m1: { icon:'📡', title:'Grup Sinyal Telegram', sub:'Sinyal trading setiap hari',
+      desc:'Terima sinyal trading setiap hari dari komunitas DA Cashback. Target win rate hingga 80% berdasarkan statistik internal.' },
+    m2: { icon:'🎓', title:'Pelatihan KOL Crypto', sub:'Bangun brand pribadi',
+      desc:'Dapatkan bimbingan membangun brand pribadi, mengembangkan komunitas, dan menguasai affiliate crypto dari para profesional berpengalaman.' },
+    m3: { icon:'🌐', title:'Ekosistem DA Network', sub:'Terhubung & berkolaborasi',
+      desc:'Terhubung dengan DA Network untuk mengakses lebih banyak deal exchange, program affiliate, dan peluang kolaborasi di pasar crypto.' },
+    secondaryTitle: 'Dan masih banyak keuntungan lainnya',
+    benefits: ['Rebate biaya berkala','Tanpa biaya tambahan','Tanpa password/API penarikan','Riwayat transaksi jelas','Mendukung banyak Crypto & Forex','Trading seperti biasa'],
+  },
+};

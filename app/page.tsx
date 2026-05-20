@@ -1,7 +1,6 @@
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
-import BenefitsSection from './components/BenefitsSection';
-import PrivilegesSection from './components/PrivilegesSection';
+import MemberPrivilegesSection from './components/MemberPrivilegesSection';
 import StatsSection from './components/StatsSection';
 import ExchangesSection from './components/ExchangesSection';
 import HowItWorks from './components/HowItWorks';
@@ -19,10 +18,8 @@ export default function HomePage() {
       <Header />
       <main>
         <HeroSection />
-        {/* ⭐ Flagship: general benefits */}
-        <BenefitsSection />
-        {/* ⭐ Flagship: unique privileges — Telegram, KOL, DA Network */}
-        <PrivilegesSection />
+        {/* ⭐ Merged flagship: Đặc quyền thành viên DA Cashback */}
+        <MemberPrivilegesSection />
         <StatsSection />
         <ExchangesSection />
         <HowItWorks />
