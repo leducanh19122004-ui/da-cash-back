@@ -281,9 +281,7 @@ export default function Testimonials() {
       {/* Notes */}
       <div style={{ maxWidth: '1100px', margin: '1.5rem auto 0', padding: '0 1.5rem', textAlign: 'center',
         display: 'flex', flexDirection: 'column', gap: '0.4rem', alignItems: 'center' }}>
-        <p style={{ fontSize: '0.7rem', color: '#444', fontStyle: 'italic' }}>{ts.privacyNote}</p>
-        {isMock && <p style={{ fontSize: '0.68rem', color: '#3a3a3a', fontStyle: 'italic' }}>{ts.mockLabel}</p>}
-        <p style={{ fontSize: '0.68rem', color: '#383838', maxWidth: '580px', lineHeight: 1.6 }}>{ts.fullNote}</p>
+        <p style={{ fontSize: '0.72rem', color: '#555', maxWidth: '580px', lineHeight: 1.65, margin: '0 auto' }}>{ts.fullNote}</p>
       </div>
     </section>
   );

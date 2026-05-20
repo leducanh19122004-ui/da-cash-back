@@ -87,8 +87,7 @@ export default function CashbackActivity(){
           <h2 style={{fontSize:'clamp(1.6rem,3vw,2.25rem)',fontWeight:900,color:'#F8F5E9',marginBottom:'0.75rem'}}>{ac.sectionTitle}</h2>
           {USE_MOCK_CASHBACK_DATA&&(
             <div style={{display:'inline-flex',alignItems:'center',gap:'0.4rem',padding:'0.28rem 0.85rem',borderRadius:'999px',background:'rgba(212,175,55,0.08)',border:'1px solid rgba(212,175,55,0.22)',fontSize:'0.7rem',color:'#B8B8B8'}}>
-              <span style={{width:'5px',height:'5px',borderRadius:'50%',background:'#D4AF37',display:'inline-block'}}/>
-              {ac.mockBadge}
+              ℹ️ {ac.mockBadge}
             </div>
           )}
         </div>

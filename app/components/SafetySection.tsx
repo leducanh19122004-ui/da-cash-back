@@ -67,11 +67,7 @@ export default function SafetySection() {
               {s.warningTitle}
             </h4>
             <p style={{ fontSize: '0.875rem', color: '#B8B8B8', lineHeight: 1.7 }}>
-              {s.warningText.replace('{highlight}', '')}{' '}
-              <strong style={{ color: '#F8F5E9' }}>{s.warningLink}</strong>
-              {s.warningText.includes('{highlight}')
-                ? s.warningText.split('{highlight}')[1]
-                : ''}{' '}
+              {s.warningText}{' '}
               <a href="https://t.me/jacksondz" style={{ color: '#D4AF37', textDecoration: 'none', fontWeight: 600 }}>
                 Telegram @jacksondz
               </a>.

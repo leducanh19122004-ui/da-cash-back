@@ -48,6 +48,25 @@ export default function GlobalAnimatedBackground() {
       width: 0.7  + (i % 3) * 0.4,
     }));
 
+
+    // ── Candlestick data for bg decoration ──────────────────────
+    const N = 200;
+    interface Candle { o:number; h:number; l:number; c:number; }
+    function genC(n:number, base=42000): Candle[] {
+      const out:Candle[]=[]; let p=base;
+      for(let i=0;i<n;i++){
+        const b=(Math.random()-.47)*p*.018, o=p, cv=p+b, w=p*.007;
+        out.push({o,c:cv,h:Math.max(o,cv)+Math.random()*w,l:Math.min(o,cv)-Math.random()*w});
+        p=cv;
+      }
+      return out;
+    }
+    function calcEma(prices:number[],period:number):number[]{
+      const k=2/(period+1);
+      return prices.reduce((acc:number[],p,i)=>{acc.push(i===0?p:p*k+acc[i-1]*(1-k));return acc;},[]);
+    }
+    const candles = genC(N);
+
     const draw = () => {
       if (!W || !H) { rafRef.current = requestAnimationFrame(draw); return; }
       ctx.clearRect(0, 0, W, H);
@@ -169,6 +188,45 @@ export default function GlobalAnimatedBackground() {
         ctx.arc(px * W, py * H, p.r, 0, Math.PI * 2);
         ctx.fill();
       });
+
+      
+      // ── BONUS: Subtle gold candlestick chart (bottom strip) ────
+      const csTop = H * 0.72, csH = H * 0.26, csBottom = csTop + csH;
+      const CW2 = 10, GAP2 = 5, STEP2 = CW2 + GAP2;
+      const scrollOffset = (t * 0.4) % (N * STEP2);
+      const startI = Math.max(0, Math.floor(scrollOffset / STEP2) - 1);
+      const visN   = Math.ceil(W / STEP2) + 4;
+      const vSlice = candles.slice(startI, startI + visN);
+      if (vSlice.length > 2) {
+        const cMin = Math.min(...vSlice.map((c:Candle) => c.l)) * 0.9995;
+        const cMax = Math.max(...vSlice.map((c:Candle) => c.h)) * 1.0005;
+        const cRng = cMax - cMin || 1;
+        const cy   = (p: number) => csBottom - ((p - cMin) / cRng) * csH;
+        const cx   = (i: number) => i * STEP2 - (scrollOffset % STEP2);
+        // EMA line over candlesticks
+        const ema9v = calcEma(vSlice.map((c:Candle) => c.c), 9);
+        ctx.strokeStyle = 'rgba(212,175,55,0.35)'; ctx.lineWidth = 1.1; ctx.lineJoin = 'round';
+        ctx.beginPath(); let es = false;
+        vSlice.forEach((_:Candle, i:number) => {
+          if (i >= ema9v.length) return;
+          const x = cx(i) + CW2/2, y = cy(ema9v[i]);
+          if (!es) { ctx.moveTo(x,y); es=true; } else ctx.lineTo(x,y);
+        });
+        ctx.stroke();
+        // Candle bodies
+        vSlice.forEach((cd:Candle, i:number) => {
+          const x  = cx(i), up = cd.c >= cd.o;
+          const alpha = 0.20 + (up ? 0.05 : 0);
+          ctx.strokeStyle = up ? `rgba(212,175,55,${alpha+0.15})` : `rgba(180,130,30,${alpha})`;
+          ctx.lineWidth = 0.8;
+          ctx.beginPath(); ctx.moveTo(x+CW2/2, cy(cd.h)); ctx.lineTo(x+CW2/2, cy(cd.l)); ctx.stroke();
+          const top2 = cy(Math.max(cd.o,cd.c)), bH2 = Math.max(cy(Math.min(cd.o,cd.c))-top2,1);
+          ctx.fillStyle = up ? `rgba(212,175,55,${alpha})` : `rgba(160,110,20,${alpha-0.05})`;
+          ctx.strokeStyle = up ? `rgba(212,175,55,${alpha+0.2})` : `rgba(180,130,30,${alpha+0.1})`;
+          ctx.lineWidth = 0.7;
+          ctx.fillRect(x,top2,CW2,bH2); ctx.strokeRect(x,top2,CW2,bH2);
+        });
+      }
 
       // ── 8. Corner gold accent vignette ─────────────────────────
       const vig = ctx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.9);
