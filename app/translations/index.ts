@@ -379,3 +379,215 @@ export const safetyTranslations: Record<Lang, SafetyTranslations> = {
     warningLink: '',
   },
 };
+
+
+export interface PrivilegesTranslations {
+  badge: string; title: string; subtitle: string; ctaText: string;
+  disclaimer: string;
+  p1: { icon: string; title: string; sub: string; points: string[]; };
+  p2: { icon: string; title: string; sub: string; points: string[]; };
+  p3: { icon: string; title: string; sub: string; points: string[]; };
+}
+
+export const privilegesTranslations: Record<import('./index').Lang, PrivilegesTranslations> = {
+  vi: {
+    badge: 'Dành riêng cho thành viên DA Cashback',
+    title: 'Đặc quyền khi cashback\ndưới DA CASH BACK',
+    subtitle: 'Không chỉ là hoàn phí — bạn còn nhận được cả một hệ sinh thái hỗ trợ trader phát triển bền vững.',
+    ctaText: 'Tham gia DA CASH BACK ngay',
+    disclaimer: 'Kết quả giao dịch có thể thay đổi theo thị trường, không cam kết lợi nhuận.',
+    p1: {
+      icon: '📡',
+      title: 'Nhóm Tín Hiệu Telegram',
+      sub: 'Tín hiệu giao dịch mỗi ngày',
+      points: [
+        'Truy cập nhóm tín hiệu giao dịch riêng trên Telegram',
+        'Signal cập nhật đều đặn hàng ngày',
+        'Tỷ lệ thắng mục tiêu lên tới 80% theo thống kê nội bộ',
+        'Phân tích thị trường từ chuyên gia crypto',
+      ],
+    },
+    p2: {
+      icon: '🎓',
+      title: 'Đào Tạo KOL Crypto',
+      sub: 'Được đào tạo để trở thành KOL',
+      points: [
+        'Hướng dẫn bởi chuyên gia có kinh nghiệm lâu năm',
+        'Xây dựng thương hiệu cá nhân trong crypto',
+        'Phát triển cộng đồng và affiliate crypto',
+        'Tạo nội dung, tối ưu chuyển đổi hiệu quả',
+      ],
+    },
+    p3: {
+      icon: '🌐',
+      title: 'Hệ Sinh Thái DA Network',
+      sub: 'Kết nối với cộng đồng DA Network',
+      points: [
+        'Tiếp cận nhiều deal sàn và chương trình affiliate',
+        'Kết nối với cộng đồng trader chuyên nghiệp',
+        'Cơ hội hợp tác và phát triển trong thị trường crypto',
+        'Thông tin và deal độc quyền từ DA Network',
+      ],
+    },
+  },
+  en: {
+    badge: 'Exclusive for DA Cashback Members',
+    title: 'Privileges for DA CASH BACK\nMembers',
+    subtitle: 'More than just cashback — get access to an ecosystem designed to grow with you.',
+    ctaText: 'Join DA CASH BACK Now',
+    disclaimer: 'Trading results may vary with market conditions. No profit guarantee.',
+    p1: {
+      icon: '📡',
+      title: 'Telegram Signal Group',
+      sub: 'Daily trading signals',
+      points: [
+        'Access to exclusive Telegram trading signal group',
+        'Signals updated daily by experienced analysts',
+        'Target win rate up to 80% based on internal stats',
+        'Market analysis from crypto experts',
+      ],
+    },
+    p2: {
+      icon: '🎓',
+      title: 'Crypto KOL Training',
+      sub: 'Become a crypto KOL',
+      points: [
+        'Mentored by veteran crypto and affiliate experts',
+        'Build your personal brand in crypto',
+        'Grow a community and master crypto affiliate',
+        'Content creation and conversion optimization',
+      ],
+    },
+    p3: {
+      icon: '🌐',
+      title: 'DA Network Ecosystem',
+      sub: 'Connect with DA Network',
+      points: [
+        'Access to multiple exchange deals and affiliate programs',
+        'Connect with professional crypto traders',
+        'Collaboration opportunities in the crypto market',
+        'Exclusive info and deals from DA Network',
+      ],
+    },
+  },
+  ko: {
+    badge: 'DA Cashback 회원 전용',
+    title: 'DA CASH BACK 회원\n특별 혜택',
+    subtitle: '캐시백 그 이상 — 트레이더로 성장하기 위한 완전한 생태계를 제공합니다.',
+    ctaText: '지금 DA CASH BACK 가입',
+    disclaimer: '거래 결과는 시장 상황에 따라 다를 수 있으며 수익을 보장하지 않습니다.',
+    p1: {
+      icon: '📡',
+      title: '텔레그램 시그널 그룹',
+      sub: '매일 업데이트되는 트레이딩 시그널',
+      points: [
+        '독점 텔레그램 트레이딩 시그널 그룹 접근',
+        '경험 많은 분석가의 일일 시그널 업데이트',
+        '내부 통계 기준 목표 승률 최대 80%',
+        '크립토 전문가의 시장 분석',
+      ],
+    },
+    p2: {
+      icon: '🎓',
+      title: '크립토 KOL 교육',
+      sub: 'KOL로 성장하는 교육',
+      points: [
+        '크립토 및 어필리에이트 베테랑 전문가 멘토링',
+        '크립토 분야 개인 브랜드 구축',
+        '커뮤니티 성장 및 크립토 어필리에이트',
+        '콘텐츠 제작 및 전환 최적화',
+      ],
+    },
+    p3: {
+      icon: '🌐',
+      title: 'DA Network 생태계',
+      sub: 'DA Network 커뮤니티 연결',
+      points: [
+        '다양한 거래소 딜 및 어필리에이트 프로그램 접근',
+        '전문 크립토 트레이더와 네트워킹',
+        '크립토 시장에서의 협업 기회',
+        'DA Network 독점 정보 및 딜',
+      ],
+    },
+  },
+  th: {
+    badge: 'สิทธิพิเศษสำหรับสมาชิก DA Cashback',
+    title: 'สิทธิพิเศษสำหรับ\nสมาชิก DA CASH BACK',
+    subtitle: 'มากกว่าแค่แคชแบ็ก — รับระบบนิเวศที่ออกแบบมาเพื่อเติบโตไปกับคุณ',
+    ctaText: 'เข้าร่วม DA CASH BACK เลย',
+    disclaimer: 'ผลการเทรดอาจแตกต่างกันตามสภาวะตลาด ไม่รับประกันผลกำไร',
+    p1: {
+      icon: '📡',
+      title: 'กลุ่ม Signal Telegram',
+      sub: 'สัญญาณเทรดรายวัน',
+      points: [
+        'เข้าถึงกลุ่ม Signal เทรดใน Telegram แบบพิเศษ',
+        'อัปเดต Signal ทุกวันจากนักวิเคราะห์มากประสบการณ์',
+        'อัตราชนะเป้าหมายสูงสุด 80% ตามสถิติภายใน',
+        'การวิเคราะห์ตลาดจากผู้เชี่ยวชาญ crypto',
+      ],
+    },
+    p2: {
+      icon: '🎓',
+      title: 'อบรม KOL Crypto',
+      sub: 'เรียนรู้การเป็น KOL',
+      points: [
+        'รับการสอนจากผู้เชี่ยวชาญ crypto และ affiliate',
+        'สร้างแบรนด์ส่วนตัวในวงการ crypto',
+        'พัฒนาชุมชนและ crypto affiliate',
+        'สร้างคอนเทนต์และเพิ่มประสิทธิภาพการแปลง',
+      ],
+    },
+    p3: {
+      icon: '🌐',
+      title: 'ระบบนิเวศ DA Network',
+      sub: 'เชื่อมต่อกับ DA Network',
+      points: [
+        'เข้าถึงดีล exchange และโปรแกรม affiliate หลายรายการ',
+        'เชื่อมต่อกับเทรดเดอร์มืออาชีพ',
+        'โอกาสร่วมมือในตลาด crypto',
+        'ข้อมูลและดีลพิเศษจาก DA Network',
+      ],
+    },
+  },
+  id: {
+    badge: 'Eksklusif untuk Anggota DA Cashback',
+    title: 'Keistimewaan Anggota\nDA CASH BACK',
+    subtitle: 'Lebih dari sekadar cashback — dapatkan ekosistem lengkap untuk berkembang bersama kami.',
+    ctaText: 'Bergabung DA CASH BACK Sekarang',
+    disclaimer: 'Hasil trading dapat bervariasi sesuai kondisi pasar. Tidak ada jaminan keuntungan.',
+    p1: {
+      icon: '📡',
+      title: 'Grup Sinyal Telegram',
+      sub: 'Sinyal trading setiap hari',
+      points: [
+        'Akses ke grup sinyal trading eksklusif di Telegram',
+        'Sinyal diperbarui setiap hari oleh analis berpengalaman',
+        'Target win rate hingga 80% berdasarkan statistik internal',
+        'Analisis pasar dari ahli crypto',
+      ],
+    },
+    p2: {
+      icon: '🎓',
+      title: 'Pelatihan KOL Crypto',
+      sub: 'Jadilah KOL crypto',
+      points: [
+        'Dibimbing oleh veteran crypto dan affiliate',
+        'Bangun brand pribadi di dunia crypto',
+        'Kembangkan komunitas dan kuasai affiliate crypto',
+        'Pembuatan konten dan optimasi konversi',
+      ],
+    },
+    p3: {
+      icon: '🌐',
+      title: 'Ekosistem DA Network',
+      sub: 'Terhubung dengan DA Network',
+      points: [
+        'Akses ke banyak deal exchange dan program affiliate',
+        'Terhubung dengan trader crypto profesional',
+        'Peluang kolaborasi di pasar crypto',
+        'Info dan deal eksklusif dari DA Network',
+      ],
+    },
+  },
+};
