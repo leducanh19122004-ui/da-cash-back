@@ -120,7 +120,7 @@ export default function MemberPrivilegesSection() {
 }
 
 // ── Main privilege card ────────────────────────────────────────────
-interface CardData { icon:string; title:string; sub:string; desc:string; }
+interface CardData { icon:string; title:string; sub:string; desc:string; note?:string; }
 function MainCard({ card, ac }: { card:CardData; ac:string }) {
   const [hov, setHov] = useState(false);
   return (
@@ -165,6 +165,14 @@ function MainCard({ card, ac }: { card:CardData; ac:string }) {
       <p style={{ fontSize:'0.9rem', color:'#B0B0B0', lineHeight:1.72, flexGrow:1 }}>
         {card.desc}
       </p>
+      {card.note && (
+        <p style={{
+          fontSize:'0.72rem', color:'#666', lineHeight:1.6, fontStyle:'italic',
+          borderTop:'1px solid rgba(212,175,55,0.1)', paddingTop:'0.75rem', marginTop:'0.25rem',
+        }}>
+          ℹ️ {card.note}
+        </p>
+      )}
     </div>
   );
 }
