@@ -99,3 +99,4 @@ export default function TrustCompactSection() {
     </section>
   );
 }
+
