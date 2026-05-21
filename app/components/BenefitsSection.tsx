@@ -1,19 +1,18 @@
 'use client';
 import { useLang } from '../contexts/LanguageContext';
-
-const BENEFIT_ICONS = ['⚡', '💎', '🔁', '📊', '🌐', '🛡️'];
+import { IconZap, IconDiamond, IconRefresh, IconBarChart, IconGlobe, IconShield } from './Icons';
 
 export default function BenefitsSection() {
   const { t } = useLang();
   const b = t.benefits;
 
   const items = [
-    { icon: BENEFIT_ICONS[0], title: b.b1t, desc: b.b1d },
-    { icon: BENEFIT_ICONS[1], title: b.b2t, desc: b.b2d },
-    { icon: BENEFIT_ICONS[2], title: b.b3t, desc: b.b3d },
-    { icon: BENEFIT_ICONS[3], title: b.b4t, desc: b.b4d },
-    { icon: BENEFIT_ICONS[4], title: b.b5t, desc: b.b5d },
-    { icon: BENEFIT_ICONS[5], title: b.b6t, desc: b.b6d },
+    { icon: <IconZap size={26} />, title: b.b1t, desc: b.b1d },
+    { icon: <IconDiamond size={26} />, title: b.b2t, desc: b.b2d },
+    { icon: <IconRefresh size={26} />, title: b.b3t, desc: b.b3d },
+    { icon: <IconBarChart size={26} />, title: b.b4t, desc: b.b4d },
+    { icon: <IconGlobe size={26} />, title: b.b5t, desc: b.b5d },
+    { icon: <IconShield size={26} />, title: b.b6t, desc: b.b6d },
   ];
 
   return (
@@ -35,7 +34,6 @@ export default function BenefitsSection() {
           radial-gradient(ellipse 50% 40% at 90% 20%, rgba(212,175,55,0.04) 0%, transparent 55%)
         `,
       }} />
-      {/* Subtle grid overlay */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
         backgroundImage: 'linear-gradient(rgba(212,175,55,0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.055) 1px, transparent 1px)',
@@ -43,13 +41,11 @@ export default function BenefitsSection() {
         maskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 80%)',
         WebkitMaskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 80%)',
       }} />
-      {/* Top gold accent line */}
       <div style={{
         position: 'absolute', top: 0, left: '10%', right: '10%', height: '1px',
         background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.4) 30%, rgba(212,175,55,0.7) 50%, rgba(212,175,55,0.4) 70%, transparent)',
         zIndex: 1,
       }} />
-      {/* Bottom gold accent line */}
       <div style={{
         position: 'absolute', bottom: 0, left: '10%', right: '10%', height: '1px',
         background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.3) 30%, rgba(212,175,55,0.5) 50%, rgba(212,175,55,0.3) 70%, transparent)',
@@ -134,7 +130,7 @@ export default function BenefitsSection() {
                 background: 'linear-gradient(135deg, rgba(212,175,55,0.18), rgba(212,175,55,0.06))',
                 border: '1.5px solid rgba(212,175,55,0.35)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.6rem',
+                color: '#D4AF37',
                 boxShadow: '0 0 18px rgba(212,175,55,0.2)',
               }}>
                 {item.icon}
@@ -182,7 +178,7 @@ export default function BenefitsSection() {
               el.style.boxShadow = '0 6px 32px rgba(212,175,55,0.45)';
             }}
           >
-            <span>⚡</span>
+            <IconZap size={18} />
             Tham gia DA CASH BACK ngay
             <span>→</span>
           </a>

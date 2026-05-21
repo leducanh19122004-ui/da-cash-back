@@ -1,8 +1,42 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { exchanges } from '../data/exchanges';
 import ExchangeCard from './ExchangeCard';
 import { useLang } from '../contexts/LanguageContext';
+import { IconChevronLeft, IconChevronRight, IconAlertTriangle } from './Icons';
+
+const CARD_W = 292;
+const GAP = 16;
+const STEP = CARD_W + GAP;
+
+function NavBtn({ dir, onClick }: { dir: 'prev' | 'next'; onClick: () => void }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      aria-label={dir === 'prev' ? 'Previous' : 'Next'}
+      style={{
+        position: 'absolute',
+        top: '50%',
+        ...(dir === 'prev' ? { left: '12px' } : { right: '12px' }),
+        transform: 'translateY(-50%)',
+        zIndex: 10,
+        width: '44px', height: '44px', borderRadius: '50%',
+        background: hov ? 'rgba(212,175,55,0.22)' : 'rgba(10,9,6,0.88)',
+        border: `1.5px solid ${hov ? '#D4AF37' : 'rgba(212,175,55,0.42)'}`,
+        color: '#D4AF37', cursor: 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        transition: 'all 0.2s',
+        backdropFilter: 'blur(10px)',
+        boxShadow: hov ? '0 0 18px rgba(212,175,55,0.28)' : '0 4px 14px rgba(0,0,0,0.45)',
+      }}
+    >
+      {dir === 'prev' ? <IconChevronLeft size={20} /> : <IconChevronRight size={20} />}
+    </button>
+  );
+}
 
 export default function ExchangesSection() {
   const [filter, setFilter] = useState<'all' | 'crypto' | 'forex'>('all');
@@ -10,13 +44,56 @@ export default function ExchangesSection() {
   const ex = t.exchanges;
 
   const filtered = filter === 'all' ? exchanges : exchanges.filter(e => e.type === filter);
+  const len = filtered.length;
 
-  // Duplicate enough times to always fill the viewport even for small sets
-  const minReps  = Math.ceil(20 / filtered.length) + 1; // at least 20 cards visible
-  const cards    = Array.from({ length: minReps * 2 }, (_, i) => filtered[i % filtered.length]);
-  const CARD_W   = 290 + 16; // card width + gap
-  const halfW    = filtered.length * minReps * CARD_W; // px for one full set
-  const duration = Math.max(filtered.length * 3, 15);  // 4s per card — faster, still smooth
+  const trackRef = useRef<HTMLDivElement>(null);
+  const offsetRef = useRef(len);
+  const pausedRef = useRef(false);
+
+  const applyTranslate = useCallback((offset: number, animated: boolean) => {
+    if (!trackRef.current) return;
+    trackRef.current.style.transition = animated
+      ? 'transform 0.42s cubic-bezier(0.4,0,0.2,1)'
+      : 'none';
+    trackRef.current.style.transform = `translateX(${-offset * STEP}px)`;
+  }, []);
+
+  const goNext = useCallback(() => {
+    offsetRef.current += 1;
+    applyTranslate(offsetRef.current, true);
+  }, [applyTranslate]);
+
+  const goPrev = useCallback(() => {
+    offsetRef.current -= 1;
+    applyTranslate(offsetRef.current, true);
+  }, [applyTranslate]);
+
+  const handleTransitionEnd = useCallback(() => {
+    const o = offsetRef.current;
+    if (o >= len * 2) {
+      offsetRef.current = o - len;
+      applyTranslate(offsetRef.current, false);
+    } else if (o < len) {
+      offsetRef.current = o + len;
+      applyTranslate(offsetRef.current, false);
+    }
+  }, [len, applyTranslate]);
+
+  // Reset carousel position on filter change
+  useEffect(() => {
+    offsetRef.current = filtered.length;
+    applyTranslate(filtered.length, false);
+  }, [filter, filtered.length, applyTranslate]);
+
+  // Auto-advance
+  useEffect(() => {
+    const iv = setInterval(() => {
+      if (!pausedRef.current) goNext();
+    }, 3500);
+    return () => clearInterval(iv);
+  }, [goNext]);
+
+  const allItems = [...filtered, ...filtered, ...filtered];
 
   return (
     <section id="exchanges" style={{ padding: '3.5rem 0', background: 'transparent' }}>
@@ -61,8 +138,9 @@ export default function ExchangesSection() {
 
       {/* ── Carousel ─────────────────────────────────────────── */}
       <div
-        className="exchanges-carousel-wrapper"
-        style={{ position: 'relative', overflow: 'hidden', padding: '0.5rem 0 1.5rem' }}
+        style={{ position: 'relative', padding: '0.5rem 0 1.5rem' }}
+        onMouseEnter={() => { pausedRef.current = true; }}
+        onMouseLeave={() => { pausedRef.current = false; }}
       >
         {/* Fade masks */}
         <div style={{
@@ -76,25 +154,21 @@ export default function ExchangesSection() {
           pointerEvents: 'none',
         }} />
 
-        {/* Scrolling track — key=filter forces CSS animation restart on filter change */}
-        <div
-          key={filter}
-          className="exchanges-track"
-          style={{
-            display: 'flex', gap: '1rem',
-            padding: '0.5rem 1rem',
-            width: 'max-content',
-            animationName: 'exchanges-marquee',
-            animationDuration: `${duration}s`,
-            animationTimingFunction: 'linear',
-            animationIterationCount: 'infinite',
-            animationPlayState: 'running',
-            willChange: 'transform',
-          }}
-        >
-          {cards.map((exchange, idx) => (
-            <ExchangeCard key={`${exchange.id}-${idx}`} exchange={exchange} />
-          ))}
+        {/* Nav buttons */}
+        <NavBtn dir="prev" onClick={goPrev} />
+        <NavBtn dir="next" onClick={goNext} />
+
+        {/* Track */}
+        <div style={{ overflow: 'hidden', padding: '0.25rem 0' }}>
+          <div
+            ref={trackRef}
+            onTransitionEnd={handleTransitionEnd}
+            style={{ display: 'flex', gap: `${GAP}px`, padding: '0.25rem 1rem', willChange: 'transform' }}
+          >
+            {allItems.map((exchange, idx) => (
+              <ExchangeCard key={`${exchange.id}-${idx}`} exchange={exchange} />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -105,23 +179,15 @@ export default function ExchangesSection() {
           background: 'rgba(212,175,55,0.04)', border: '1px solid rgba(212,175,55,0.12)',
           display: 'flex', alignItems: 'flex-start', gap: '0.6rem',
         }}>
-          <span style={{ fontSize: '0.85rem', flexShrink: 0 }}>⚠️</span>
-          <p style={{ fontSize: '0.78rem', color: '#666', lineHeight: 1.6 }}>{ex.disclaimer}</p>
+          <span style={{ color: '#D4AF37', display: 'flex', flexShrink: 0, marginTop: '1px' }}><IconAlertTriangle size={16} /></span>
+          <p style={{ fontSize: '0.78rem', color: '#666', lineHeight: 1.6 }}>{ex.disclaimer.replace(/^⚠️\s*/, '')}</p>
         </div>
       </div>
 
-      {/* Keyframe + pause-on-hover */}
       <style>{`
-        @keyframes exchanges-marquee {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
-        }
-        .exchanges-carousel-wrapper:hover .exchanges-track {
-          animation-play-state: paused;
-        }
         .exchange-card { user-select: none; }
         @media (prefers-reduced-motion: reduce) {
-          .exchanges-track { animation: none !important; }
+          * { transition: none !important; }
         }
       `}</style>
     </section>

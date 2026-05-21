@@ -1,8 +1,9 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useLang } from '../contexts/LanguageContext';
 import { extraTranslations } from '../translations';
 import { USE_MOCK_CASHBACK_DATA } from '../lib/cashback';
+import { IconChevronLeft, IconChevronRight, IconStar } from './Icons';
 
 // ─── Data ─────────────────────────────────────────────────────────
 interface TestimonialItem {
@@ -10,7 +11,7 @@ interface TestimonialItem {
   exchange: string; exchangeType: 'crypto' | 'forex'; avatar: string;
   rating: number; locale: string;
   badges: ('verifiedUid' | 'cashbackRecorded' | 'privacyProtected')[];
-  text: string; // native language text
+  text: string;
 }
 
 const ALL_TESTIMONIALS: TestimonialItem[] = [
@@ -207,15 +208,17 @@ function TestimonialCard({ item, badgeLabels, exchangeLabel }:
             <span style={{ fontSize:'0.9rem' }}>{item.flag}</span>
           </div>
           <p style={{ fontSize:'0.65rem', color:'#555', marginTop:'0.06rem' }}>{item.email}</p>
-          <div style={{ display:'flex', gap:'1px', marginTop:'0.28rem' }}>
+          <div style={{ display:'flex', gap:'2px', marginTop:'0.28rem' }}>
             {Array.from({length:5}).map((_,i) => (
-              <span key={i} style={{ fontSize:'0.72rem', color:i < item.rating ? '#D4AF37' : '#222' }}>★</span>
+              <span key={i} style={{ color: i < item.rating ? '#D4AF37' : '#2a2a2a', display:'flex' }}>
+                <IconStar size={12} filled={i < item.rating} />
+              </span>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Review text — native language */}
+      {/* Review text */}
       <p style={{ fontSize:'0.84rem', color:'#B0B0B0', lineHeight:1.7, fontStyle:'italic', flex:1 }}>
         &ldquo;{item.text}&rdquo;
       </p>
@@ -235,12 +238,40 @@ function TestimonialCard({ item, badgeLabels, exchangeLabel }:
   );
 }
 
+// ─── Carousel constants ───────────────────────────────────────────
+const CARD_W = 310;
+const GAP = 16;
+const STEP = CARD_W + GAP;
+
+function NavBtn({ dir, onClick }: { dir: 'prev' | 'next'; onClick: () => void }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      aria-label={dir === 'prev' ? 'Previous' : 'Next'}
+      style={{
+        width: '44px', height: '44px', borderRadius: '50%',
+        background: hov ? 'rgba(212,175,55,0.22)' : 'rgba(10,9,6,0.88)',
+        border: `1.5px solid ${hov ? '#D4AF37' : 'rgba(212,175,55,0.42)'}`,
+        color: '#D4AF37', cursor: 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        transition: 'all 0.2s', flexShrink: 0,
+        backdropFilter: 'blur(10px)',
+        boxShadow: hov ? '0 0 18px rgba(212,175,55,0.28)' : '0 4px 14px rgba(0,0,0,0.45)',
+      }}
+    >
+      {dir === 'prev' ? <IconChevronLeft size={20} /> : <IconChevronRight size={20} />}
+    </button>
+  );
+}
+
 // ─── Main section ─────────────────────────────────────────────────
 export default function Testimonials() {
   const { lang } = useLang();
   const ts = extraTranslations[lang as keyof typeof extraTranslations]?.testimonials
     ?? extraTranslations.vi.testimonials;
-  const isMock = USE_MOCK_CASHBACK_DATA;
 
   const badgeLabels = {
     verifiedUid:      ts.badges.verifiedUid,
@@ -248,8 +279,52 @@ export default function Testimonials() {
     privacyProtected: ts.badges.privacyProtected,
   };
 
-  // 3 copies for smooth infinite loop (translateX -33.333% = 1 copy)
-  const cards = [...ALL_TESTIMONIALS, ...ALL_TESTIMONIALS, ...ALL_TESTIMONIALS];
+  const len = ALL_TESTIMONIALS.length;
+  const allItems = [...ALL_TESTIMONIALS, ...ALL_TESTIMONIALS, ...ALL_TESTIMONIALS];
+
+  const trackRef = useRef<HTMLDivElement>(null);
+  const offsetRef = useRef(len);
+  const pausedRef = useRef(false);
+
+  const applyTranslate = useCallback((offset: number, animated: boolean) => {
+    if (!trackRef.current) return;
+    trackRef.current.style.transition = animated
+      ? 'transform 0.42s cubic-bezier(0.4,0,0.2,1)'
+      : 'none';
+    trackRef.current.style.transform = `translateX(${-offset * STEP}px)`;
+  }, []);
+
+  const goNext = useCallback(() => {
+    offsetRef.current += 1;
+    applyTranslate(offsetRef.current, true);
+  }, [applyTranslate]);
+
+  const goPrev = useCallback(() => {
+    offsetRef.current -= 1;
+    applyTranslate(offsetRef.current, true);
+  }, [applyTranslate]);
+
+  const handleTransitionEnd = useCallback(() => {
+    const o = offsetRef.current;
+    if (o >= len * 2) {
+      offsetRef.current = o - len;
+      applyTranslate(offsetRef.current, false);
+    } else if (o < len) {
+      offsetRef.current = o + len;
+      applyTranslate(offsetRef.current, false);
+    }
+  }, [len, applyTranslate]);
+
+  useEffect(() => {
+    applyTranslate(len, false);
+  }, []); // eslint-disable-line
+
+  useEffect(() => {
+    const iv = setInterval(() => {
+      if (!pausedRef.current) goNext();
+    }, 5000);
+    return () => clearInterval(iv);
+  }, [goNext]);
 
   return (
     <section style={{ padding: '4rem 0 3rem', background: 'rgba(5,5,5,0)', overflow: 'hidden' }}>
@@ -261,26 +336,59 @@ export default function Testimonials() {
         <h2 style={{ fontSize: 'clamp(1.35rem,2.5vw,1.75rem)', fontWeight: 800, color: '#F8F5E9', marginBottom: '0.75rem' }}>
           {ts.title}
         </h2>
-        <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: 1.7, fontStyle: 'italic', maxWidth: '620px', margin: '0 auto 0.5rem' }}>
+        <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: 1.7, fontStyle: 'italic', maxWidth: '620px', margin: '0 auto' }}>
           {ts.subtitle}
         </p>
-        <p style={{ fontSize: '0.72rem', color: '#555', letterSpacing: '0.04em' }}>↔ Hover vào từng card để dừng — cuộn tự động</p>
       </div>
 
-      {/* Carousel — pure CSS hover, no JS needed */}
-      <div className="testimonials-wrapper">
-        <div className="testimonials-track">
-          {cards.map((item, idx) => (
-            <div key={`${item.id}-${idx}`} className="testimonial-card">
-              <TestimonialCard item={item} badgeLabels={badgeLabels} exchangeLabel={ts.exchange} />
-            </div>
-          ))}
+      {/* Carousel */}
+      <div
+        style={{ position: 'relative' }}
+        onMouseEnter={() => { pausedRef.current = true; }}
+        onMouseLeave={() => { pausedRef.current = false; }}
+      >
+        {/* Fade masks */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, bottom: 0, width: '80px', zIndex: 2,
+          background: 'linear-gradient(to right, #040404 0%, transparent 100%)',
+          pointerEvents: 'none',
+        }} />
+        <div style={{
+          position: 'absolute', top: 0, right: 0, bottom: 0, width: '80px', zIndex: 2,
+          background: 'linear-gradient(to left, #040404 0%, transparent 100%)',
+          pointerEvents: 'none',
+        }} />
+
+        {/* Nav buttons row */}
+        <div style={{
+          display: 'flex', justifyContent: 'center', gap: '0.75rem',
+          marginBottom: '1.25rem', position: 'relative', zIndex: 3,
+        }}>
+          <NavBtn dir="prev" onClick={goPrev} />
+          <NavBtn dir="next" onClick={goNext} />
+        </div>
+
+        {/* Track */}
+        <div style={{ overflow: 'hidden', padding: '0.5rem 0' }}>
+          <div
+            ref={trackRef}
+            onTransitionEnd={handleTransitionEnd}
+            style={{ display: 'flex', gap: `${GAP}px`, padding: '0.25rem 1.5rem', willChange: 'transform' }}
+          >
+            {allItems.map((item, idx) => (
+              <TestimonialCard
+                key={`${item.id}-${idx}`}
+                item={item}
+                badgeLabels={badgeLabels}
+                exchangeLabel={ts.exchange}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Notes */}
-      <div style={{ maxWidth: '1100px', margin: '1.5rem auto 0', padding: '0 1.5rem', textAlign: 'center',
-        display: 'flex', flexDirection: 'column', gap: '0.4rem', alignItems: 'center' }}>
+      <div style={{ maxWidth: '1100px', margin: '1.5rem auto 0', padding: '0 1.5rem', textAlign: 'center' }}>
         <p style={{ fontSize: '0.72rem', color: '#555', maxWidth: '580px', lineHeight: 1.65, margin: '0 auto' }}>{ts.fullNote}</p>
       </div>
     </section>

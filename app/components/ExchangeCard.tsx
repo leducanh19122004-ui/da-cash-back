@@ -1,6 +1,7 @@
 'use client';
 import { Exchange } from '../data/exchanges';
 import { useLang } from '../contexts/LanguageContext';
+import { IconExternalLink } from './Icons';
 
 interface Props { exchange: Exchange; }
 const DEALS_BASE = 'https://danetwork.asia/deals.html';
@@ -176,7 +177,7 @@ export default function ExchangeCard({ exchange }: Props) {
             el.style.boxShadow = 'none';
           }}
         >
-          ↗ {t.exchanges.viewDetails}
+          <span style={{ display:'inline-flex', alignItems:'center', gap:'0.3rem' }}><IconExternalLink size={13} />{t.exchanges.viewDetails}</span>
         </a>
       </div>
     </div>

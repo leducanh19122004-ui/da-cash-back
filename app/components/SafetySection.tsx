@@ -1,6 +1,7 @@
 'use client';
 import { useLang } from '../contexts/LanguageContext';
 import { safetyTranslations } from '../translations';
+import { IconCheckCircle, IconXCircle, IconAlertOctagon } from './Icons';
 
 export default function SafetySection() {
   const { lang } = useLang();
@@ -29,7 +30,7 @@ export default function SafetySection() {
           {/* CAN NEED */}
           <div style={{ background: 'rgba(8,7,5,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '1.25rem', padding: '1.75rem', overflow: 'hidden' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(212,175,55,0.15)' }}>
-              <span style={{ fontSize: '1.25rem' }}>✅</span>
+              <span style={{ color: '#4CAF50', display: 'flex', flexShrink: 0 }}><IconCheckCircle size={22} /></span>
               <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#D4AF37' }}>{s.canNeedTitle}</h3>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -45,7 +46,7 @@ export default function SafetySection() {
           {/* NEVER ASK */}
           <div style={{ background: 'rgba(26,10,10,0.9)', backdropFilter: 'blur(12px)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: '1.25rem', padding: '1.75rem', overflow: 'hidden' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(239,68,68,0.15)' }}>
-              <span style={{ fontSize: '1.25rem' }}>⛔</span>
+              <span style={{ color: '#ef4444', display: 'flex', flexShrink: 0 }}><IconXCircle size={22} /></span>
               <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#ef4444' }}>{s.neverAskTitle}</h3>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -61,7 +62,7 @@ export default function SafetySection() {
 
         {/* Warning box */}
         <div style={{ background: 'rgba(26,10,10,0.9)', backdropFilter: 'blur(12px)', border: '2px solid rgba(239,68,68,0.4)', borderRadius: '1rem', padding: '1.5rem 2rem', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-          <span style={{ fontSize: '1.75rem', flexShrink: 0 }}>🚨</span>
+          <span style={{ color: '#ef4444', display: 'flex', flexShrink: 0, marginTop: '2px' }}><IconAlertOctagon size={28} /></span>
           <div>
             <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#ef4444', marginBottom: '0.5rem' }}>
               {s.warningTitle}

@@ -166,7 +166,7 @@ export function getInitialTransactions(count = 5): CashbackTransaction[] {
 const LS_KEY = 'dcb_mock_v2';
 
 // Base: ~85,732 USDT (realistic starting point)
-const DEFAULT_STATS: CashbackStats = {
+export const DEFAULT_STATS: CashbackStats = {
   totalCashback:   85_732.40,
   monthCashback:    5_842.75,
   verifiedAccounts:   648,

@@ -1,13 +1,15 @@
 'use client';
 import { useLang } from '../contexts/LanguageContext';
+import { IconBuilding, IconLink, IconSearch, IconCoins } from './Icons';
+
 export default function HowItWorks() {
   const { t } = useLang();
   const h = t.how;
   const steps = [
-    { step: '01', icon: '🏦', title: h.s1t, desc: h.s1d },
-    { step: '02', icon: '🔗', title: h.s2t, desc: h.s2d },
-    { step: '03', icon: '🔍', title: h.s3t, desc: h.s3d },
-    { step: '04', icon: '💰', title: h.s4t, desc: h.s4d },
+    { step: '01', icon: <IconBuilding size={26} />, title: h.s1t, desc: h.s1d },
+    { step: '02', icon: <IconLink size={26} />, title: h.s2t, desc: h.s2d },
+    { step: '03', icon: <IconSearch size={26} />, title: h.s3t, desc: h.s3d },
+    { step: '04', icon: <IconCoins size={26} />, title: h.s4t, desc: h.s4d },
   ];
   return (
     <section id="how-it-works" style={{ padding: '4rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
@@ -24,7 +26,7 @@ export default function HowItWorks() {
               onMouseEnter={e => { const el = e.currentTarget; el.style.transform = 'translateY(-4px)'; el.style.borderColor = 'rgba(212,175,55,0.55)'; el.style.boxShadow = '0 8px 32px rgba(212,175,55,0.12)'; }}
               onMouseLeave={e => { const el = e.currentTarget; el.style.transform = 'none'; el.style.borderColor = 'rgba(212,175,55,0.2)'; el.style.boxShadow = 'none'; }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '50%', margin: '0 auto 1rem', background: 'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 900, color: '#050505', boxShadow: '0 0 16px rgba(212,175,55,0.3)' }}>{step.step}</div>
-              <div style={{ fontSize: '1.75rem', marginBottom: '0.75rem' }}>{step.icon}</div>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem', color: '#D4AF37' }}>{step.icon}</div>
               <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#F8F5E9', marginBottom: '0.75rem' }}>{step.title}</h3>
               <p style={{ fontSize: '0.82rem', color: '#777', lineHeight: 1.65 }}>{step.desc}</p>
             </div>

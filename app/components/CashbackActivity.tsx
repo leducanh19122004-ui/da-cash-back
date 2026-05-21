@@ -4,7 +4,7 @@ import { useLang } from '../contexts/LanguageContext';
 import { extraTranslations } from '../translations';
 import {
   USE_MOCK_CASHBACK_DATA, CashbackStats, CashbackTransaction,
-  loadOrInitStats, saveStats, getInitialTransactions, generateMockCashbackEvent,
+  DEFAULT_STATS, loadOrInitStats, saveStats, getInitialTransactions, generateMockCashbackEvent,
   getRandomDelay, formatRelativeTime, formatCurrency,
 } from '../lib/cashback';
 
@@ -25,9 +25,9 @@ function StatCard({label,value,format,updated}:{label:string;value:number;format
   const a=useAnimatedNum(value,900);
   const disp=format==='usdt'?`${a.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})} USDT`:Math.round(a).toLocaleString('en-US');
   return(
-    <div style={{background:'#111',border:`1px solid ${updated?'rgba(212,175,55,0.55)':'rgba(212,175,55,0.18)'}`,borderRadius:'1rem',padding:'1.1rem 1.4rem',transition:'border-color 0.5s,box-shadow 0.5s',boxShadow:updated?'0 0 18px rgba(212,175,55,0.15)':'none'}}>
+    <div style={{background:'#000',border:`1px solid ${updated?'rgba(212,175,55,0.6)':'rgba(212,175,55,0.28)'}`,borderRadius:'1rem',padding:'1.1rem 1.4rem',transition:'border-color 0.5s,box-shadow 0.5s',boxShadow:updated?'0 0 22px rgba(212,175,55,0.22)':'none'}}>
       <p style={{fontSize:'0.68rem',color:'#888',marginBottom:'0.35rem',fontWeight:500,letterSpacing:'0.04em',textTransform:'uppercase'}}>{label}</p>
-      <p style={{fontSize:'clamp(1.1rem,2.5vw,1.5rem)',fontWeight:900,fontVariantNumeric:'tabular-nums',background:updated?'linear-gradient(135deg,#FFD700,#D4AF37)':'linear-gradient(135deg,#F8F5E9,#B8B8B8)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text',transition:'background 0.5s'}}>{disp}</p>
+      <p style={{fontSize:'clamp(1.1rem,2.5vw,1.5rem)',fontWeight:900,fontVariantNumeric:'tabular-nums',background:'linear-gradient(135deg,#FFE566,#FFD700,#D4AF37,#B8860B)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text'}}>{disp}</p>
     </div>
   );
 }
@@ -59,12 +59,13 @@ function TxRow({tx,isNew,lang}:{tx:CashbackTransaction;isNew:boolean;lang:string
 export default function CashbackActivity(){
   const { lang } = useLang();
   const ac = extraTranslations[lang as keyof typeof extraTranslations]?.activity ?? extraTranslations.vi.activity;
-  const [stats,setStats]=useState<CashbackStats>(()=>loadOrInitStats());
-  const [txList,setTxList]=useState<CashbackTransaction[]>(()=>getInitialTransactions(7));
+  const [stats,setStats]=useState<CashbackStats>({...DEFAULT_STATS});
+  const [txList,setTxList]=useState<CashbackTransaction[]>([]);
   const [newTxId,setNewTxId]=useState<string|null>(null);
   const [upd,setUpd]=useState<keyof CashbackStats|null>(null);
   const [,setTick]=useState(0);
   const timerRef=useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
+  useEffect(()=>{setStats(loadOrInitStats());setTxList(getInitialTransactions(7));},[]);
   useEffect(()=>{const iv=setInterval(()=>setTick(t=>t+1),30_000);return()=>clearInterval(iv);},[]);
   const scheduleNext=useCallback(()=>{
     timerRef.current=setTimeout(()=>{

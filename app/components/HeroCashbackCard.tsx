@@ -3,8 +3,8 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useLang } from '../contexts/LanguageContext';
 import { extraTranslations } from '../translations';
 import {
-  USE_MOCK_CASHBACK_DATA, CashbackTransaction,
-  loadOrInitStats, saveStats, getInitialTransactions,
+  USE_MOCK_CASHBACK_DATA, CashbackTransaction, CashbackStats,
+  DEFAULT_STATS, loadOrInitStats, saveStats, getInitialTransactions,
   generateMockCashbackEvent, getRandomDelay, formatRelativeTime, formatCurrency,
 } from '../lib/cashback';
 
@@ -72,8 +72,8 @@ function TxRow({ tx, isNew, lang }: { tx:CashbackTransaction; isNew:boolean; lan
 export default function HeroCashbackCard() {
   const { lang } = useLang();
   const hc = extraTranslations[lang as keyof typeof extraTranslations]?.heroCard ?? extraTranslations.vi.heroCard;
-  const [stats,setStats]     = useState(()=>loadOrInitStats());
-  const [txList,setTxList]   = useState<CashbackTransaction[]>(()=>getInitialTransactions(5));
+  const [stats,setStats]     = useState<CashbackStats>({...DEFAULT_STATS});
+  const [txList,setTxList]   = useState<CashbackTransaction[]>([]);
   const [newTxId,setNewTxId] = useState<string|null>(null);
   const [flashTot,setFlashTot] = useState(false);
   const [,setTick]            = useState(0);
@@ -84,6 +84,7 @@ export default function HeroCashbackCard() {
   const [mounted,setMounted] = useState(false);
 
   useEffect(()=>{const t=setTimeout(()=>setMounted(true),80);return()=>clearTimeout(t);},[]);
+  useEffect(()=>{setStats(loadOrInitStats());setTxList(getInitialTransactions(5));},[]);
   useEffect(()=>{const iv=setInterval(()=>setTick(t=>t+1),25_000);return()=>clearInterval(iv);},[]);
 
   const scheduleNext = useCallback(()=>{

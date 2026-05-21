@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useLang } from '../contexts/LanguageContext';
 import { Lang, langNames } from '../translations';
+import { IconGlobe } from './Icons';
 
 const LANGS: Lang[] = ['vi', 'en', 'ko', 'th', 'id'];
 
@@ -112,7 +113,7 @@ export default function Header() {
             </div>
             {/* Mobile Language Switcher */}
             <div>
-              <p style={{ fontSize: '0.75rem', color: '#666', marginBottom: '0.5rem', fontWeight: 600 }}>🌐 Language / Ngôn ngữ</p>
+              <p style={{ display:'flex', alignItems:'center', gap:'0.35rem', fontSize: '0.75rem', color: '#666', marginBottom: '0.5rem', fontWeight: 600 }}><IconGlobe size={14} /> Language / Ngôn ngữ</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                 {LANGS.map(l => (
                   <button key={l} onClick={() => { setLang(l); setMenuOpen(false); }}

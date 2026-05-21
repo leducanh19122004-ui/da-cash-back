@@ -3,18 +3,15 @@ import { useEffect, useRef, useState } from 'react';
 import { useLang } from '../contexts/LanguageContext';
 import HeroCashbackCard from './HeroCashbackCard';
 
-// ─── Floating particles ────────────────────────────────────────────
-const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
-  id: i,
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  size: 1 + Math.random() * 2,
-  duration: 8 + Math.random() * 14,
-  delay: Math.random() * 8,
-  opacity: 0.08 + Math.random() * 0.16,
-}));
-
 function FloatingGlowBackground() {
+  const [particles, setParticles] = useState<Array<{id:number;x:number;y:number;size:number;duration:number;delay:number;opacity:number}>>([]);
+  useEffect(()=>{
+    setParticles(Array.from({length:18},(_,i)=>({
+      id:i, x:Math.random()*100, y:Math.random()*100,
+      size:1+Math.random()*2, duration:8+Math.random()*14,
+      delay:Math.random()*8, opacity:0.08+Math.random()*0.16,
+    })));
+  },[]);
   return (
     <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
       {/* Orb 1 — gold, behind headline */}
@@ -48,7 +45,7 @@ function FloatingGlowBackground() {
         opacity: 0.4,
       }} />
       {/* Floating particles */}
-      {PARTICLES.map(p => (
+      {particles.map(p => (
         <div key={p.id} style={{
           position: 'absolute',
           left: `${p.x}%`, top: `${p.y}%`,
