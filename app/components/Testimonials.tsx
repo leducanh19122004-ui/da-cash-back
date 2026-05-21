@@ -284,7 +284,6 @@ export default function Testimonials() {
 
   const trackRef = useRef<HTMLDivElement>(null);
   const offsetRef = useRef(len);
-  const pausedRef = useRef(false);
 
   const applyTranslate = useCallback((offset: number, animated: boolean) => {
     if (!trackRef.current) return;
@@ -319,12 +318,19 @@ export default function Testimonials() {
     applyTranslate(len, false);
   }, []); // eslint-disable-line
 
-  useEffect(() => {
-    const iv = setInterval(() => {
-      if (!pausedRef.current) goNext();
-    }, 5000);
-    return () => clearInterval(iv);
+  const hoverScrollRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
+
+  const startHoverScroll = useCallback(() => {
+    if (hoverScrollRef.current) return;
+    hoverScrollRef.current = setInterval(() => goNext(), 2200);
   }, [goNext]);
+
+  const stopHoverScroll = useCallback(() => {
+    if (hoverScrollRef.current) {
+      clearInterval(hoverScrollRef.current);
+      hoverScrollRef.current = undefined;
+    }
+  }, []);
 
   return (
     <section style={{ padding: '4rem 0 3rem', background: 'rgba(5,5,5,0)', overflow: 'hidden' }}>
@@ -344,8 +350,8 @@ export default function Testimonials() {
       {/* Carousel */}
       <div
         style={{ position: 'relative' }}
-        onMouseEnter={() => { pausedRef.current = true; }}
-        onMouseLeave={() => { pausedRef.current = false; }}
+        onMouseEnter={() => startHoverScroll()}
+        onMouseLeave={() => stopHoverScroll()}
       >
         {/* Fade masks */}
         <div style={{

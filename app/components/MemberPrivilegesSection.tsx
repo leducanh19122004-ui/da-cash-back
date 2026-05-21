@@ -51,15 +51,15 @@ export default function MemberPrivilegesSection() {
           }}>
             {p.badge}
           </div>
-          <h2 style={{ fontSize:'clamp(2.1rem,4.5vw,3.5rem)', fontWeight:900,
-            lineHeight:1.1, letterSpacing:'-0.02em', color:'#F8F5E9', marginBottom:'1.1rem' }}>
-            {p.title.includes('DA Cashback') ? (
+          <h2 style={{ fontSize:'clamp(1.8rem,4vw,3rem)', fontWeight:900,
+            lineHeight:1.15, letterSpacing:'-0.02em', color:'#F8F5E9', marginBottom:'1.1rem' }}>
+            {p.title.includes('cashback') ? (
               <>
-                {p.title.split('DA Cashback')[0]}
+                {p.title.split('cashback')[0]}
                 <span style={{ background:'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
-                  DA Cashback
+                  cashback
                 </span>
-                {p.title.split('DA Cashback')[1] || ''}
+                {p.title.split('cashback')[1] || ''}
               </>
             ) : p.title}
           </h2>
