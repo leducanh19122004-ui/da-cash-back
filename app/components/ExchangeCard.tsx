@@ -102,21 +102,29 @@ export default function ExchangeCard({ exchange }: Props) {
         {(t.exchangeDesc as Record<string,string>)[exchange.id] || exchange.description}
       </p>
 
-      {/* Primary: Đăng ký cashback */}
+      {/* Primary: Đăng ký cashback / Coming Soon */}
       <a
         href={hasRef ? exchange.refLink : undefined}
         target={hasRef ? '_blank' : undefined}
         rel="noopener noreferrer"
         style={{
-          display: 'block', width: '100%', padding: '0.6rem',
+          display: 'flex', width: '100%', padding: '0.6rem',
+          alignItems: 'center', justifyContent: 'center', gap: '0.35rem',
           textAlign: 'center', textDecoration: 'none',
           fontWeight: 700, fontSize: '0.83rem', marginBottom: '0.45rem',
-          background: hasRef
-            ? 'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)'
-            : 'rgba(212,175,55,0.18)',
-          color: '#050505', borderRadius: '0.65rem',
-          opacity: hasRef ? 1 : 0.55,
-          cursor: hasRef ? 'pointer' : 'not-allowed',
+          borderRadius: '0.65rem',
+          ...(hasRef ? {
+            background: 'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)',
+            color: '#050505',
+            cursor: 'pointer',
+            opacity: 1,
+          } : {
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px dashed rgba(212,175,55,0.3)',
+            color: 'rgba(212,175,55,0.55)',
+            cursor: 'default',
+            opacity: 1,
+          }),
           transition: 'opacity 0.2s, transform 0.2s, box-shadow 0.2s',
         }}
         onMouseEnter={e => {
@@ -126,12 +134,14 @@ export default function ExchangeCard({ exchange }: Props) {
           e.currentTarget.style.boxShadow = '0 4px 16px rgba(212,175,55,0.35)';
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.opacity = hasRef ? '1' : '0.55';
+          e.currentTarget.style.opacity = '1';
           e.currentTarget.style.transform = 'none';
           e.currentTarget.style.boxShadow = 'none';
         }}
       >
-        {t.exchanges.register}
+        {hasRef ? t.exchanges.register : (
+          <><span style={{ fontSize: '0.75rem' }}>🕐</span>{t.exchanges.comingSoon}</>
+        )}
       </a>
 
       {/* Secondary row: Hướng dẫn + Xem chi tiết */}
