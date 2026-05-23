@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useLang } from '../contexts/LanguageContext';
 import { extraTranslations } from '../translations';
 import {
-  USE_MOCK_CASHBACK_DATA, CashbackStats, CashbackTransaction,
+  CashbackStats, CashbackTransaction,
   DEFAULT_STATS, loadOrInitStats, saveStats, getInitialTransactions, generateMockCashbackEvent,
   getRandomDelay, formatRelativeTime, formatCurrency,
 } from '../lib/cashback';
@@ -86,11 +86,9 @@ export default function CashbackActivity(){
         <div style={{textAlign:'center',marginBottom:'2.5rem'}}>
           <p style={{fontSize:'0.8rem',fontWeight:700,color:'#D4AF37',letterSpacing:'0.15em',textTransform:'uppercase',marginBottom:'0.6rem'}}>{ac.sectionBadge}</p>
           <h2 style={{fontSize:'clamp(1.6rem,3vw,2.25rem)',fontWeight:900,color:'#F8F5E9',marginBottom:'0.75rem'}}>{ac.sectionTitle}</h2>
-          {USE_MOCK_CASHBACK_DATA&&(
-            <div style={{display:'inline-flex',alignItems:'center',gap:'0.4rem',padding:'0.28rem 0.85rem',borderRadius:'999px',background:'rgba(212,175,55,0.08)',border:'1px solid rgba(212,175,55,0.22)',fontSize:'0.7rem',color:'#B8B8B8'}}>
-              ℹ️ {ac.mockBadge}
-            </div>
-          )}
+          <div style={{display:'inline-flex',alignItems:'center',gap:'0.4rem',padding:'0.28rem 0.85rem',borderRadius:'999px',background:'rgba(212,175,55,0.06)',border:'1px solid rgba(212,175,55,0.18)',fontSize:'0.7rem',color:'#666'}}>
+            🔒 {ac.privacyNote}
+          </div>
         </div>
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1rem',marginBottom:'2rem'}} className="activity-stats-grid">
           <StatCard label={ac.totalLabel} value={stats.totalCashback} format="usdt" updated={upd==='totalCashback'} />
@@ -109,7 +107,7 @@ export default function CashbackActivity(){
         </div>
         <div style={{marginTop:'1.1rem',padding:'0.8rem 1.1rem',borderRadius:'0.7rem',background:'rgba(212,175,55,0.03)',border:'1px solid rgba(212,175,55,0.1)',display:'flex',gap:'0.55rem',alignItems:'flex-start'}}>
           <span style={{fontSize:'0.85rem',flexShrink:0}}>ℹ️</span>
-          <p style={{fontSize:'0.73rem',color:'#555',lineHeight:1.6}}>{USE_MOCK_CASHBACK_DATA?ac.disclaimer:ac.disclaimerMock}</p>
+          <p style={{fontSize:'0.73rem',color:'#555',lineHeight:1.6}}>{ac.disclaimerMock}</p>
         </div>
       </div>
       <style>{`@media(max-width:700px){.activity-stats-grid{grid-template-columns:1fr!important}}@media(min-width:701px) and (max-width:900px){.activity-stats-grid{grid-template-columns:1fr 1fr!important}}`}</style>

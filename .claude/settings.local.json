@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout *)",
+      "mcp__Claude_Preview__preview_start",
+      "PowerShell(node --version)",
+      "PowerShell(Get-Command node -ErrorAction SilentlyContinue)",
+      "PowerShell($env:PATH)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\nodejs;\" + $env:PATH; Set-Location C:\\\\CODE\\\\da-cash-back; & \"C:\\\\Program Files\\\\nodejs\\\\node.exe\" \"C:\\\\Program Files\\\\nodejs\\\\node_modules\\\\npm\\\\bin\\\\npx-cli.js\" next build 2>&1 | Select-Object -First 80)"
+    ]
+  }
+}
