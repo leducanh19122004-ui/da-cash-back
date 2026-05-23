@@ -2,8 +2,6 @@
 import { useState } from 'react';
 import { useLang } from '../contexts/LanguageContext';
 
-const WEBHOOK_URL = process.env.NEXT_PUBLIC_CONTACT_WEBHOOK_URL ?? '';
-
 export default function Contact() {
   const { t, lang } = useLang();
   const ct = t.contact;
@@ -28,14 +26,12 @@ export default function Contact() {
     setSending(true);
     setSendError(false);
     try {
-      if (WEBHOOK_URL) {
-        await fetch(WEBHOOK_URL, {
-          method: 'POST',
-          mode: 'no-cors',          // Apps Script không trả CORS header
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: form.name, contact: form.contact, message: form.message, lang }),
-        });
-      }
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: form.name, contact: form.contact, message: form.message, lang }),
+      });
+      if (!res.ok) throw new Error('server error');
       setSubmitted(true);
       setForm({ name: '', contact: '', message: '' });
     } catch {
