@@ -1,12 +1,18 @@
 'use client';
 import { useState } from 'react';
 import { useLang } from '../contexts/LanguageContext';
+
+const WEBHOOK_URL = process.env.NEXT_PUBLIC_CONTACT_WEBHOOK_URL ?? '';
+
 export default function Contact() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const ct = t.contact;
   const [form, setForm] = useState({ name: '', contact: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState(false);
   const [errors, setErrors] = useState<Partial<typeof form>>({});
+
   const validate = () => {
     const e: Partial<typeof form> = {};
     if (!form.name.trim()) e.name = ct.namePlaceholder;
@@ -15,7 +21,29 @@ export default function Contact() {
     setErrors(e);
     return Object.keys(e).length === 0;
   };
-  const handleSubmit = (ev: React.FormEvent) => { ev.preventDefault(); if (!validate()) return; setSubmitted(true); };
+
+  const handleSubmit = async (ev: React.FormEvent) => {
+    ev.preventDefault();
+    if (!validate()) return;
+    setSending(true);
+    setSendError(false);
+    try {
+      if (WEBHOOK_URL) {
+        await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          mode: 'no-cors',          // Apps Script không trả CORS header
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: form.name, contact: form.contact, message: form.message, lang }),
+        });
+      }
+      setSubmitted(true);
+      setForm({ name: '', contact: '', message: '' });
+    } catch {
+      setSendError(true);
+    } finally {
+      setSending(false);
+    }
+  };
   const inputStyle = (hasError: boolean): React.CSSProperties => ({ width: '100%', padding: '0.875rem 1rem', background: '#1A1A1A', border: `1.5px solid ${hasError ? '#ef4444' : 'rgba(212,175,55,0.25)'}`, borderRadius: '0.625rem', color: '#F8F5E9', fontSize: '0.95rem', outline: 'none', fontFamily: 'Inter, sans-serif', transition: 'border-color 0.2s' });
   const contactInfo = [
     { icon: '📱', label: 'Telegram', value: '@jacksondz', href: 'https://t.me/jacksondz' },
@@ -59,7 +87,7 @@ export default function Contact() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+              <><form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#B8B8B8', marginBottom: '0.4rem' }}>{ct.nameLabel}</label>
                   <input type="text" value={form.name} onChange={e => { setForm(p => ({ ...p, name: e.target.value })); setErrors(p => ({ ...p, name: undefined })); }} placeholder={ct.namePlaceholder} style={inputStyle(!!errors.name)}
@@ -79,12 +107,31 @@ export default function Contact() {
                     onFocus={e => e.target.style.borderColor = 'rgba(212,175,55,0.6)'} onBlur={e => e.target.style.borderColor = errors.message ? '#ef4444' : 'rgba(212,175,55,0.25)'} />
                   {errors.message && <p style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.3rem' }}>{errors.message}</p>}
                 </div>
-                <button type="submit" style={{ padding: '0.875rem', fontWeight: 700, fontSize: '1rem', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)', color: '#050505', borderRadius: '0.75rem', transition: 'opacity 0.2s, transform 0.2s' }}
-                  onMouseEnter={e => { e.currentTarget.style.opacity = '0.88'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'none'; }}>
-                  {ct.submit}
+                {sendError && (
+                  <p style={{ fontSize: '0.82rem', color: '#ef4444', textAlign: 'center', padding: '0.5rem', background: 'rgba(239,68,68,0.08)', borderRadius: '0.5rem', border: '1px solid rgba(239,68,68,0.2)' }}>
+                    ⚠️ Gửi thất bại. Vui lòng thử lại hoặc liên hệ qua Telegram.
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  disabled={sending}
+                  style={{
+                    padding: '0.875rem', fontWeight: 700, fontSize: '1rem', border: 'none',
+                    cursor: sending ? 'wait' : 'pointer',
+                    background: sending ? 'rgba(212,175,55,0.4)' : 'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)',
+                    color: '#050505', borderRadius: '0.75rem', transition: 'opacity 0.2s, transform 0.2s',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                  }}
+                  onMouseEnter={e => { if (!sending) { e.currentTarget.style.opacity = '0.88'; e.currentTarget.style.transform = 'translateY(-1px)'; } }}
+                  onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'none'; }}
+                >
+                  {sending ? (
+                    <><span style={{ display:'inline-block', width:'14px', height:'14px', border:'2px solid #050505', borderTopColor:'transparent', borderRadius:'50%', animation:'spin 0.7s linear infinite' }} />{' '}Đang gửi...</>
+                  ) : ct.submit}
                 </button>
               </form>
+              <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+              </>
             )}
           </div>
         </div>
