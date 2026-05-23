@@ -20,8 +20,6 @@ export default function Contact() {
   const contactInfo = [
     { icon: '📱', label: 'Telegram', value: '@jacksondz', href: 'https://t.me/jacksondz' },
     { icon: '📧', label: 'Email', value: 'support@dacashback.com', href: 'mailto:support@dacashback.com' },
-    { icon: '👥', label: 'Facebook', value: 'DA CASH BACK', href: '#' },
-    { icon: '💬', label: 'Zalo', value: 'DA CASH BACK Support', href: '#' },
     { icon: '📍', label: ct.address, value: ct.address, href: undefined },
   ];
   return (
