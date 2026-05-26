@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLang } from '../contexts/LanguageContext';
 import { Lang, langNames } from '../translations';
 import { IconGlobe } from './Icons';
@@ -33,7 +34,8 @@ export default function Header() {
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '4.5rem' }}>
           {/* Logo */}
-          <Link href="/" style={{ textDecoration: 'none' }}>
+          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+            <Image src="/logo.png" alt="DA CASH BACK" width={40} height={40} style={{ borderRadius: '50%', flexShrink: 0 }} priority />
             <span style={{ fontSize: '1.35rem', fontWeight: 900, letterSpacing: '0.04em', background: 'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               DA CASH BACK
             </span>

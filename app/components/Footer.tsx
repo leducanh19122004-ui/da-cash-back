@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLang } from '../contexts/LanguageContext';
 export default function Footer() {
   const { t } = useLang();
@@ -20,7 +21,8 @@ export default function Footer() {
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '3rem', marginBottom: '3rem' }} className="footer-grid">
           <div>
-            <Link href="/" style={{ textDecoration: 'none', display: 'inline-block', marginBottom: '1rem' }}>
+            <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+              <Image src="/logo.png" alt="DA CASH BACK" width={44} height={44} style={{ borderRadius: '50%', flexShrink: 0 }} />
               <span style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '0.04em', background: 'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>DA CASH BACK</span>
             </Link>
             <p style={{ fontSize: '0.875rem', color: '#666', lineHeight: 1.7, maxWidth: '320px', marginBottom: '1.25rem' }}>{ft.desc}</p>
