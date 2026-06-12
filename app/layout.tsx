@@ -4,7 +4,7 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import GlobalAnimatedBackground from './components/GlobalAnimatedBackground';
 
 export const metadata: Metadata = {
-  title: 'DA CASH BACK — Nền tảng hoàn phí giao dịch Crypto & Forex',
+  title: 'DA CASH BACK — Premium Crypto Cashback Platform',
   description: 'DA CASH BACK giúp trader nhận lại một phần phí giao dịch khi đăng ký tài khoản sàn crypto và forex qua link đối tác. Minh bạch, an toàn, không yêu cầu mật khẩu.',
   keywords: 'cashback crypto, hoàn phí giao dịch, forex cashback, binance cashback, rebate trading',
   authors: [{ name: 'DA CASH BACK' }],
@@ -12,22 +12,27 @@ export const metadata: Metadata = {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
       { url: '/favicon.ico', sizes: 'any' },
     ],
     apple: { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     shortcut: '/favicon.ico',
+    other: [
+      { rel: 'icon', url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { rel: 'icon', url: '/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+    ],
   },
   openGraph: {
-    title: 'DA CASH BACK — Nền tảng hoàn phí giao dịch Crypto & Forex',
+    title: 'DA CASH BACK — Premium Crypto Cashback Platform',
     description: 'Đăng ký sàn qua link đối tác, giao dịch như bình thường và nhận hoàn phí định kỳ.',
     type: 'website', locale: 'vi_VN', siteName: 'DA CASH BACK',
-    images: [{ url: '/logo.png', width: 1080, height: 1080, alt: 'DA CASH BACK Logo' }],
+    images: [{ url: '/icon-512x512.png', width: 512, height: 512, alt: 'DA CASH BACK Logo' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'DA CASH BACK — Hoàn phí giao dịch Crypto & Forex',
+    title: 'DA CASH BACK — Premium Crypto Cashback Platform',
     description: 'Nền tảng cashback giao dịch minh bạch, an toàn.',
-    images: ['/logo.png'],
+    images: ['/icon-512x512.png'],
   },
   robots: { index: true, follow: true },
 };
@@ -43,9 +48,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png" />
       </head>
       <body>
         <LanguageProvider>
