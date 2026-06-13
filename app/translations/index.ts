@@ -697,7 +697,7 @@ export interface SignalTeaserTranslations {
 export const signalTeaserTranslations: Record<Lang, SignalTeaserTranslations> = {
   vi: {
     badge: '● Đang ghi nhận trực tiếp',
-    headline: 'Chúng tôi có tín hiệu hàng ngày. Nhưng đừng tin lời chúng tôi.',
+    headline: 'Cơ hội sử dụng Bot độc quyền của DA NETWORK',
     desc: 'Công khai cả lệnh thắng lẫn lệnh thua, đối chiếu giá thật từ sàn.',
     cta: 'Tự kiểm chứng dữ liệu →',
     disclaimer: 'Hiệu suất quá khứ không đảm bảo kết quả trong tương lai. Nội dung này không phải lời khuyên đầu tư.',
