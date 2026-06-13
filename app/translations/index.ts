@@ -403,7 +403,6 @@ export const privilegesTranslations: Record<import('./index').Lang, PrivilegesTr
       points: [
         'Truy cập nhóm tín hiệu giao dịch riêng trên Telegram',
         'Signal cập nhật đều đặn hàng ngày',
-        'Tỷ lệ thắng mục tiêu lên tới 80% theo thống kê nội bộ',
         'Phân tích thị trường từ chuyên gia crypto',
       ],
     },
@@ -443,7 +442,6 @@ export const privilegesTranslations: Record<import('./index').Lang, PrivilegesTr
       points: [
         'Access to exclusive Telegram trading signal group',
         'Signals updated daily by experienced analysts',
-        'Target win rate up to 80% based on internal stats',
         'Market analysis from crypto experts',
       ],
     },
@@ -483,7 +481,6 @@ export const privilegesTranslations: Record<import('./index').Lang, PrivilegesTr
       points: [
         '독점 텔레그램 트레이딩 시그널 그룹 접근',
         '경험 많은 분석가의 일일 시그널 업데이트',
-        '내부 통계 기준 목표 승률 최대 80%',
         '크립토 전문가의 시장 분석',
       ],
     },
@@ -523,7 +520,6 @@ export const privilegesTranslations: Record<import('./index').Lang, PrivilegesTr
       points: [
         'เข้าถึงกลุ่ม Signal เทรดใน Telegram แบบพิเศษ',
         'อัปเดต Signal ทุกวันจากนักวิเคราะห์มากประสบการณ์',
-        'อัตราชนะเป้าหมายสูงสุด 80% ตามสถิติภายใน',
         'การวิเคราะห์ตลาดจากผู้เชี่ยวชาญ crypto',
       ],
     },
@@ -563,7 +559,6 @@ export const privilegesTranslations: Record<import('./index').Lang, PrivilegesTr
       points: [
         'Akses ke grup sinyal trading eksklusif di Telegram',
         'Sinyal diperbarui setiap hari oleh analis berpengalaman',
-        'Target win rate hingga 80% berdasarkan statistik internal',
         'Analisis pasar dari ahli crypto',
       ],
     },
@@ -614,7 +609,7 @@ export const memberPrivilegesTranslations: Record<import('./index').Lang, Member
     ctaText: 'Tham gia DA Cashback ngay',
     disclaimer: 'Giao dịch tài chính luôn có rủi ro. Signal không phải cam kết lợi nhuận.',
     m1: { icon:'📡', title:'Nhóm Tín Hiệu Telegram', sub:'Signal giao dịch mỗi ngày',
-      desc:'Nhận signal giao dịch đều mỗi ngày từ cộng đồng DA Cashback. Tỷ lệ thắng mục tiêu lên tới 80% theo thống kê nội bộ.' },
+      desc:'Nhận signal giao dịch đều mỗi ngày từ cộng đồng DA Cashback.' },
     m2: { icon:'🎓', title:'Cơ Hội Đào Tạo KOL Crypto', sub:'Xét chọn theo từng giai đoạn',
       desc:'Thành viên DA Cashback có cơ hội được xét chọn tham gia chương trình đào tạo KOL Crypto, được định hướng xây dựng thương hiệu cá nhân, phát triển cộng đồng và làm affiliate crypto bởi những người có kinh nghiệm lâu năm trong thị trường.',
       note:'Chương trình đào tạo có thể áp dụng điều kiện lựa chọn theo từng giai đoạn.' },
@@ -631,7 +626,7 @@ export const memberPrivilegesTranslations: Record<import('./index').Lang, Member
     ctaText: 'Join DA Cashback Now',
     disclaimer: 'Financial trading always carries risk. Signals are not profit guarantees.',
     m1: { icon:'📡', title:'Telegram Signal Group', sub:'Daily trading signals',
-      desc:'Receive daily trading signals from the DA Cashback community. Target win rate up to 80% based on internal statistics.' },
+      desc:'Receive daily trading signals from the DA Cashback community.' },
     m2: { icon:'🎓', title:'Crypto KOL Training Opportunity', sub:'Selection-based programme',
       desc:'DA Cashback members have the opportunity to be selected for the KOL Crypto training programme, receiving guidance on personal branding, community building, and crypto affiliate from seasoned professionals in the market.',
       note:'The training programme may apply selection criteria depending on the phase.' },
@@ -648,7 +643,7 @@ export const memberPrivilegesTranslations: Record<import('./index').Lang, Member
     ctaText: '지금 DA Cashback 가입',
     disclaimer: '금융 거래에는 항상 리스크가 있습니다. 시그널은 수익을 보장하지 않습니다.',
     m1: { icon:'📡', title:'텔레그램 시그널 그룹', sub:'매일 트레이딩 시그널',
-      desc:'DA Cashback 커뮤니티에서 매일 트레이딩 시그널을 받으세요. 내부 통계 기준 목표 승률 최대 80%.' },
+      desc:'DA Cashback 커뮤니티에서 매일 트레이딩 시그널을 받으세요.' },
     m2: { icon:'🎓', title:'크립토 KOL 교육 기회', sub:'단계별 선발 프로그램',
       desc:'DA Cashback 회원은 KOL 크립토 교육 프로그램에 선발될 기회를 얻으며, 베테랑 전문가로부터 개인 브랜드 구축, 커뮤니티 개발, 크립토 어필리에이트에 대한 지도를 받을 수 있습니다.',
       note:'교육 프로그램은 단계에 따라 선발 기준이 적용될 수 있습니다.' },
@@ -665,7 +660,7 @@ export const memberPrivilegesTranslations: Record<import('./index').Lang, Member
     ctaText: 'เข้าร่วม DA Cashback เลย',
     disclaimer: 'การเทรดมีความเสี่ยง Signal ไม่ใช่การรับประกันผลกำไร',
     m1: { icon:'📡', title:'กลุ่ม Signal Telegram', sub:'Signal ทุกวัน',
-      desc:'รับ Signal การเทรดทุกวันจากชุมชน DA Cashback อัตราชนะเป้าหมายสูงสุด 80% ตามสถิติภายใน' },
+      desc:'รับ Signal การเทรดทุกวันจากชุมชน DA Cashback' },
     m2: { icon:'🎓', title:'โอกาสอบรม KOL Crypto', sub:'คัดเลือกตามรอบ',
       desc:'สมาชิก DA Cashback มีโอกาสได้รับการคัดเลือกเข้าร่วมโปรแกรมอบรม KOL Crypto โดยได้รับคำแนะนำด้านการสร้างแบรนด์ส่วนตัว พัฒนาชุมชน และ affiliate crypto จากผู้เชี่ยวชาญที่มีประสบการณ์',
       note:'โปรแกรมอบรมอาจมีเงื่อนไขการคัดเลือกขึ้นอยู่กับแต่ละรอบ' },
@@ -682,7 +677,7 @@ export const memberPrivilegesTranslations: Record<import('./index').Lang, Member
     ctaText: 'Bergabung DA Cashback Sekarang',
     disclaimer: 'Trading keuangan selalu memiliki risiko. Sinyal bukan jaminan keuntungan.',
     m1: { icon:'📡', title:'Grup Sinyal Telegram', sub:'Sinyal trading setiap hari',
-      desc:'Terima sinyal trading setiap hari dari komunitas DA Cashback. Target win rate hingga 80% berdasarkan statistik internal.' },
+      desc:'Terima sinyal trading setiap hari dari komunitas DA Cashback.' },
     m2: { icon:'🎓', title:'Kesempatan Pelatihan KOL Crypto', sub:'Program berbasis seleksi',
       desc:'Anggota DA Cashback memiliki kesempatan untuk dipilih mengikuti program pelatihan KOL Crypto, mendapatkan bimbingan membangun brand pribadi, mengembangkan komunitas, dan menguasai affiliate crypto dari para profesional berpengalaman di pasar.',
       note:'Program pelatihan dapat menerapkan kriteria seleksi tergantung pada fase yang berlaku.' },
@@ -691,6 +686,49 @@ export const memberPrivilegesTranslations: Record<import('./index').Lang, Member
     secondaryTitle: 'Dan masih banyak keuntungan lainnya',
     secondaryCardTitle: 'Manfaat cashback inti',
     benefits: ['Rebate biaya berkala','Tanpa biaya tambahan','Tanpa password/API penarikan','Riwayat transaksi jelas','Mendukung banyak Crypto & Forex','Trading seperti biasa'],
+  },
+};
+
+// ── Signal Teaser Section ─────────────────────────────────────────
+export interface SignalTeaserTranslations {
+  badge: string; headline: string; desc: string; cta: string; disclaimer: string;
+}
+
+export const signalTeaserTranslations: Record<Lang, SignalTeaserTranslations> = {
+  vi: {
+    badge: '● Đang ghi nhận trực tiếp',
+    headline: 'Chúng tôi có tín hiệu hàng ngày. Nhưng đừng tin lời chúng tôi.',
+    desc: 'Công khai cả lệnh thắng lẫn lệnh thua, đối chiếu giá thật từ sàn.',
+    cta: 'Tự kiểm chứng dữ liệu →',
+    disclaimer: 'Hiệu suất quá khứ không đảm bảo kết quả trong tương lai. Nội dung này không phải lời khuyên đầu tư.',
+  },
+  en: {
+    badge: '● Recording live',
+    headline: "We post signals daily. But don't take our word for it.",
+    desc: 'We publish both winning and losing trades, cross-referenced against real exchange prices.',
+    cta: 'Verify the data yourself →',
+    disclaimer: 'Past performance does not guarantee future results. This is not investment advice.',
+  },
+  ko: {
+    badge: '● 실시간 기록 중',
+    headline: '매일 시그널을 공유합니다. 하지만 저희 말을 믿지 마세요.',
+    desc: '승리 거래와 손실 거래 모두 공개하며, 실제 거래소 가격과 대조합니다.',
+    cta: '직접 데이터 검증하기 →',
+    disclaimer: '과거 성과가 미래 결과를 보장하지 않습니다. 이것은 투자 조언이 아닙니다.',
+  },
+  th: {
+    badge: '● บันทึกแบบเรียลไทม์',
+    headline: 'เราโพสต์ Signal ทุกวัน แต่อย่าเชื่อแค่คำพูดของเรา',
+    desc: 'เปิดเผยทั้งออเดอร์กำไรและขาดทุน พร้อมอ้างอิงราคาจริงจากตลาด',
+    cta: 'ตรวจสอบข้อมูลด้วยตัวเอง →',
+    disclaimer: 'ผลการดำเนินงานในอดีตไม่รับประกันผลลัพธ์ในอนาคต เนื้อหานี้ไม่ใช่คำแนะนำการลงทุน',
+  },
+  id: {
+    badge: '● Direkam secara langsung',
+    headline: 'Kami posting sinyal setiap hari. Tapi jangan percaya kata kami begitu saja.',
+    desc: 'Kami mempublikasikan trade menang maupun kalah, dicocokkan dengan harga nyata dari exchange.',
+    cta: 'Verifikasi datanya sendiri →',
+    disclaimer: 'Performa masa lalu tidak menjamin hasil masa depan. Ini bukan saran investasi.',
   },
 };
 
