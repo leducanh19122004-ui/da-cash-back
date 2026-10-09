@@ -1,73 +1,169 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { useLang } from '../contexts/LanguageContext';
+import { Lang } from '../translations';
+import { langLabels } from '../translations/ui';
+import { cn } from './ui';
+
+const LANGS: Lang[] = ['vi', 'en', 'ko', 'th', 'id'];
+const linkCls = 'inline-flex min-h-9 items-center text-sm text-muted transition-colors hover:text-fg';
+
+function Heading({ id, children }: { id: string; children: React.ReactNode }) {
+  return (
+    <h3 id={id} className="font-mono text-[0.6875rem] tracking-[0.14em] text-faint uppercase">
+      {children}
+    </h3>
+  );
+}
+
 export default function Footer() {
-  const { t } = useLang();
+  const { t, ui, lang, setLang } = useLang();
   const ft = t.footer;
+  const isHome = usePathname() === '/';
+  const href = (id: string) => (isHome ? `#${id}` : `/#${id}`);
+
   const navLinks = [
-    { href: '#exchanges', label: t.nav.exchanges },
-    { href: '#how-it-works', label: t.nav.howItWorks },
-    { href: '#cashback-lookup', label: t.nav.cashbackLookup },
-    { href: '#faq', label: t.nav.faq },
+    { id: 'exchanges', label: t.nav.exchanges },
+    { id: 'how-it-works', label: t.nav.howItWorks },
+    { id: 'cashback-activity', label: t.nav.cashbackLookup },
+    { id: 'cashback-lookup', label: t.nav.lookupCashback },
+    { id: 'faq', label: t.nav.faq },
+    { id: 'contact', label: t.nav.contact },
   ];
   const legalLinks = [
     { href: '/terms', label: ft.terms },
     { href: '/privacy', label: ft.privacy },
     { href: '/risk-disclaimer', label: ft.risk },
   ];
+  const ecosystem = [
+    { href: `https://danetwork.asia/${lang}`, label: ui.footer.network },
+    { href: 'https://crypto.danetwork.asia', label: ui.footer.crypto },
+    { href: 'https://da-signal-tracking.vercel.app/', label: ui.footer.tracking },
+  ];
+
   return (
-    <footer style={{ background: '#050505', borderTop: '1px solid rgba(212,175,55,0.15)', padding: '3.5rem 1.5rem 2rem' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '3rem', marginBottom: '3rem' }} className="footer-grid">
+    <footer className="border-t border-line bg-ink-1" aria-labelledby="footer-heading">
+      <h2 id="footer-heading" className="sr-only">
+        DA CASH BACK
+      </h2>
+      <div className="container-site pt-20 pb-10">
+        <div className="grid gap-14 lg:grid-cols-[1.2fr_2fr]">
           <div>
-            <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-              <Image src="/logo.png" alt="DA CASH BACK" width={44} height={44} style={{ borderRadius: '50%', flexShrink: 0 }} />
-              <span style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '0.04em', background: 'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>DA CASH BACK</span>
+            <Link href="/" className="inline-flex items-center gap-2.5" aria-label={`DA CASH BACK — ${t.nav.home}`}>
+              <Image src="/logo.png" alt="" width={32} height={32} className="size-8 rounded-full" />
+              <span className="font-semibold tracking-[0.12em]">DA CASH BACK</span>
             </Link>
-            <p style={{ fontSize: '0.875rem', color: '#666', lineHeight: 1.7, maxWidth: '320px', marginBottom: '1.25rem' }}>{ft.desc}</p>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              {[{ icon: '📱', label: 'Telegram', href: 'https://t.me/jacksondz' }, { icon: '📧', label: 'Email', href: 'mailto:support@dacashback.com' }, { icon: '👥', label: 'Facebook', href: '#' }].map(s => (
-                <a key={s.label} href={s.href} aria-label={s.label} style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', textDecoration: 'none', transition: 'background 0.2s, border-color 0.2s' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(212,175,55,0.2)'; e.currentTarget.style.borderColor = 'rgba(212,175,55,0.5)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(212,175,55,0.1)'; e.currentTarget.style.borderColor = 'rgba(212,175,55,0.25)'; }}>
-                  {s.icon}
-                </a>
-              ))}
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted">{ft.desc}</p>
+            <a
+              href={`https://danetwork.asia/${lang}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-flex min-h-9 items-center font-mono text-[0.6875rem] tracking-[0.14em] text-gold uppercase transition-colors hover:text-gold-soft"
+            >
+              {ui.partOf}
+              <span className="sr-only"> ({ui.newTab})</span>
+            </a>
+
+            <div className="mt-10">
+              <Heading id="f-support">{ui.footer.support}</Heading>
+              <dl className="mt-4 space-y-3 text-sm">
+                <div>
+                  <dt className="text-faint">Telegram</dt>
+                  <dd>
+                    <a
+                      href="https://t.me/jacksondz"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link-underline inline-flex min-h-9 items-center"
+                    >
+                      @jacksondz
+                      <span className="sr-only"> ({ui.newTab})</span>
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-faint">{ui.contact.email}</dt>
+                  <dd>
+                    <a href="mailto:support@dacashback.com" className="link-underline inline-flex min-h-9 items-center">
+                      support@dacashback.com
+                    </a>
+                  </dd>
+                </div>
+              </dl>
             </div>
           </div>
-          <div>
-            <h4 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#D4AF37', marginBottom: '1rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{ft.nav}</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-              {navLinks.map(link => (
-                <a key={link.href} href={link.href} style={{ color: '#666', textDecoration: 'none', fontSize: '0.875rem', transition: 'color 0.2s' }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#D4AF37'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#666'}>{link.label}</a>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h4 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#D4AF37', marginBottom: '1rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{ft.legal}</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-              {legalLinks.map(link => (
-                <Link key={link.href} href={link.href} style={{ color: '#666', textDecoration: 'none', fontSize: '0.875rem', transition: 'color 0.2s' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#D4AF37'}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#666'}>{link.label}</Link>
-              ))}
+
+          <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4">
+            <nav aria-labelledby="f-nav">
+              <Heading id="f-nav">{ft.nav}</Heading>
+              <ul className="mt-4 space-y-1">
+                {navLinks.map((l) => (
+                  <li key={l.id}>
+                    <a href={href(l.id)} className={linkCls}>
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <nav aria-labelledby="f-eco">
+              <Heading id="f-eco">{ui.footer.ecosystem}</Heading>
+              <ul className="mt-4 space-y-1">
+                {ecosystem.map((l) => (
+                  <li key={l.label}>
+                    <a href={l.href} target="_blank" rel="noopener noreferrer" className={linkCls}>
+                      {l.label}
+                      <span className="sr-only"> ({ui.newTab})</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <nav aria-labelledby="f-legal">
+              <Heading id="f-legal">{ft.legal}</Heading>
+              <ul className="mt-4 space-y-1">
+                {legalLinks.map((l) => (
+                  <li key={l.href}>
+                    <Link href={l.href} className={linkCls}>
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <div>
+              <Heading id="f-lang">{ui.footer.languages}</Heading>
+              <ul className="mt-4 space-y-1" aria-labelledby="f-lang">
+                {LANGS.map((l) => (
+                  <li key={l}>
+                    <button
+                      type="button"
+                      lang={l}
+                      aria-pressed={l === lang}
+                      onClick={() => setLang(l)}
+                      className={cn(linkCls, l === lang && 'text-fg')}
+                    >
+                      {langLabels[l].native}
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
-        <div style={{ padding: '1.5rem', background: 'rgba(5,4,3,0.58)', borderRadius: '0.875rem', border: '1px solid rgba(212,175,55,0.1)', marginBottom: '2rem' }}>
-          <p style={{ fontSize: '0.78rem', color: '#555', lineHeight: 1.75, textAlign: 'center' }}>
-            {ft.disclaimer}
-          </p>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.06)', flexWrap: 'wrap', gap: '0.75rem' }}>
-          <p style={{ fontSize: '0.8rem', color: '#444' }}>{ft.copyright.replace('{year}', new Date().getFullYear().toString())}</p>
-          <p style={{ fontSize: '0.8rem', color: '#444' }}>🇻🇳 Vietnam</p>
+
+        <p className="mt-16 max-w-4xl text-xs leading-relaxed text-faint">{ft.disclaimer}</p>
+
+        <div className="mt-8 flex flex-col gap-3 border-t border-line pt-8 text-xs leading-relaxed text-faint md:flex-row md:justify-between">
+          <p>{ft.copyright.replace('{year}', new Date().getFullYear().toString())}</p>
+          <p>{t.contact.address}</p>
         </div>
       </div>
-      <style>{`@media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr!important;gap:2rem!important}}@media(max-width:550px){.footer-grid{grid-template-columns:1fr!important}}`}</style>
     </footer>
   );
 }

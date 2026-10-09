@@ -1,46 +1,45 @@
 'use client';
 import { useLang } from '../contexts/LanguageContext';
-import { IconBuilding, IconLink, IconSearch, IconCoins } from './Icons';
+import { ArrowRight, InView, Section, SectionHeader } from './ui';
 
 export default function HowItWorks() {
   const { t } = useLang();
   const h = t.how;
   const steps = [
-    { step: '01', icon: <IconBuilding size={26} />, title: h.s1t, desc: h.s1d },
-    { step: '02', icon: <IconLink size={26} />, title: h.s2t, desc: h.s2d },
-    { step: '03', icon: <IconSearch size={26} />, title: h.s3t, desc: h.s3d },
-    { step: '04', icon: <IconCoins size={26} />, title: h.s4t, desc: h.s4d },
+    { n: '01', title: h.s1t, desc: h.s1d },
+    { n: '02', title: h.s2t, desc: h.s2d },
+    { n: '03', title: h.s3t, desc: h.s3d },
+    { n: '04', title: h.s4t, desc: h.s4d },
   ];
+
   return (
-    <section id="how-it-works" style={{ padding: '4rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{h.badge}</p>
-          <h2 style={{ fontSize: 'clamp(1.4rem,2.5vw,1.85rem)', fontWeight: 800, color: '#F8F5E9', marginBottom: '0.75rem' }}>{h.title}</h2>
-          <p style={{ color: '#888', maxWidth: '500px', margin: '0 auto', lineHeight: 1.7 }}>{h.desc}</p>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1.5rem', position: 'relative' }} className="steps-grid">
-          <div style={{ position: 'absolute', top: '3.25rem', left: '12%', right: '12%', height: '1px', background: 'linear-gradient(90deg, rgba(212,175,55,0.4), rgba(212,175,55,0.1), rgba(212,175,55,0.4))' }} className="steps-connector" />
-          {steps.map(step => (
-            <div key={step.step} style={{ background: 'rgba(8,7,5,0.62)', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '1.25rem', padding: '1.75rem 1.25rem', textAlign: 'center', position: 'relative', transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease' }}
-              onMouseEnter={e => { const el = e.currentTarget; el.style.transform = 'translateY(-4px)'; el.style.borderColor = 'rgba(212,175,55,0.55)'; el.style.boxShadow = '0 8px 32px rgba(212,175,55,0.12)'; }}
-              onMouseLeave={e => { const el = e.currentTarget; el.style.transform = 'none'; el.style.borderColor = 'rgba(212,175,55,0.2)'; el.style.boxShadow = 'none'; }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '50%', margin: '0 auto 1rem', background: 'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 900, color: '#050505', boxShadow: '0 0 16px rgba(212,175,55,0.3)' }}>{step.step}</div>
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem', color: '#D4AF37' }}>{step.icon}</div>
-              <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#F8F5E9', marginBottom: '0.75rem' }}>{step.title}</h3>
-              <p style={{ fontSize: '0.82rem', color: '#777', lineHeight: 1.65 }}>{step.desc}</p>
-            </div>
-          ))}
-        </div>
-        <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-          <a href="#exchanges" style={{ display: 'inline-block', padding: '0.875rem 2.5rem', fontWeight: 700, fontSize: '1rem', background: 'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)', color: '#050505', borderRadius: '0.75rem', textDecoration: 'none', boxShadow: '0 4px 24px rgba(212,175,55,0.3)', transition: 'opacity 0.2s, transform 0.2s' }}
-            onMouseEnter={e => { e.currentTarget.style.opacity = '0.88'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'none'; }}>
-            {h.cta}
-          </a>
-        </div>
+    <Section id="how-it-works" labelledBy="how-title" tone="raised">
+      <SectionHeader id="how-title" eyebrow={h.badge} title={h.title} lead={h.desc} />
+
+      <InView as="ol" className="relative mt-14 grid gap-0 md:mt-16 md:grid-cols-4 md:gap-8">
+        {/* Connecting line: horizontal on desktop, vertical on mobile */}
+        <span
+          aria-hidden
+          className="seq-line absolute top-0 left-[0.3125rem] h-full w-px origin-top bg-gold-line md:top-[0.3125rem] md:left-0 md:h-px md:w-full md:origin-left"
+        />
+        {steps.map((s, i) => (
+          <li key={s.n} className="seq relative pb-10 pl-8 last:pb-0 md:pt-10 md:pb-0 md:pl-0" style={{ '--i': i } as React.CSSProperties}>
+            <span aria-hidden className="absolute top-0 left-0 size-[0.6875rem] rounded-full border border-gold bg-ink-1" />
+            <p className="font-mono text-[2.75rem] leading-none font-medium tracking-tight text-fg/25 tabular-nums md:text-[3.5rem]">
+              {s.n}
+            </p>
+            <h3 className="h-card mt-4 md:mt-6">{s.title}</h3>
+            <p className="mt-3 text-[0.9375rem] leading-relaxed text-muted">{s.desc}</p>
+          </li>
+        ))}
+      </InView>
+
+      <div className="mt-14">
+        <a href="#exchanges" className="btn btn-primary">
+          {h.cta.replace(/\s*→\s*$/, '')}
+          <ArrowRight className="btn-icon size-4" />
+        </a>
       </div>
-      <style>{`@media(max-width:1024px){.steps-grid{grid-template-columns:1fr 1fr!important}.steps-connector{display:none!important}}@media(max-width:600px){.steps-grid{grid-template-columns:1fr!important}}`}</style>
-    </section>
+    </Section>
   );
 }

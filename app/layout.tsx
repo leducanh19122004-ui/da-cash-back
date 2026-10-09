@@ -1,7 +1,6 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { LanguageProvider } from './contexts/LanguageContext';
-import GlobalAnimatedBackground from './components/GlobalAnimatedBackground';
 
 export const metadata: Metadata = {
   title: 'DA CASH BACK — Premium Crypto Cashback Platform',
@@ -37,31 +36,16 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+export const viewport: Viewport = {
+  themeColor: '#080808',
+  colorScheme: 'dark',
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="vi">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body>
-        <LanguageProvider>
-          {/*
-           * app-root: base layer, background đen
-           * GlobalAnimatedBackground: fixed, z-index 0, pointer-events none
-           * app-content: relative, z-index 10 — toàn bộ UI nằm trên nền
-           */}
-          <div className="app-root">
-            <GlobalAnimatedBackground />
-            <div className="app-content">
-              {children}
-            </div>
-          </div>
-        </LanguageProvider>
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );
