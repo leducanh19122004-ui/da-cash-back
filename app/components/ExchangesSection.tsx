@@ -4,7 +4,7 @@ import { exchanges, Exchange } from '../data/exchanges';
 import { useLang } from '../contexts/LanguageContext';
 import { ArrowUpRight, Reveal, Section, SectionHeader, cn, stripEmoji } from './ui';
 
-const DEALS_BASE = 'https://danetwork.asia/deals.html';
+const DEALS_BASE = 'https://crypto.danetwork.asia/deals.html';
 type Filter = 'all' | 'crypto' | 'forex';
 
 const isLive = (e: Exchange) => e.refLink !== '#';

@@ -40,7 +40,7 @@ export default function Footer() {
   const ecosystem = [
     { href: `https://danetwork.asia/${lang}`, label: ui.footer.network },
     { href: 'https://crypto.danetwork.asia', label: ui.footer.crypto },
-    { href: 'https://da-signal-tracking.vercel.app/', label: ui.footer.tracking },
+    { href: 'https://signal.danetwork.asia/', label: ui.footer.tracking },
   ];
 
   return (

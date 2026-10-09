@@ -3,7 +3,7 @@ import { useLang } from '../contexts/LanguageContext';
 import { signalTeaserTranslations } from '../translations';
 import { ArrowUpRight, Reveal, Section } from './ui';
 
-const DASHBOARD_URL = 'https://da-signal-tracking.vercel.app/';
+const DASHBOARD_URL = 'https://signal.danetwork.asia/';
 
 function trackDashboardClick() {
   try {
