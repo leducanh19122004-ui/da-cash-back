@@ -4,7 +4,7 @@ import { LanguageProvider } from './contexts/LanguageContext';
 
 export const metadata: Metadata = {
   title: 'DA CASH BACK — Premium Crypto Cashback Platform',
-  description: 'DA CASH BACK giúp trader nhận lại một phần phí giao dịch khi đăng ký tài khoản sàn crypto và forex qua link đối tác. Minh bạch, an toàn, không yêu cầu mật khẩu.',
+  description: 'DA CASH BACK helps traders get part of their trading fees back by registering crypto and forex exchange accounts through partner links. Transparent, secure, no password required.',
   keywords: 'cashback crypto, hoàn phí giao dịch, forex cashback, binance cashback, rebate trading',
   authors: [{ name: 'DA CASH BACK' }],
   icons: {
@@ -23,14 +23,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'DA CASH BACK — Premium Crypto Cashback Platform',
-    description: 'Đăng ký sàn qua link đối tác, giao dịch như bình thường và nhận hoàn phí định kỳ.',
-    type: 'website', locale: 'vi_VN', siteName: 'DA CASH BACK',
+    description: 'Register through partner links, trade as usual and receive periodic trading fee rebates.',
+    type: 'website', locale: 'en_US', alternateLocale: ['vi_VN', 'ko_KR', 'th_TH', 'id_ID'], siteName: 'DA CASH BACK',
     images: [{ url: '/icon-512x512.png', width: 512, height: 512, alt: 'DA CASH BACK Logo' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'DA CASH BACK — Premium Crypto Cashback Platform',
-    description: 'Nền tảng cashback giao dịch minh bạch, an toàn.',
+    description: 'A transparent, secure trading cashback platform.',
     images: ['/icon-512x512.png'],
   },
   robots: { index: true, follow: true },
@@ -43,7 +43,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi">
+    <html lang="en">
       <body>
         <LanguageProvider>{children}</LanguageProvider>
       </body>

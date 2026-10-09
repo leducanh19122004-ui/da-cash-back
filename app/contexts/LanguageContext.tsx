@@ -11,14 +11,14 @@ interface LangContextType {
 }
 
 const LangContext = createContext<LangContextType>({
-  lang: 'vi',
-  t: translations.vi,
-  ui: uiStrings.vi,
+  lang: 'en',
+  t: translations.en,
+  ui: uiStrings.en,
   setLang: () => {},
 });
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>('vi');
+  const [lang, setLangState] = useState<Lang>('en');
   const setLang = useCallback((l: Lang) => setLangState(l), []);
 
   // Keep <html lang> in sync: screen readers and the per-script font rules
