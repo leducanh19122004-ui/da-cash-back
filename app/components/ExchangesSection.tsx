@@ -1,195 +1,211 @@
 'use client';
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { exchanges } from '../data/exchanges';
-import ExchangeCard from './ExchangeCard';
+import { useState } from 'react';
+import { exchanges, Exchange } from '../data/exchanges';
 import { useLang } from '../contexts/LanguageContext';
-import { IconChevronLeft, IconChevronRight, IconAlertTriangle } from './Icons';
+import { ArrowUpRight, Reveal, Section, SectionHeader, cn, stripEmoji } from './ui';
 
-const CARD_W = 292;
-const GAP = 16;
-const STEP = CARD_W + GAP;
+const DEALS_BASE = 'https://danetwork.asia/deals.html';
+type Filter = 'all' | 'crypto' | 'forex';
 
-function NavBtn({ dir, onClick }: { dir: 'prev' | 'next'; onClick: () => void }) {
-  const [hov, setHov] = useState(false);
+const isLive = (e: Exchange) => e.refLink !== '#';
+
+/** Monochrome initials mark: brand colours are left to the exchanges' own sites. */
+function Mark({ ex }: { ex: Exchange }) {
   return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      aria-label={dir === 'prev' ? 'Previous' : 'Next'}
-      style={{
-        position: 'absolute',
-        top: '50%',
-        ...(dir === 'prev' ? { left: '12px' } : { right: '12px' }),
-        transform: 'translateY(-50%)',
-        zIndex: 10,
-        width: '44px', height: '44px', borderRadius: '50%',
-        background: hov ? 'rgba(212,175,55,0.22)' : 'rgba(10,9,6,0.88)',
-        border: `1.5px solid ${hov ? '#D4AF37' : 'rgba(212,175,55,0.42)'}`,
-        color: '#D4AF37', cursor: 'pointer',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        transition: 'all 0.2s',
-        backdropFilter: 'blur(10px)',
-        boxShadow: hov ? '0 0 18px rgba(212,175,55,0.28)' : '0 4px 14px rgba(0,0,0,0.45)',
-      }}
+    <span
+      aria-hidden
+      className="inline-flex size-8 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-line-strong bg-ink-2 font-mono text-[0.625rem] font-medium tracking-wider text-fg"
     >
-      {dir === 'prev' ? <IconChevronLeft size={20} /> : <IconChevronRight size={20} />}
-    </button>
+      {ex.initials}
+    </span>
+  );
+}
+
+function Status({ live, label }: { live: boolean; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-2 text-sm whitespace-nowrap">
+      <span aria-hidden className={cn('size-1.5 rounded-full', live ? 'bg-gold' : 'border border-faint')} />
+      <span className={live ? 'text-fg' : 'text-muted'}>{label}</span>
+    </span>
   );
 }
 
 export default function ExchangesSection() {
-  const [filter, setFilter] = useState<'all' | 'crypto' | 'forex'>('all');
-  const { t } = useLang();
+  const [filter, setFilter] = useState<Filter>('all');
+  const { t, ui } = useLang();
   const ex = t.exchanges;
 
-  const filtered = filter === 'all' ? exchanges : exchanges.filter(e => e.type === filter);
-  const len = filtered.length;
+  // Open programmes first (stable sort keeps the data order within each group).
+  const filtered = (filter === 'all' ? exchanges : exchanges.filter((e) => e.type === filter))
+    .map((e, i) => ({ e, i }))
+    .sort((a, b) => Number(isLive(b.e)) - Number(isLive(a.e)) || a.i - b.i)
+    .map(({ e }) => e);
+  const tabs: { id: Filter; label: string; n: number }[] = [
+    { id: 'all', label: ex.all, n: exchanges.length },
+    { id: 'crypto', label: stripEmoji(ex.crypto), n: exchanges.filter((e) => e.type === 'crypto').length },
+    { id: 'forex', label: stripEmoji(ex.forex), n: exchanges.filter((e) => e.type === 'forex').length },
+  ];
 
-  const trackRef = useRef<HTMLDivElement>(null);
-  const offsetRef = useRef(len);
-  const pausedRef = useRef(false);
+  const market = (e: Exchange) => (e.type === 'crypto' ? stripEmoji(ex.crypto) : stripEmoji(ex.forex));
+  const desc = (e: Exchange) => (t.exchangeDesc as Record<string, string>)[e.id] || e.description;
 
-  const applyTranslate = useCallback((offset: number, animated: boolean) => {
-    if (!trackRef.current) return;
-    trackRef.current.style.transition = animated
-      ? 'transform 0.42s cubic-bezier(0.4,0,0.2,1)'
-      : 'none';
-    trackRef.current.style.transform = `translateX(${-offset * STEP}px)`;
-  }, []);
-
-  const goNext = useCallback(() => {
-    offsetRef.current += 1;
-    applyTranslate(offsetRef.current, true);
-  }, [applyTranslate]);
-
-  const goPrev = useCallback(() => {
-    offsetRef.current -= 1;
-    applyTranslate(offsetRef.current, true);
-  }, [applyTranslate]);
-
-  const handleTransitionEnd = useCallback(() => {
-    const o = offsetRef.current;
-    if (o >= len * 2) {
-      offsetRef.current = o - len;
-      applyTranslate(offsetRef.current, false);
-    } else if (o < len) {
-      offsetRef.current = o + len;
-      applyTranslate(offsetRef.current, false);
-    }
-  }, [len, applyTranslate]);
-
-  // Reset carousel position on filter change
-  useEffect(() => {
-    offsetRef.current = filtered.length;
-    applyTranslate(filtered.length, false);
-  }, [filter, filtered.length, applyTranslate]);
-
-  // Auto-advance
-  useEffect(() => {
-    const iv = setInterval(() => {
-      if (!pausedRef.current) goNext();
-    }, 3500);
-    return () => clearInterval(iv);
-  }, [goNext]);
-
-  const allItems = [...filtered, ...filtered, ...filtered];
+  /** Guide (when available) + details links, then the registration CTA for open programmes. */
+  const Actions = ({ e }: { e: Exchange }) => (
+    <span className="flex items-center justify-end gap-4 text-[0.8125rem]">
+      {e.guideLink !== '#' ? (
+        <a href={e.guideLink} target="_blank" rel="noopener noreferrer" className="link-underline text-muted hover:text-fg">
+          {ex.guide}
+          <span className="sr-only">
+            {' '}
+            — {e.name} ({ui.newTab})
+          </span>
+        </a>
+      ) : null}
+      <a
+        href={`${DEALS_BASE}?exchange=${e.id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="link-underline whitespace-nowrap text-muted hover:text-fg"
+      >
+        {ex.viewDetails}
+        <span className="sr-only">
+          {' '}
+          — {e.name} ({ui.newTab})
+        </span>
+      </a>
+      {isLive(e) ? (
+        <a
+          href={e.refLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-sm btn-gold min-h-9 px-3.5 whitespace-nowrap"
+        >
+          {ex.register}
+          <ArrowUpRight className="btn-icon size-3.5" />
+          <span className="sr-only">
+            {' '}
+            — {e.name} ({ui.newTab})
+          </span>
+        </a>
+      ) : null}
+    </span>
+  );
 
   return (
-    <section id="exchanges" style={{ padding: '3.5rem 0', background: 'transparent' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.5rem' }}>
+    <Section id="exchanges" labelledBy="exchanges-title">
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHeader id="exchanges-title" eyebrow={ex.badge} title={ex.title} lead={ex.desc} />
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-          <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
-            {ex.badge}
-          </p>
-          <h2 style={{ fontSize: 'clamp(1.35rem,2.5vw,1.75rem)', fontWeight: 800, color: '#F8F5E9', marginBottom: '0.6rem' }}>
-            {ex.title}
-          </h2>
-          <p style={{ color: '#777', maxWidth: '520px', margin: '0 auto 1.5rem', lineHeight: 1.7, fontSize: '0.9rem' }}>
-            {ex.desc}
-          </p>
+        <div role="group" aria-label={ui.exchanges.filterLabel} className="flex shrink-0 border-b border-line">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              aria-pressed={filter === tab.id}
+              onClick={() => setFilter(tab.id)}
+              className={cn(
+                'relative min-h-11 px-4 text-sm transition-colors',
+                filter === tab.id ? 'text-fg' : 'text-muted hover:text-fg',
+              )}
+            >
+              {tab.label}
+              <span className="ml-2 font-mono text-[0.6875rem] text-faint tabular-nums">{tab.n}</span>
+              <span
+                aria-hidden
+                className={cn(
+                  'absolute inset-x-3 -bottom-px h-px origin-left bg-gold transition-transform duration-300',
+                  filter === tab.id ? 'scale-x-100' : 'scale-x-0',
+                )}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
 
-          {/* Filter tabs */}
-          <div style={{
-            display: 'inline-flex',
-            background: 'rgba(8,7,5,0.8)', border: '1px solid rgba(212,175,55,0.2)',
-            borderRadius: '0.875rem', padding: '0.25rem', gap: '0.25rem',
-          }}>
-            {(['all', 'crypto', 'forex'] as const).map(tab => (
-              <button
-                key={tab}
-                onClick={() => setFilter(tab)}
-                style={{
-                  padding: '0.45rem 1.25rem', borderRadius: '0.625rem',
-                  border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem',
-                  transition: 'background 0.2s, color 0.2s',
-                  background: filter === tab ? 'linear-gradient(135deg,#FFD700,#D4AF37,#B8860B)' : 'transparent',
-                  color: filter === tab ? '#050505' : '#888',
-                }}
-              >
-                {tab === 'all' ? ex.all : tab === 'crypto' ? ex.crypto : ex.forex}
-              </button>
+      <p className="sr-only" aria-live="polite">
+        {ui.exchanges.count(filtered.length)}
+      </p>
+
+      <Reveal className="mt-10">
+        {/* Desktop / tablet: one compact line per exchange */}
+        <table className="hidden w-full border-collapse text-left md:table">
+          <caption className="sr-only">{ex.title}</caption>
+          <thead>
+            <tr className="border-b border-line font-mono text-[0.625rem] tracking-[0.12em] text-faint uppercase">
+              <th scope="col" className="pb-3 font-normal">
+                {ui.exchanges.colExchange}
+              </th>
+              <th scope="col" className="hidden pb-3 font-normal xl:table-cell">
+                {ui.exchanges.colMarket}
+              </th>
+              <th scope="col" className="pb-3 text-right font-normal">
+                {ui.exchanges.colRate}
+              </th>
+              <th scope="col" className="pb-3 pl-8 font-normal">
+                {ui.exchanges.colStatus}
+              </th>
+              <th scope="col" className="pb-3 text-right font-normal">
+                <span className="sr-only">{ui.exchanges.colAction}</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((e) => (
+              <tr key={e.id} className="border-b border-line transition-colors hover:bg-white/[0.015]">
+                <th scope="row" className="py-3 pr-6 font-normal">
+                  <div className="flex items-center gap-3">
+                    <Mark ex={e} />
+                    <span className="w-24 shrink-0 font-medium text-fg">{e.name}</span>
+                    <span className="hidden max-w-[22rem] truncate text-sm text-muted lg:inline" title={desc(e)}>
+                      {desc(e)}
+                    </span>
+                    <span className="font-mono text-[0.625rem] tracking-[0.12em] text-faint uppercase xl:hidden">
+                      {market(e)}
+                    </span>
+                  </div>
+                </th>
+                <td className="hidden py-3 pr-6 font-mono text-[0.6875rem] tracking-[0.1em] text-muted uppercase xl:table-cell">
+                  {market(e)}
+                </td>
+                <td className="py-3 text-right text-xl font-semibold tracking-tight tabular-nums">{e.cashbackRate}</td>
+                <td className="py-3 pl-8">
+                  <Status live={isLive(e)} label={isLive(e) ? ui.exchanges.available : ex.comingSoon} />
+                </td>
+                <td className="py-3 pl-4">
+                  <Actions e={e} />
+                </td>
+              </tr>
             ))}
-          </div>
-        </div>
-      </div>
+          </tbody>
+        </table>
 
-      {/* ── Carousel ─────────────────────────────────────────── */}
-      <div
-        style={{ position: 'relative', padding: '0.5rem 0 1.5rem' }}
-        onMouseEnter={() => { pausedRef.current = true; }}
-        onMouseLeave={() => { pausedRef.current = false; }}
-      >
-        {/* Fade masks */}
-        <div style={{
-          position: 'absolute', top: 0, left: 0, bottom: 0, width: '120px', zIndex: 2,
-          background: 'linear-gradient(to right, #040404 0%, rgba(4,4,4,0.8) 40%, transparent 100%)',
-          pointerEvents: 'none',
-        }} />
-        <div style={{
-          position: 'absolute', top: 0, right: 0, bottom: 0, width: '120px', zIndex: 2,
-          background: 'linear-gradient(to left, #040404 0%, rgba(4,4,4,0.8) 40%, transparent 100%)',
-          pointerEvents: 'none',
-        }} />
+        {/* Mobile: compact rows */}
+        <ul className="border-t border-line md:hidden">
+          {filtered.map((e) => (
+            <li key={e.id} className="border-b border-line py-4">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex min-w-0 items-center gap-3">
+                  <Mark ex={e} />
+                  <div className="min-w-0">
+                    <h3 className="font-medium">{e.name}</h3>
+                    <p className="font-mono text-[0.625rem] tracking-[0.12em] text-faint uppercase">{market(e)}</p>
+                  </div>
+                </div>
+                <p className="text-2xl leading-none font-semibold tracking-tight tabular-nums">
+                  {e.cashbackRate}
+                  <span className="sr-only"> {ex.rate}</span>
+                </p>
+              </div>
+              <div className="mt-3 flex items-center justify-between gap-3">
+                <Status live={isLive(e)} label={isLive(e) ? ui.exchanges.available : ex.comingSoon} />
+                <Actions e={e} />
+              </div>
+            </li>
+          ))}
+        </ul>
 
-        {/* Nav buttons */}
-        <NavBtn dir="prev" onClick={goPrev} />
-        <NavBtn dir="next" onClick={goNext} />
-
-        {/* Track */}
-        <div style={{ overflow: 'hidden', padding: '0.25rem 0' }}>
-          <div
-            ref={trackRef}
-            onTransitionEnd={handleTransitionEnd}
-            style={{ display: 'flex', gap: `${GAP}px`, padding: '0.25rem 1rem', willChange: 'transform' }}
-          >
-            {allItems.map((exchange, idx) => (
-              <ExchangeCard key={`${exchange.id}-${idx}`} exchange={exchange} />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Disclaimer */}
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.5rem' }}>
-        <div style={{
-          marginTop: '1rem', padding: '0.875rem 1.25rem', borderRadius: '0.75rem',
-          background: 'rgba(212,175,55,0.04)', border: '1px solid rgba(212,175,55,0.12)',
-          display: 'flex', alignItems: 'flex-start', gap: '0.6rem',
-        }}>
-          <span style={{ color: '#D4AF37', display: 'flex', flexShrink: 0, marginTop: '1px' }}><IconAlertTriangle size={16} /></span>
-          <p style={{ fontSize: '0.78rem', color: '#666', lineHeight: 1.6 }}>{ex.disclaimer.replace(/^⚠️\s*/, '')}</p>
-        </div>
-      </div>
-
-      <style>{`
-        .exchange-card { user-select: none; }
-        @media (prefers-reduced-motion: reduce) {
-          * { transition: none !important; }
-        }
-      `}</style>
-    </section>
+        <p className="mt-6 text-xs leading-relaxed text-faint">{stripEmoji(ex.disclaimer)}</p>
+      </Reveal>
+    </Section>
   );
 }

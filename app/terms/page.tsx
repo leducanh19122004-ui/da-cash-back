@@ -1,47 +1,12 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import { LegalShell, LegalSection as Section, Bullet, CheckList as Check, CrossList as Cross, Step } from '../components/Legal';
 export const metadata: Metadata = { title: 'Điều khoản dịch vụ — DA CASH BACK', description: 'Điều khoản sử dụng dịch vụ hoàn phí DA CASH BACK.' };
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div style={{ background: '#111', border: '1px solid rgba(212,175,55,0.15)', borderRadius: '1rem', padding: '1.75rem', marginBottom: '1.25rem' }}>
-      <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#D4AF37', marginBottom: '1rem' }}>{title}</h2>
-      <div style={{ fontSize: '0.9rem', color: '#999', lineHeight: 1.85 }}>{children}</div>
-    </div>
-  );
-}
-function Bullet({ items }: { items: string[] }) {
-  return <ul style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>{items.map((i,k)=><li key={k}>{i}</li>)}</ul>;
-}
-function Check({ items }: { items: string[] }) {
-  return <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>{items.map((i,k)=><div key={k} style={{ display:'flex',gap:'0.5rem',alignItems:'flex-start' }}><span style={{color:'#4CAF50',flexShrink:0}}>✓</span><span>{i}</span></div>)}</div>;
-}
-function Cross({ items }: { items: string[] }) {
-  return <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>{items.map((i,k)=><div key={k} style={{ display:'flex',gap:'0.5rem',alignItems:'flex-start' }}><span style={{color:'#ef4444',flexShrink:0}}>✕</span><span>{i}</span></div>)}</div>;
-}
-function Step({ n, text }: { n: number; text: string }) {
-  return (
-    <div style={{ display: 'flex', gap: '0.875rem', alignItems: 'flex-start', padding: '0.75rem 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-      <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'linear-gradient(135deg,#FFD700,#D4AF37)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 900, color: '#050505', flexShrink: 0 }}>{n}</div>
-      <p style={{ paddingTop: '0.3rem' }}>{text}</p>
-    </div>
-  );
-}
 
 export default function TermsPage() {
   return (
-    <>
-      <Header />
-      <main style={{ minHeight: '100vh', paddingTop: '5rem', background: '#0B0B0B' }}>
-        <div style={{ maxWidth: '820px', margin: '0 auto', padding: '4rem 1.5rem' }}>
-          <Link href="/" style={{ color: '#D4AF37', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>← Về trang chủ</Link>
-          <h1 style={{ fontSize: 'clamp(1.75rem,3vw,2.5rem)', fontWeight: 900, color: '#F8F5E9', marginTop: '1.5rem', marginBottom: '0.5rem' }}>Điều khoản dịch vụ</h1>
-          <p style={{ color: '#555', fontSize: '0.85rem', marginBottom: '2.5rem' }}>Cập nhật lần cuối: 01/05/2025</p>
-
+    <LegalShell title="Điều khoản dịch vụ" updated="Cập nhật lần cuối: 01/05/2025" backLabel="Về trang chủ">
           <Section title="1. Tổng quan về DA CASH BACK">
-            <p style={{ marginBottom: '0.875rem' }}>DA CASH BACK là nền tảng hỗ trợ người dùng nhận cashback/hoàn phí từ các đối tác sàn giao dịch crypto và forex thông qua chương trình IB/affiliate.</p>
+            <p className="mb-4">DA CASH BACK là nền tảng hỗ trợ người dùng nhận cashback/hoàn phí từ các đối tác sàn giao dịch crypto và forex thông qua chương trình IB/affiliate.</p>
             <Bullet items={[
               'DA CASH BACK không phải sàn giao dịch và không thực hiện các hoạt động giao dịch thay người dùng.',
               'DA CASH BACK không cung cấp dịch vụ môi giới, tư vấn đầu tư hoặc quản lý tài sản.',
@@ -51,7 +16,7 @@ export default function TermsPage() {
           </Section>
 
           <Section title="2. Điều kiện nhận cashback">
-            <p style={{ marginBottom: '0.875rem' }}>Để đủ điều kiện nhận cashback, người dùng cần đáp ứng đồng thời các yêu cầu sau:</p>
+            <p className="mb-4">Để đủ điều kiện nhận cashback, người dùng cần đáp ứng đồng thời các yêu cầu sau:</p>
             <Check items={[
               'Đăng ký tài khoản tại sàn qua link/mã giới thiệu đối tác chính thức của DA CASH BACK.',
               'Không có tài khoản cũ trùng thông tin tại cùng sàn (nếu sàn không cho phép đăng ký lại).',
@@ -74,7 +39,7 @@ export default function TermsPage() {
           </Section>
 
           <Section title="4. Quy trình đối soát cashback">
-            <p style={{ marginBottom: '1rem' }}>DA CASH BACK thực hiện đối soát định kỳ theo chu kỳ của từng sàn đối tác:</p>
+            <p className="mb-4">DA CASH BACK thực hiện đối soát định kỳ theo chu kỳ của từng sàn đối tác:</p>
             {[
               'Người dùng đăng ký tài khoản sàn qua link đối tác DA CASH BACK',
               'Gửi UID/email để DA CASH BACK xác minh liên kết tài khoản',
@@ -98,14 +63,11 @@ export default function TermsPage() {
 
           <Section title="6. Liên hệ hỗ trợ">
             <p>Mọi thắc mắc về điều khoản hoặc cashback, vui lòng liên hệ qua:</p>
-            <div style={{ marginTop: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <p>📱 Telegram: <a href="https://t.me/jacksondz" style={{ color: '#D4AF37', textDecoration: 'none' }}>@jacksondz</a></p>
-              <p>📧 Email: <a href="mailto:support@dacashback.com" style={{ color: '#D4AF37', textDecoration: 'none' }}>support@dacashback.com</a></p>
+            <div className="mt-3 flex flex-col gap-1.5">
+              <p>Telegram: <a href="https://t.me/jacksondz" target="_blank" rel="noopener noreferrer">@jacksondz</a></p>
+              <p>Email: <a href="mailto:support@dacashback.com">support@dacashback.com</a></p>
             </div>
           </Section>
-        </div>
-      </main>
-      <Footer />
-    </>
+    </LegalShell>
   );
 }

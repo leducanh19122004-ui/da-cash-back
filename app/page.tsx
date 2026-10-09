@@ -1,30 +1,35 @@
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
-import MemberPrivilegesSection from './components/MemberPrivilegesSection';
-import StatsSection from './components/StatsSection';
 import ExchangesSection from './components/ExchangesSection';
 import HowItWorks from './components/HowItWorks';
 import CashbackActivity from './components/CashbackActivity';
+import CashbackLookup from './components/CashbackLookup';
 import TrustCompactSection from './components/TrustCompactSection';
-import FAQ from './components/FAQ';
 import Testimonials from './components/Testimonials';
+import MemberPrivilegesSection from './components/MemberPrivilegesSection';
+import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
+/**
+ * Order follows the conversion path: what it is → compare offers → how it
+ * works → the record → check status → safety → feedback → ecosystem → FAQ →
+ * support. The ecosystem/signal section sits after the core product content.
+ */
 export default function HomePage() {
   return (
     <>
       <Header />
-      <main>
+      <main id="main">
         <HeroSection />
-        <MemberPrivilegesSection />
-        <StatsSection />
         <ExchangesSection />
         <HowItWorks />
         <CashbackActivity />
+        <CashbackLookup />
         <TrustCompactSection />
-        <FAQ />
         <Testimonials />
+        <MemberPrivilegesSection />
+        <FAQ />
         <Contact />
       </main>
       <Footer />

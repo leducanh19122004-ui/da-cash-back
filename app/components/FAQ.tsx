@@ -1,44 +1,55 @@
 'use client';
-import { useState } from 'react';
 import { useLang } from '../contexts/LanguageContext';
+import { ArrowRight, Plus, Reveal, Section, SectionHeader } from './ui';
+
 export default function FAQ() {
   const { t } = useLang();
   const faq = t.faq;
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
+
   return (
-    <section id="faq" style={{ padding: '4rem 1.5rem', background: 'rgba(5,5,5,0)' }}>
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-          <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{faq.badge}</p>
-          <h2 style={{ fontSize: 'clamp(1.35rem,2.5vw,1.75rem)', fontWeight: 800, color: '#F8F5E9', marginBottom: '1rem' }}>{faq.title}</h2>
-          <p style={{ color: '#888', lineHeight: 1.7 }}>{faq.desc}</p>
+    <Section id="faq" labelledBy="faq-title">
+      <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
+        <div>
+          <SectionHeader id="faq-title" eyebrow={faq.badge} title={faq.title} lead={faq.desc} />
+          <div className="mt-10 hidden lg:block">
+            <p className="text-sm text-muted">{faq.noAnswer}</p>
+            <a href="#contact" className="btn btn-secondary mt-4">
+              {faq.contactSupport}
+              <ArrowRight className="btn-icon size-4" />
+            </a>
+          </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {faq.items.map((item, idx) => (
-            <div key={idx} style={{ background: 'rgba(8,7,5,0.62)', border: `1px solid ${openIdx === idx ? 'rgba(212,175,55,0.5)' : 'rgba(212,175,55,0.2)'}`, borderRadius: '0.875rem', overflow: 'hidden', transition: 'border-color 0.25s ease, box-shadow 0.25s ease', boxShadow: openIdx === idx ? '0 4px 20px rgba(212,175,55,0.08)' : 'none' }}>
-              <button onClick={() => setOpenIdx(openIdx === idx ? null : idx)} aria-expanded={openIdx === idx}
-                style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem 1.5rem', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
-                <span style={{ fontSize: '0.95rem', fontWeight: 600, color: '#F8F5E9', flex: 1 }}>{item.q}</span>
-                <span style={{ marginLeft: '1rem', flexShrink: 0, width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: 'rgba(212,175,55,0.15)', color: '#D4AF37', fontWeight: 700, fontSize: '1rem', transition: 'transform 0.25s ease', transform: openIdx === idx ? 'rotate(45deg)' : 'none' }}>+</span>
-              </button>
-              {openIdx === idx && (
-                <div style={{ padding: '0 1.5rem 1.25rem' }}>
-                  <div style={{ height: '1px', background: 'rgba(212,175,55,0.15)', marginBottom: '1rem' }} />
-                  <p style={{ fontSize: '0.9rem', color: '#888', lineHeight: 1.75 }}>{item.a}</p>
+
+        <Reveal>
+          <div className="border-t border-line">
+            {faq.items.map((item, i) => (
+              // Native <details>: keyboard accessible, works without JS, content stays indexable.
+              <details key={i} className="disclosure group border-b border-line">
+                <summary className="flex min-h-16 cursor-pointer list-none items-start justify-between gap-6 py-5 text-left text-[1.0625rem] font-medium transition-colors hover:text-fg [&::-webkit-details-marker]:hidden">
+                  <span className="flex gap-4">
+                    <span aria-hidden className="mt-0.5 w-6 shrink-0 font-mono text-xs text-faint tabular-nums">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span>{item.q}</span>
+                  </span>
+                  <Plus className="mt-1 size-4 shrink-0 text-gold transition-transform duration-[var(--dur-fast)] group-open:rotate-45" />
+                </summary>
+                <div className="disclosure-body pb-6 pl-10 pr-10">
+                  <p className="max-w-2xl text-[0.9375rem] leading-relaxed text-muted">{item.a}</p>
                 </div>
-              )}
-            </div>
-          ))}
-        </div>
-        <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-          <p style={{ color: '#777', fontSize: '0.9rem', marginBottom: '1rem' }}>{faq.noAnswer}</p>
-          <a href="#contact" style={{ display: 'inline-block', padding: '0.75rem 2rem', fontWeight: 600, fontSize: '0.9rem', border: '1.5px solid #D4AF37', color: '#D4AF37', borderRadius: '0.75rem', textDecoration: 'none', transition: 'background 0.2s, transform 0.2s' }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(212,175,55,0.1)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'none'; }}>
+              </details>
+            ))}
+          </div>
+        </Reveal>
+
+        <div className="lg:hidden">
+          <p className="text-sm text-muted">{faq.noAnswer}</p>
+          <a href="#contact" className="btn btn-secondary mt-4">
             {faq.contactSupport}
+            <ArrowRight className="btn-icon size-4" />
           </a>
         </div>
       </div>
-    </section>
+    </Section>
   );
 }

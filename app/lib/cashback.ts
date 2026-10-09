@@ -202,3 +202,57 @@ export async function fetchCashbackStats(): Promise<CashbackStats> {
 export async function fetchRecentTransactions(): Promise<CashbackTransaction[]> {
   throw new Error('Set USE_MOCK_CASHBACK_DATA=false and implement real API');
 }
+
+// ─── PUBLISHED FIGURES ───────────────────────────────────────────
+// Aggregate figures shown on the site. Fill these in only with reconciled
+// numbers from partner reports; `null` renders a neutral "pending" state.
+// Never derive them from the mock generators above.
+export interface PublishedStats {
+  totalCashback: number | null;   // USDT, all time
+  monthCashback: number | null;   // USDT, reporting month
+  verifiedAccounts: number | null;
+  reportingPeriod: string | null; // 'YYYY-MM'
+  lastUpdated: string | null;     // ISO date
+}
+
+export const PUBLISHED_STATS: PublishedStats = {
+  totalCashback: null,
+  monthCashback: null,
+  verifiedAccounts: null,
+  reportingPeriod: null,
+  lastUpdated: null,
+};
+
+// ─── SAMPLE ROWS (format illustration only) ──────────────────────
+// Fixed, clearly-labelled sample rows used while USE_MOCK_CASHBACK_DATA is
+// true. Deterministic: no random amounts and no simulated live arrivals.
+const SAMPLE_SPEC: { exchange: string; type: ExchangeType; maskedAccount: string; amount: number; minutesAgo: number }[] = [
+  { exchange: 'Binance', type: 'crypto', maskedAccount: '****7821', amount: 12.4, minutesAgo: 95 },
+  { exchange: 'Exness', type: 'forex', maskedAccount: 'k***fx@hotmail.com', amount: 31.05, minutesAgo: 240 },
+  { exchange: 'Bybit', type: 'crypto', maskedAccount: '****4398', amount: 3.6, minutesAgo: 420 },
+  { exchange: 'OKX', type: 'crypto', maskedAccount: 'm***trade@gmail.com', amount: 8.15, minutesAgo: 1_380 },
+  { exchange: 'XM', type: 'forex', maskedAccount: '****2156', amount: 19.9, minutesAgo: 2_900 },
+];
+
+export function getSampleTransactions(now = Date.now()): CashbackTransaction[] {
+  return SAMPLE_SPEC.map((r, i) => ({
+    id: `sample-${i}`,
+    exchange: r.exchange,
+    type: r.type,
+    maskedAccount: r.maskedAccount,
+    amount: r.amount,
+    timestampMs: now - r.minutesAgo * 60_000,
+  }));
+}
+
+// ─── LOOKUP ──────────────────────────────────────────────────────
+// No lookup backend exists yet. Until one is connected the site must not
+// invent a status or amount for a real user's UID, so the stub reports that
+// the request has to be handled manually by support.
+export type LookupResult =
+  | { kind: 'manual'; exchange: string; maskedUid: string }
+  | { kind: 'found'; exchange: string; maskedUid: string; status: string; estimatedCashback: number; nextPayment: string };
+
+export async function lookupCashback(exchangeName: string, uid: string): Promise<LookupResult> {
+  return { kind: 'manual', exchange: exchangeName, maskedUid: maskUid(uid.trim()) };
+}

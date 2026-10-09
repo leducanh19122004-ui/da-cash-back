@@ -1,9 +1,8 @@
 'use client';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useSyncExternalStore } from 'react';
 import { useLang } from '../contexts/LanguageContext';
 import { extraTranslations } from '../translations';
-import { USE_MOCK_CASHBACK_DATA } from '../lib/cashback';
-import { IconChevronLeft, IconChevronRight, IconStar } from './Icons';
+import { ChevronLeft, ChevronRight, Pause, Play, Section, SectionHeader, cn } from './ui';
 
 // ─── Data ─────────────────────────────────────────────────────────
 interface TestimonialItem {
@@ -156,247 +155,158 @@ const ALL_TESTIMONIALS: TestimonialItem[] = [
     text:'Die UID-Verifizierung war unkompliziert. Gut finde ich, dass keine Passwörter oder privaten Schlüssel verlangt werden.' },
 ];
 
-// ─── Badge ────────────────────────────────────────────────────────
-function Badge({ type, labels }: { type: string; labels: Record<string, string> }) {
-  const cfg: Record<string, { bg: string; border: string; color: string }> = {
-    verifiedUid:      { bg:'rgba(212,175,55,0.12)',  border:'rgba(212,175,55,0.3)', color:'#D4AF37' },
-    cashbackRecorded: { bg:'rgba(76,175,80,0.1)',    border:'rgba(76,175,80,0.3)',  color:'#4CAF50' },
-    privacyProtected: { bg:'rgba(184,184,184,0.08)', border:'rgba(184,184,184,0.2)',color:'#888' },
-  };
-  const c = cfg[type] || cfg.privacyProtected;
+// ─── Rendering ────────────────────────────────────────────────────
+// Shows the existing feedback as editorial quotes. Identifiers stay masked;
+// avatars, flags, star ratings and "verified" badges are not shown because
+// they cannot be confirmed from the project data.
+
+const AUTO_MS = 7000;
+const REDUCED = '(prefers-reduced-motion: reduce)';
+const subscribeReduced = (cb: () => void) => {
+  const mq = window.matchMedia(REDUCED);
+  mq.addEventListener('change', cb);
+  return () => mq.removeEventListener('change', cb);
+};
+
+function Quote({ item, exchangeLabel }: { item: TestimonialItem; exchangeLabel: string }) {
   return (
-    <span style={{ padding:'0.18rem 0.55rem', borderRadius:'999px', fontSize:'0.62rem', fontWeight:600,
-      background:c.bg, border:`1px solid ${c.border}`, color:c.color, whiteSpace:'nowrap' }}>
-      {labels[type] || type}
-    </span>
+    <figure className="flex h-full flex-col justify-between border-l border-line pl-6 md:pl-8">
+      <blockquote lang={item.locale} className="text-lg leading-relaxed text-pretty text-fg/90 md:text-xl">
+        <span aria-hidden className="mr-1 text-gold">“</span>
+        {item.text}
+        <span aria-hidden className="ml-0.5 text-gold">”</span>
+      </blockquote>
+      <figcaption className="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm">
+        <span className="font-medium">{item.name}</span>
+        <span className="text-faint">{item.country}</span>
+        <span className="font-mono text-[0.6875rem] tracking-[0.12em] text-muted uppercase">
+          {exchangeLabel}: {item.exchange}
+        </span>
+      </figcaption>
+    </figure>
   );
 }
 
-// ─── Card ─────────────────────────────────────────────────────────
-function TestimonialCard({ item, badgeLabels, exchangeLabel }:
-  { item: TestimonialItem; badgeLabels: Record<string,string>; exchangeLabel: string }) {
-  const [hov, setHov] = useState(false);
-  return (
-    <div
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        width:'310px', flexShrink:0,
-        background:'rgba(12,12,12,0.9)', backdropFilter:'blur(14px)',
-        border:`1px solid ${hov ? 'rgba(212,175,55,0.5)' : 'rgba(212,175,55,0.18)'}`,
-        borderRadius:'1.25rem', padding:'1.4rem',
-        display:'flex', flexDirection:'column', gap:'0.8rem',
-        transform: hov ? 'translateY(-4px)' : 'none',
-        boxShadow: hov
-          ? '0 12px 36px rgba(0,0,0,0.55), 0 0 20px rgba(212,175,55,0.1)'
-          : '0 4px 18px rgba(0,0,0,0.3)',
-        transition:'transform 0.25s ease, border-color 0.25s, box-shadow 0.25s',
-        userSelect:'none',
-      }}
-    >
-      {/* Top row */}
-      <div style={{ display:'flex', gap:'0.65rem', alignItems:'flex-start' }}>
-        <div style={{ width:'40px', height:'40px', borderRadius:'50%',
-          background:'linear-gradient(135deg,#FFD700,#D4AF37)',
-          display:'flex', alignItems:'center', justifyContent:'center',
-          fontSize:'0.95rem', fontWeight:900, color:'#050505', flexShrink:0 }}>
-          {item.avatar}
-        </div>
-        <div style={{ flex:1, minWidth:0 }}>
-          <div style={{ display:'flex', alignItems:'center', gap:'0.4rem', flexWrap:'wrap' }}>
-            <p style={{ fontSize:'0.86rem', fontWeight:700, color:'#F8F5E9' }}>{item.name}</p>
-            <span style={{ fontSize:'0.9rem' }}>{item.flag}</span>
-          </div>
-          <p style={{ fontSize:'0.65rem', color:'#555', marginTop:'0.06rem' }}>{item.email}</p>
-          <div style={{ display:'flex', gap:'2px', marginTop:'0.28rem' }}>
-            {Array.from({length:5}).map((_,i) => (
-              <span key={i} style={{ color: i < item.rating ? '#D4AF37' : '#2a2a2a', display:'flex' }}>
-                <IconStar size={12} filled={i < item.rating} />
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Review text */}
-      <p style={{ fontSize:'0.84rem', color:'#B0B0B0', lineHeight:1.7, fontStyle:'italic', flex:1 }}>
-        &ldquo;{item.text}&rdquo;
-      </p>
-
-      {/* Footer */}
-      <div>
-        <div style={{ fontSize:'0.63rem', color:'#555', marginBottom:'0.45rem',
-          paddingBottom:'0.45rem', borderBottom:'1px solid rgba(255,255,255,0.05)' }}>
-          {exchangeLabel}:{' '}
-          <span style={{ color:'#888', fontWeight:600 }}>{item.exchange}</span>
-        </div>
-        <div style={{ display:'flex', gap:'0.32rem', flexWrap:'wrap' }}>
-          {item.badges.map(b => <Badge key={b} type={b} labels={badgeLabels} />)}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── Carousel constants ───────────────────────────────────────────
-const CARD_W = 310;
-const GAP = 16;
-const STEP = CARD_W + GAP;
-
-function NavBtn({ dir, onClick }: { dir: 'prev' | 'next'; onClick: () => void }) {
-  const [hov, setHov] = useState(false);
-  return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      aria-label={dir === 'prev' ? 'Previous' : 'Next'}
-      style={{
-        width: '44px', height: '44px', borderRadius: '50%',
-        background: hov ? 'rgba(212,175,55,0.22)' : 'rgba(10,9,6,0.88)',
-        border: `1.5px solid ${hov ? '#D4AF37' : 'rgba(212,175,55,0.42)'}`,
-        color: '#D4AF37', cursor: 'pointer',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        transition: 'all 0.2s', flexShrink: 0,
-        backdropFilter: 'blur(10px)',
-        boxShadow: hov ? '0 0 18px rgba(212,175,55,0.28)' : '0 4px 14px rgba(0,0,0,0.45)',
-      }}
-    >
-      {dir === 'prev' ? <IconChevronLeft size={20} /> : <IconChevronRight size={20} />}
-    </button>
-  );
-}
-
-// ─── Main section ─────────────────────────────────────────────────
 export default function Testimonials() {
-  const { lang } = useLang();
-  const ts = extraTranslations[lang as keyof typeof extraTranslations]?.testimonials
-    ?? extraTranslations.vi.testimonials;
+  const { lang, ui } = useLang();
+  const ts = extraTranslations[lang]?.testimonials ?? extraTranslations.vi.testimonials;
+  const items = ALL_TESTIMONIALS;
+  const n = items.length;
 
-  const badgeLabels = {
-    verifiedUid:      ts.badges.verifiedUid,
-    cashbackRecorded: ts.badges.cashbackRecorded,
-    privacyProtected: ts.badges.privacyProtected,
-  };
+  const track = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+  const [userPlaying, setPlaying] = useState(true);
+  const [hold, setHold] = useState(false); // hover / focus inside pauses temporarily
+  // Respect reduced motion: never auto-advance unless the user presses play.
+  const reduced = useSyncExternalStore(subscribeReduced, () => window.matchMedia(REDUCED).matches, () => false);
+  const [userOverride, setUserOverride] = useState(false);
+  const playing = userPlaying && (!reduced || userOverride);
 
-  const len = ALL_TESTIMONIALS.length;
-  const allItems = [...ALL_TESTIMONIALS, ...ALL_TESTIMONIALS, ...ALL_TESTIMONIALS];
+  const goTo = useCallback(
+    (i: number) => {
+      const el = track.current;
+      if (!el) return;
+      const next = ((i % n) + n) % n;
+      const child = el.children[next] as HTMLElement | undefined;
+      setIndex(next);
+      if (child) el.scrollTo({ left: child.offsetLeft - el.offsetLeft, behavior: 'smooth' });
+    },
+    [n],
+  );
 
-  const trackRef = useRef<HTMLDivElement>(null);
-  const offsetRef = useRef(len);
-
-  const applyTranslate = useCallback((offset: number, animated: boolean) => {
-    if (!trackRef.current) return;
-    trackRef.current.style.transition = animated
-      ? 'transform 0.42s cubic-bezier(0.4,0,0.2,1)'
-      : 'none';
-    trackRef.current.style.transform = `translateX(${-offset * STEP}px)`;
+  // Keep the index in sync with manual swipes / scrolls.
+  useEffect(() => {
+    const el = track.current;
+    if (!el) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const kids = Array.from(el.children) as HTMLElement[];
+        const x = el.scrollLeft;
+        let best = 0;
+        kids.forEach((k, i) => {
+          if (Math.abs(k.offsetLeft - el.offsetLeft - x) < Math.abs(kids[best].offsetLeft - el.offsetLeft - x)) best = i;
+        });
+        setIndex(best);
+      });
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      el.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
-
-  const goNext = useCallback(() => {
-    offsetRef.current += 1;
-    applyTranslate(offsetRef.current, true);
-  }, [applyTranslate]);
-
-  const goPrev = useCallback(() => {
-    offsetRef.current -= 1;
-    applyTranslate(offsetRef.current, true);
-  }, [applyTranslate]);
-
-  const handleTransitionEnd = useCallback(() => {
-    const o = offsetRef.current;
-    if (o >= len * 2) {
-      offsetRef.current = o - len;
-      applyTranslate(offsetRef.current, false);
-    } else if (o < len) {
-      offsetRef.current = o + len;
-      applyTranslate(offsetRef.current, false);
-    }
-  }, [len, applyTranslate]);
 
   useEffect(() => {
-    applyTranslate(len, false);
-  }, []); // eslint-disable-line
+    if (!playing || hold) return;
+    const id = setInterval(() => {
+      const el = track.current;
+      // At the end of the track, wrap back to the first quote.
+      if (el && el.scrollLeft + el.clientWidth >= el.scrollWidth - 4) goTo(0);
+      else goTo(index + 1);
+    }, AUTO_MS);
+    return () => clearInterval(id);
+  }, [playing, hold, index, goTo]);
 
-  const hoverScrollRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
-
-  const startHoverScroll = useCallback(() => {
-    if (hoverScrollRef.current) return;
-    hoverScrollRef.current = setInterval(() => goNext(), 2200);
-  }, [goNext]);
-
-  const stopHoverScroll = useCallback(() => {
-    if (hoverScrollRef.current) {
-      clearInterval(hoverScrollRef.current);
-      hoverScrollRef.current = undefined;
-    }
-  }, []);
+  const ctrl =
+    'inline-flex size-11 items-center justify-center rounded-[var(--radius-sm)] border border-line-strong text-fg transition-colors hover:border-fg/50 hover:bg-white/[0.03]';
 
   return (
-    <section style={{ padding: '4rem 0 3rem', background: 'rgba(5,5,5,0)', overflow: 'hidden' }}>
-      {/* Header */}
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 1.5rem', marginBottom: '2rem', textAlign: 'center' }}>
-        <p style={{ fontSize: '0.8rem', fontWeight: 700, color: '#D4AF37', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
-          {ts.badge}
-        </p>
-        <h2 style={{ fontSize: 'clamp(1.35rem,2.5vw,1.75rem)', fontWeight: 800, color: '#F8F5E9', marginBottom: '0.75rem' }}>
-          {ts.title}
-        </h2>
-        <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: 1.7, fontStyle: 'italic', maxWidth: '620px', margin: '0 auto' }}>
-          {ts.subtitle}
-        </p>
-      </div>
-
-      {/* Carousel */}
-      <div
-        style={{ position: 'relative' }}
-        onMouseEnter={() => startHoverScroll()}
-        onMouseLeave={() => stopHoverScroll()}
-      >
-        {/* Fade masks */}
-        <div style={{
-          position: 'absolute', top: 0, left: 0, bottom: 0, width: '80px', zIndex: 2,
-          background: 'linear-gradient(to right, #040404 0%, transparent 100%)',
-          pointerEvents: 'none',
-        }} />
-        <div style={{
-          position: 'absolute', top: 0, right: 0, bottom: 0, width: '80px', zIndex: 2,
-          background: 'linear-gradient(to left, #040404 0%, transparent 100%)',
-          pointerEvents: 'none',
-        }} />
-
-        {/* Nav buttons row */}
-        <div style={{
-          display: 'flex', justifyContent: 'center', gap: '0.75rem',
-          marginBottom: '1.25rem', position: 'relative', zIndex: 3,
-        }}>
-          <NavBtn dir="prev" onClick={goPrev} />
-          <NavBtn dir="next" onClick={goNext} />
-        </div>
-
-        {/* Track */}
-        <div style={{ overflow: 'hidden', padding: '0.5rem 0' }}>
-          <div
-            ref={trackRef}
-            onTransitionEnd={handleTransitionEnd}
-            style={{ display: 'flex', gap: `${GAP}px`, padding: '0.25rem 1.5rem', willChange: 'transform' }}
+    <Section id="feedback" labelledBy="feedback-title" tone="raised">
+      <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <SectionHeader id="feedback-title" eyebrow={ts.badge} title={ui.feedback.title} lead={ts.subtitle} />
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="mr-3 font-mono text-xs text-faint tabular-nums" aria-hidden>
+            {ui.feedback.position(index + 1, n)}
+          </span>
+          <button type="button" className={ctrl} aria-label={ui.feedback.prev} onClick={() => goTo(index - 1)}>
+            <ChevronLeft />
+          </button>
+          <button type="button" className={ctrl} aria-label={ui.feedback.next} onClick={() => goTo(index + 1)}>
+            <ChevronRight />
+          </button>
+          <button
+            type="button"
+            className={ctrl}
+            aria-label={playing ? ui.feedback.pause : ui.feedback.play}
+            aria-pressed={!playing}
+            onClick={() => {
+              setUserOverride(true);
+              setPlaying(!playing);
+            }}
           >
-            {allItems.map((item, idx) => (
-              <TestimonialCard
-                key={`${item.id}-${idx}`}
-                item={item}
-                badgeLabels={badgeLabels}
-                exchangeLabel={ts.exchange}
-              />
-            ))}
-          </div>
+            {playing ? <Pause /> : <Play />}
+          </button>
         </div>
       </div>
 
-      {/* Notes */}
-      <div style={{ maxWidth: '1100px', margin: '1.5rem auto 0', padding: '0 1.5rem', textAlign: 'center' }}>
-        <p style={{ fontSize: '0.72rem', color: '#555', maxWidth: '580px', lineHeight: 1.65, margin: '0 auto' }}>{ts.fullNote}</p>
+      <div
+        ref={track}
+        role="region"
+        aria-roledescription="carousel"
+        aria-label={ui.feedback.title}
+        tabIndex={0}
+        onMouseEnter={() => setHold(true)}
+        onMouseLeave={() => setHold(false)}
+        onFocus={() => setHold(true)}
+        onBlur={() => setHold(false)}
+        className="feedback-track mt-14 flex gap-8 overflow-x-auto pb-2 focus-visible:outline-offset-8 md:gap-12"
+      >
+        {items.map((item, i) => (
+          <div
+            key={item.id}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={ui.feedback.position(i + 1, n)}
+            className={cn('w-[85%] shrink-0 sm:w-[60%] lg:w-[calc((100%-6rem)/3)]')}
+          >
+            <Quote item={item} exchangeLabel={ts.exchange} />
+          </div>
+        ))}
       </div>
-    </section>
+
+      <p className="mt-10 text-xs leading-relaxed text-faint">{ts.fullNote}</p>
+    </Section>
   );
 }

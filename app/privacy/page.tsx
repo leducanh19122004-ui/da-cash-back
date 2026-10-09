@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import { LegalShell, LegalSection, Callout } from '../components/Legal';
 
 export const metadata: Metadata = {
   title: 'Chính sách bảo mật — DA CASH BACK',
@@ -68,43 +66,15 @@ Nếu bất kỳ ai tự xưng là DA CASH BACK và yêu cầu các thông tin t
 
 export default function PrivacyPage() {
   return (
-    <>
-      <Header />
-      <main style={{ minHeight: '100vh', paddingTop: '5rem', background: '#0B0B0B' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '4rem 1.5rem' }}>
-          <div style={{ marginBottom: '3rem' }}>
-            <Link href="/" style={{ color: '#D4AF37', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>← Quay về trang chủ</Link>
-            <h1 style={{ fontSize: 'clamp(1.75rem,3vw,2.5rem)', fontWeight: 900, color: '#F8F5E9', marginTop: '1.25rem', marginBottom: '0.5rem' }}>
-              Chính sách bảo mật
-            </h1>
-            <p style={{ color: '#666', fontSize: '0.875rem' }}>Cập nhật lần cuối: 01/05/2025</p>
-          </div>
-
-          <div style={{
-            background: 'rgba(212,175,55,0.07)', border: '1px solid rgba(212,175,55,0.3)',
-            borderRadius: '0.875rem', padding: '1.25rem 1.5rem', marginBottom: '2rem',
-            display: 'flex', gap: '0.75rem', alignItems: 'flex-start',
-          }}>
-            <span style={{ fontSize: '1.25rem' }}>🔒</span>
-            <p style={{ fontSize: '0.875rem', color: '#B8B8B8', lineHeight: 1.7 }}>
-              DA CASH BACK cam kết bảo vệ quyền riêng tư của bạn. Chúng tôi chỉ thu thập thông tin tối thiểu cần thiết và không bao giờ yêu cầu mật khẩu, private key, hay seed phrase.
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            {sections.map(sec => (
-              <div key={sec.title} style={{
-                background: '#111111', border: '1px solid rgba(212,175,55,0.15)',
-                borderRadius: '1rem', padding: '1.75rem',
-              }}>
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#D4AF37', marginBottom: '1rem' }}>{sec.title}</h2>
-                <p style={{ fontSize: '0.9rem', color: '#999', lineHeight: 1.8, whiteSpace: 'pre-line' }}>{sec.content}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </main>
-      <Footer />
-    </>
+    <LegalShell title="Chính sách bảo mật" updated="Cập nhật lần cuối: 01/05/2025" backLabel="Quay về trang chủ">
+      <Callout>
+        <p>DA CASH BACK cam kết bảo vệ quyền riêng tư của bạn. Chúng tôi chỉ thu thập thông tin tối thiểu cần thiết và không bao giờ yêu cầu mật khẩu, private key, hay seed phrase.</p>
+      </Callout>
+      {sections.map((sec) => (
+        <LegalSection key={sec.title} title={sec.title}>
+          <p className="whitespace-pre-line">{sec.content}</p>
+        </LegalSection>
+      ))}
+    </LegalShell>
   );
 }
