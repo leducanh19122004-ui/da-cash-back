@@ -47,7 +47,7 @@ export const networkUrl = (lang: SiteLang = 'en') => `${URLS.network}/${lang}`;
  * Set HUB_TRADERS_PAGE_LIVE to true once /[locale]/traders is deployed on the hub.
  * Until then links go to the hub home page so they never hit a 404.
  */
-export const HUB_TRADERS_PAGE_LIVE = false;
+export const HUB_TRADERS_PAGE_LIVE = true;
 export const tradersUrl = (lang: SiteLang = 'en') =>
   HUB_TRADERS_PAGE_LIVE ? `${URLS.network}/${lang}/traders` : networkUrl(lang);
 
