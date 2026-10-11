@@ -1,8 +1,13 @@
 'use client';
 import { useLang } from '../contexts/LanguageContext';
-import { availableExchanges, pausedExchanges, isAvailable, type Exchange } from '@/config/exchanges';
-import { exchangesWithTiers } from '@/config/rewardTiers';
-import { VIEW_MILESTONES_EVENT } from './Rewards';
+import {
+  canRegister,
+  exchangeCounts,
+  newPartnerExchanges,
+  partnerExchanges,
+  pausedExchanges,
+  type Exchange,
+} from '@/config/exchanges';
 import { ArrowUpRight, Reveal, Section, SectionHeader, cn } from './ui';
 
 /** Monochrome initials mark: brand colours are left to the exchanges' own sites. */
@@ -20,33 +25,23 @@ function Mark({ ex }: { ex: Exchange }) {
 export default function Exchanges() {
   const { copy, ui } = useLang();
   const c = copy.exchanges;
-  const withTiers = new Set(exchangesWithTiers());
-
-  const viewMilestones = (id: string) => {
-    window.dispatchEvent(new CustomEvent(VIEW_MILESTONES_EVENT, { detail: id }));
-    document.getElementById('rewards')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
 
   const status = (e: Exchange) => {
-    const live = isAvailable(e);
+    const partner = e.partnershipStatus === 'active';
     return (
       <span className="inline-flex items-center gap-2 text-sm whitespace-nowrap">
-        <span aria-hidden className={cn('size-1.5 rounded-full', live ? 'bg-gold' : 'border border-faint')} />
-        <span className={live ? 'text-fg' : 'text-muted'}>{live ? c.statusAvailable : c.statusPaused}</span>
+        <span aria-hidden className={cn('size-1.5 rounded-full', partner ? 'bg-gold' : 'border border-faint')} />
+        <span className={partner ? 'text-fg' : 'text-muted'}>{c.partnership[e.partnershipStatus]}</span>
       </span>
     );
   };
 
-  const actions = (e: Exchange) =>
-    isAvailable(e) && e.refLink ? (
-      <span className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-[0.8125rem]">
-        {withTiers.has(e.id) ? (
-          <button type="button" onClick={() => viewMilestones(e.id)} className="link-underline min-h-9 text-muted hover:text-fg">
-            {c.viewMilestones}
-            <span className="sr-only"> — {e.name}</span>
-          </button>
-        ) : null}
-        <a href={e.refLink} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-gold min-h-9 px-3.5 whitespace-nowrap">
+  // Register only when the link is 'available' and https (canRegister). Otherwise a
+  // neutral link status, or nothing for 'none'. Never a '#' or empty href.
+  const action = (e: Exchange) => {
+    if (canRegister(e)) {
+      return (
+        <a href={e.referralUrl} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-gold min-h-9 px-3.5 whitespace-nowrap">
           {c.register}
           <ArrowUpRight className="btn-icon size-3.5" />
           <span className="sr-only">
@@ -54,20 +49,26 @@ export default function Exchanges() {
             — {e.name} ({ui.newTab})
           </span>
         </a>
-      </span>
-    ) : null;
+      );
+    }
+    const label = c.link[e.referralLinkStatus];
+    return label ? <span className="text-[0.8125rem] whitespace-nowrap text-muted">{label}</span> : null;
+  };
+
+  const market = (e: Exchange) => (e.market ? c.market[e.market] : c.marketUnknown);
 
   const groups = [
-    { id: 'available', title: c.groupAvailable, list: availableExchanges },
+    { id: 'partners', title: c.groupPartners, list: partnerExchanges },
+    { id: 'new', title: c.groupNew, list: newPartnerExchanges },
     { id: 'paused', title: c.groupPaused, list: pausedExchanges },
-  ];
+  ].filter((g) => g.list.length > 0);
 
   return (
     <Section id="exchanges" labelledBy="exchanges-title">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <SectionHeader id="exchanges-title" eyebrow={c.eyebrow} title={c.title} lead={c.lead} />
         <p className="shrink-0 font-mono text-[0.6875rem] tracking-[0.12em] text-muted uppercase">
-          {c.count(availableExchanges.length, pausedExchanges.length)}
+          {c.count(exchangeCounts)}
         </p>
       </div>
 
@@ -110,14 +111,12 @@ export default function Exchanges() {
                       </span>
                     </th>
                     <td className="py-3 pr-6 font-mono text-[0.6875rem] tracking-[0.1em] text-muted uppercase">
-                      {c.market[e.market]}
+                      {market(e)}
                     </td>
                     <td className="py-3 pr-6">
                       {status(e)}
                     </td>
-                    <td className="py-3 pl-4">
-                      {actions(e)}
-                    </td>
+                    <td className="py-3 pl-4 text-right">{action(e)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -132,16 +131,12 @@ export default function Exchanges() {
                       <Mark ex={e} />
                       <div className="min-w-0">
                         <p className="font-medium">{e.name}</p>
-                        <p className="font-mono text-[0.625rem] tracking-[0.12em] text-faint uppercase">{c.market[e.market]}</p>
+                        <p className="font-mono text-[0.625rem] tracking-[0.12em] text-faint uppercase">{market(e)}</p>
                       </div>
                     </div>
                     {status(e)}
                   </div>
-                  {isAvailable(e) ? (
-                    <div className="mt-3">
-                      {actions(e)}
-                    </div>
-                  ) : null}
+                  {action(e) ? <div className="mt-3">{action(e)}</div> : null}
                 </li>
               ))}
             </ul>
