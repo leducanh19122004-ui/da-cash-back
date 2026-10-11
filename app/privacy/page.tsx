@@ -2,14 +2,15 @@ import type { Metadata } from 'next';
 import { LegalShell, LegalSection, Callout } from '../components/Legal';
 
 export const metadata: Metadata = {
-  title: 'Chính sách bảo mật — DA CASH BACK',
-  description: 'Chính sách bảo mật và quyền riêng tư của nền tảng DA CASH BACK.',
+  alternates: { canonical: '/privacy' },
+  title: 'Chính sách bảo mật — DA Cashback',
+  description: 'Chính sách bảo mật và quyền riêng tư của nền tảng DA Cashback.',
 };
 
 const sections = [
   {
     title: '1. Dữ liệu chúng tôi thu thập',
-    content: `Để cung cấp dịch vụ cashback, DA CASH BACK có thể thu thập các thông tin sau:
+    content: `Để cung cấp dịch vụ cashback, DA Cashback có thể thu thập các thông tin sau:
 • Họ tên
 • Địa chỉ email
 • Tên người dùng Telegram / Zalo
@@ -19,7 +20,7 @@ const sections = [
   },
   {
     title: '2. Dữ liệu chúng tôi KHÔNG thu thập',
-    content: `DA CASH BACK tuyệt đối không thu thập và không yêu cầu:
+    content: `DA Cashback tuyệt đối không thu thập và không yêu cầu:
 • Mật khẩu tài khoản sàn
 • Mã xác thực 2FA / OTP
 • Private key / Seed phrase / Recovery phrase
@@ -27,7 +28,7 @@ const sections = [
 • Thông tin thẻ ngân hàng / tài khoản ngân hàng
 • Số CCCD / Căn cước công dân
 
-Nếu bất kỳ ai tự xưng là DA CASH BACK và yêu cầu các thông tin trên, đây là hành vi lừa đảo. Vui lòng báo cáo ngay cho chúng tôi.`,
+Nếu bất kỳ ai tự xưng là DA Cashback và yêu cầu các thông tin trên, đây là hành vi lừa đảo. Vui lòng báo cáo ngay cho chúng tôi.`,
   },
   {
     title: '3. Mục đích sử dụng dữ liệu',
@@ -40,7 +41,7 @@ Nếu bất kỳ ai tự xưng là DA CASH BACK và yêu cầu các thông tin t
   },
   {
     title: '4. Bảo mật dữ liệu',
-    content: `DA CASH BACK thực hiện các biện pháp bảo mật phù hợp để bảo vệ thông tin của người dùng. Dữ liệu không được bán, trao đổi hoặc chuyển nhượng cho bên thứ ba vì mục đích thương mại. Thông tin chỉ được chia sẻ với sàn đối tác trong giới hạn cần thiết để thực hiện chương trình cashback.`,
+    content: `DA Cashback thực hiện các biện pháp bảo mật phù hợp để bảo vệ thông tin của người dùng. Dữ liệu không được bán, trao đổi hoặc chuyển nhượng cho bên thứ ba vì mục đích thương mại. Thông tin chỉ được chia sẻ với sàn đối tác trong giới hạn cần thiết để thực hiện chương trình cashback.`,
   },
   {
     title: '5. Quyền của người dùng',
@@ -54,7 +55,7 @@ Nếu bất kỳ ai tự xưng là DA CASH BACK và yêu cầu các thông tin t
   },
   {
     title: '6. Thay đổi chính sách',
-    content: `DA CASH BACK có thể cập nhật chính sách bảo mật này theo thời gian. Mọi thay đổi sẽ được thông báo trên website. Việc tiếp tục sử dụng dịch vụ sau khi thay đổi được công bố đồng nghĩa với việc bạn chấp nhận chính sách mới.`,
+    content: `DA Cashback có thể cập nhật chính sách bảo mật này theo thời gian. Mọi thay đổi sẽ được thông báo trên website. Việc tiếp tục sử dụng dịch vụ sau khi thay đổi được công bố đồng nghĩa với việc bạn chấp nhận chính sách mới.`,
   },
   {
     title: '7. Liên hệ',
@@ -68,7 +69,7 @@ export default function PrivacyPage() {
   return (
     <LegalShell title="Chính sách bảo mật" updated="Cập nhật lần cuối: 01/05/2025" backLabel="Quay về trang chủ">
       <Callout>
-        <p>DA CASH BACK cam kết bảo vệ quyền riêng tư của bạn. Chúng tôi chỉ thu thập thông tin tối thiểu cần thiết và không bao giờ yêu cầu mật khẩu, private key, hay seed phrase.</p>
+        <p>DA Cashback cam kết bảo vệ quyền riêng tư của bạn. Chúng tôi chỉ thu thập thông tin tối thiểu cần thiết và không bao giờ yêu cầu mật khẩu, private key, hay seed phrase.</p>
       </Callout>
       {sections.map((sec) => (
         <LegalSection key={sec.title} title={sec.title}>

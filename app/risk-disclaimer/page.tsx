@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { LegalShell, LegalSection as Section, Bullet, Callout } from '../components/Legal';
-export const metadata: Metadata = { title: 'Cảnh báo rủi ro — DA CASH BACK', description: 'Thông tin cảnh báo rủi ro khi giao dịch Crypto và Forex.' };
+export const metadata: Metadata = { alternates: { canonical: '/risk-disclaimer' }, title: 'Cảnh báo rủi ro — DA Cashback', description: 'Thông tin cảnh báo rủi ro khi giao dịch Crypto và Forex.' };
 
 export default function RiskPage() {
   return (
@@ -38,7 +38,7 @@ export default function RiskPage() {
               'Cashback là hoàn lại một phần phí giao dịch — không phải lợi nhuận đầu tư.',
               'Cashback không bù đắp được tổn thất từ giao dịch thua lỗ.',
               'Cashback không đảm bảo kết quả giao dịch có lãi.',
-              'DA CASH BACK không cam kết bất kỳ mức lợi nhuận nào.',
+              'DA Cashback không cam kết bất kỳ mức lợi nhuận nào.',
               'Quyết định giao dịch hoàn toàn thuộc trách nhiệm cá nhân người dùng.',
             ]} />
           </Section>
@@ -55,7 +55,7 @@ export default function RiskPage() {
 
           <div className="py-9">
             <p className="text-sm leading-relaxed text-muted">
-              Bằng cách sử dụng dịch vụ của DA CASH BACK, bạn xác nhận đã đọc, hiểu và chấp nhận các rủi ro được mô tả trong tài liệu này.
+              Bằng cách sử dụng dịch vụ của DA Cashback, bạn xác nhận đã đọc, hiểu và chấp nhận các rủi ro được mô tả trong tài liệu này.
             </p>
             <Link href="/" className="btn btn-primary mt-6">
               Về trang chủ
