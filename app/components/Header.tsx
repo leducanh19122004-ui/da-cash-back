@@ -175,9 +175,13 @@ export default function Header() {
     <header
       className={cn(
         'sticky top-0 z-50 border-b transition-[background-color,border-color] duration-300',
-        scrolled || open
-          ? 'border-line bg-ink-0/85 backdrop-blur-md supports-[not(backdrop-filter:blur(0))]:bg-ink-0'
-          : 'border-transparent bg-transparent',
+        // No backdrop-filter while the menu is open: it would make the header the
+        // containing block of the fixed menu panel and collapse it to 1px.
+        open
+          ? 'border-line bg-ink-0'
+          : scrolled
+            ? 'border-line bg-ink-0/85 backdrop-blur-md supports-[not(backdrop-filter:blur(0))]:bg-ink-0'
+            : 'border-transparent bg-transparent',
       )}
     >
       <a
