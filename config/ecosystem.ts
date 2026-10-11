@@ -43,8 +43,13 @@ export const networkUrl = (lang: SiteLang = 'en') => `${URLS.network}/${lang}`;
 /**
  * DA Network for traders (hub Trader page). Daily plans, signals, community,
  * learning, direct support and Volume Rewards live there — not on DA Cashback.
+ *
+ * Set HUB_TRADERS_PAGE_LIVE to true once /[locale]/traders is deployed on the hub.
+ * Until then links go to the hub home page so they never hit a 404.
  */
-export const tradersUrl = (lang: SiteLang = 'en') => `${URLS.network}/${lang}/traders`;
+export const HUB_TRADERS_PAGE_LIVE = false;
+export const tradersUrl = (lang: SiteLang = 'en') =>
+  HUB_TRADERS_PAGE_LIVE ? `${URLS.network}/${lang}/traders` : networkUrl(lang);
 
 /** Verification states (spec §3). */
 export type VerificationStatus = 'NOT_AVAILABLE' | 'OWNER_ESTIMATE' | 'OWNER_REPORTED' | 'RECONCILED' | 'VERIFIED';
