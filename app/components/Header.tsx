@@ -4,12 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useLang } from '../contexts/LanguageContext';
+import { BRAND, networkUrl as hubUrl } from '@/config/ecosystem';
 import { Lang } from '../translations';
 import { langLabels } from '../translations/ui';
 import { ArrowUpRight, Check, ChevronDown, Cross, Globe, Menu, cn } from './ui';
 
 const LANGS: Lang[] = ['vi', 'en', 'ko', 'th', 'id'];
-const NAV_IDS = ['hero', 'exchanges', 'how-it-works', 'cashback-activity', 'faq', 'contact'] as const;
+const NAV_IDS = ['exchanges', 'rewards', 'join', 'progress', 'safety', 'faq', 'contact'] as const;
 type NavId = (typeof NAV_IDS)[number];
 
 function LanguageSwitcher() {
@@ -91,7 +92,8 @@ function LanguageSwitcher() {
 }
 
 export default function Header() {
-  const { t, ui, lang, setLang } = useLang();
+  const { copy, ui, lang, setLang } = useLang();
+  const n = copy.nav;
   const pathname = usePathname();
   const isHome = pathname === '/';
   const [scrolled, setScrolled] = useState(false);
@@ -102,15 +104,16 @@ export default function Header() {
 
   // On sub-pages (legal), section links point back to the home page.
   const href = (id: string) => (isHome ? `#${id}` : `/#${id}`);
-  const networkUrl = `https://danetwork.asia/${lang}`;
+  const networkUrl = hubUrl(lang);
 
   const navLinks: { id: NavId; label: string }[] = [
-    { id: 'hero', label: t.nav.home },
-    { id: 'exchanges', label: t.nav.exchanges },
-    { id: 'how-it-works', label: t.nav.howItWorks },
-    { id: 'cashback-activity', label: t.nav.cashbackLookup },
-    { id: 'faq', label: t.nav.faq },
-    { id: 'contact', label: t.nav.contact },
+    { id: 'exchanges', label: n.exchanges },
+    { id: 'rewards', label: n.rewards },
+    { id: 'join', label: n.join },
+    { id: 'progress', label: n.progress },
+    { id: 'safety', label: n.safety },
+    { id: 'faq', label: n.faq },
+    { id: 'contact', label: n.contact },
   ];
 
   useEffect(() => {
@@ -184,16 +187,15 @@ export default function Header() {
         {ui.skip}
       </a>
       <div className="container-site flex h-16 items-center justify-between gap-4 md:h-[4.5rem]">
-        <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label={`DA CASH BACK — ${t.nav.home}`}>
+        <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label={BRAND.cashback}>
           <Image src="/logo.png" alt="" width={28} height={28} priority className="size-7 rounded-full" />
-          <span className="text-[0.9375rem] font-semibold tracking-[0.12em] whitespace-nowrap">DA CASH BACK</span>
+          <span className="text-[0.9375rem] font-semibold tracking-[0.04em] whitespace-nowrap">{BRAND.cashback}</span>
         </Link>
 
         <nav aria-label={ui.primaryNav} className="hidden xl:block">
           <ul className="flex items-center gap-1">
             {navLinks.map((l) => (
-              // "Home" duplicates the logo link; it only fits from 2xl up.
-              <li key={l.id} className={l.id === 'hero' ? 'hidden 2xl:block' : undefined}>
+              <li key={l.id}>
                 <a
                   href={href(l.id)}
                   aria-current={active === l.id ? 'location' : undefined}
@@ -228,11 +230,11 @@ export default function Header() {
             <span className="sr-only"> ({ui.newTab})</span>
           </a>
           <LanguageSwitcher />
-          <a href={href('cashback-lookup')} className="btn btn-sm btn-secondary hidden whitespace-nowrap md:inline-flex">
-            {t.nav.lookupCashback}
+          <a href={href('progress')} className="btn btn-sm btn-secondary hidden whitespace-nowrap md:inline-flex">
+            {n.ctaProgress}
           </a>
-          <a href={href('exchanges')} className="btn btn-sm btn-gold hidden whitespace-nowrap md:inline-flex">
-            {t.nav.joinNow}
+          <a href={href('join')} className="btn btn-sm btn-gold hidden whitespace-nowrap md:inline-flex">
+            {n.ctaJoin}
           </a>
           <button
             ref={menuButton}
@@ -270,11 +272,11 @@ export default function Header() {
               ))}
             </ul>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              <a href={href('exchanges')} onClick={() => setOpen(false)} className="btn btn-gold">
-                {t.nav.joinNow}
+              <a href={href('join')} onClick={() => setOpen(false)} className="btn btn-gold">
+                {n.ctaJoin}
               </a>
-              <a href={href('cashback-lookup')} onClick={() => setOpen(false)} className="btn btn-secondary">
-                {t.nav.lookupCashback}
+              <a href={href('progress')} onClick={() => setOpen(false)} className="btn btn-secondary">
+                {n.ctaProgress}
               </a>
             </div>
 

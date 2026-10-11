@@ -2,11 +2,14 @@
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
 import { Lang, Translations, translations } from '../translations';
 import { UiStrings, uiStrings } from '../translations/ui';
+import { V3Copy, v3Copy } from '../translations/v3';
 
 interface LangContextType {
   lang: Lang;
   t: Translations;
   ui: UiStrings;
+  /** V3 page copy (English for every language until translated). */
+  copy: V3Copy;
   setLang: (l: Lang) => void;
 }
 
@@ -14,6 +17,7 @@ const LangContext = createContext<LangContextType>({
   lang: 'en',
   t: translations.en,
   ui: uiStrings.en,
+  copy: v3Copy.en,
   setLang: () => {},
 });
 
@@ -28,7 +32,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [lang]);
 
   return (
-    <LangContext.Provider value={{ lang, t: translations[lang], ui: uiStrings[lang], setLang }}>
+    <LangContext.Provider value={{ lang, t: translations[lang], ui: uiStrings[lang], copy: v3Copy[lang], setLang }}>
       {children}
     </LangContext.Provider>
   );

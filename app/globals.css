@@ -445,16 +445,3 @@
     transform: rotate(360deg);
   }
 }
-
-/* Testimonials carousel: native horizontal scroll with snap points */
-.feedback-track {
-  scrollbar-width: none;
-  scroll-snap-type: x mandatory;
-  overscroll-behavior-x: contain;
-}
-.feedback-track::-webkit-scrollbar {
-  display: none;
-}
-.feedback-track > * {
-  scroll-snap-align: start;
-}

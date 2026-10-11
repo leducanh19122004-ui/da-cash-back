@@ -6,6 +6,8 @@ import { useLang } from '../contexts/LanguageContext';
 import { Lang } from '../translations';
 import { langLabels } from '../translations/ui';
 import { cn } from './ui';
+import { BRAND, URLS, networkUrl } from '@/config/ecosystem';
+import { supportEmail, telegramContact } from '@/config/contact';
 
 const LANGS: Lang[] = ['vi', 'en', 'ko', 'th', 'id'];
 const linkCls = 'inline-flex min-h-9 items-center text-sm text-muted transition-colors hover:text-fg';
@@ -19,18 +21,22 @@ function Heading({ id, children }: { id: string; children: React.ReactNode }) {
 }
 
 export default function Footer() {
-  const { t, ui, lang, setLang } = useLang();
+  const { t, ui, lang, setLang, copy } = useLang();
   const ft = t.footer;
+  const cf = copy.footer;
+  const n = copy.nav;
   const isHome = usePathname() === '/';
   const href = (id: string) => (isHome ? `#${id}` : `/#${id}`);
 
   const navLinks = [
-    { id: 'exchanges', label: t.nav.exchanges },
-    { id: 'how-it-works', label: t.nav.howItWorks },
-    { id: 'cashback-activity', label: t.nav.cashbackLookup },
-    { id: 'cashback-lookup', label: t.nav.lookupCashback },
-    { id: 'faq', label: t.nav.faq },
-    { id: 'contact', label: t.nav.contact },
+    { id: 'exchanges', label: n.exchanges },
+    { id: 'rewards', label: n.rewards },
+    { id: 'join', label: n.join },
+    { id: 'progress', label: n.progress },
+    { id: 'safety', label: n.safety },
+    { id: 'compare', label: copy.compare.title },
+    { id: 'faq', label: n.faq },
+    { id: 'contact', label: n.contact },
   ];
   const legalLinks = [
     { href: '/terms', label: ft.terms },
@@ -38,26 +44,26 @@ export default function Footer() {
     { href: '/risk-disclaimer', label: ft.risk },
   ];
   const ecosystem = [
-    { href: `https://danetwork.asia/${lang}`, label: ui.footer.network },
-    { href: 'https://crypto.danetwork.asia', label: ui.footer.crypto },
-    { href: 'https://signal.danetwork.asia/', label: ui.footer.tracking },
+    { href: networkUrl(lang), label: cf.network },
+    { href: URLS.affiliate, label: cf.affiliate },
+    { href: URLS.signalTracking, label: cf.tracking },
   ];
 
   return (
     <footer className="border-t border-line bg-ink-1" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
-        DA CASH BACK
+        {BRAND.cashback}
       </h2>
       <div className="container-site pt-20 pb-10">
         <div className="grid gap-14 lg:grid-cols-[1.2fr_2fr]">
           <div>
-            <Link href="/" className="inline-flex items-center gap-2.5" aria-label={`DA CASH BACK — ${t.nav.home}`}>
+            <Link href="/" className="inline-flex items-center gap-2.5" aria-label={BRAND.cashback}>
               <Image src="/logo.png" alt="" width={32} height={32} className="size-8 rounded-full" />
-              <span className="font-semibold tracking-[0.12em]">DA CASH BACK</span>
+              <span className="font-semibold tracking-[0.04em]">{BRAND.cashback}</span>
             </Link>
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted">{ft.desc}</p>
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted">{cf.desc}</p>
             <a
-              href={`https://danetwork.asia/${lang}`}
+              href={networkUrl(lang)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-6 inline-flex min-h-9 items-center font-mono text-[0.6875rem] tracking-[0.14em] text-gold uppercase transition-colors hover:text-gold-soft"
@@ -70,34 +76,36 @@ export default function Footer() {
               <Heading id="f-support">{ui.footer.support}</Heading>
               <dl className="mt-4 space-y-3 text-sm">
                 <div>
-                  <dt className="text-faint">Telegram</dt>
+                  <dt className="text-faint">{copy.contact.telegram}</dt>
                   <dd>
                     <a
-                      href="https://t.me/jacksondz"
+                      href={telegramContact.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="link-underline inline-flex min-h-9 items-center"
                     >
-                      @jacksondz
+                      {telegramContact.handle}
                       <span className="sr-only"> ({ui.newTab})</span>
                     </a>
                   </dd>
                 </div>
-                <div>
-                  <dt className="text-faint">{ui.contact.email}</dt>
-                  <dd>
-                    <a href="mailto:support@dacashback.com" className="link-underline inline-flex min-h-9 items-center">
-                      support@dacashback.com
-                    </a>
-                  </dd>
-                </div>
+                {supportEmail ? (
+                  <div>
+                    <dt className="text-faint">{copy.contact.email}</dt>
+                    <dd>
+                      <a href={`mailto:${supportEmail}`} className="link-underline inline-flex min-h-9 items-center">
+                        {supportEmail}
+                      </a>
+                    </dd>
+                  </div>
+                ) : null}
               </dl>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4">
             <nav aria-labelledby="f-nav">
-              <Heading id="f-nav">{ft.nav}</Heading>
+              <Heading id="f-nav">{cf.sections}</Heading>
               <ul className="mt-4 space-y-1">
                 {navLinks.map((l) => (
                   <li key={l.id}>
@@ -110,7 +118,7 @@ export default function Footer() {
             </nav>
 
             <nav aria-labelledby="f-eco">
-              <Heading id="f-eco">{ui.footer.ecosystem}</Heading>
+              <Heading id="f-eco">{cf.ecosystem}</Heading>
               <ul className="mt-4 space-y-1">
                 {ecosystem.map((l) => (
                   <li key={l.label}>
@@ -157,11 +165,10 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="mt-16 max-w-4xl text-xs leading-relaxed text-faint">{ft.disclaimer}</p>
+        <p className="mt-16 max-w-4xl text-xs leading-relaxed text-faint">{cf.disclaimer}</p>
 
         <div className="mt-8 flex flex-col gap-3 border-t border-line pt-8 text-xs leading-relaxed text-faint md:flex-row md:justify-between">
-          <p>{ft.copyright.replace('{year}', new Date().getFullYear().toString())}</p>
-          <p>{t.contact.address}</p>
+          <p>{cf.copyright(new Date().getFullYear())}</p>
         </div>
       </div>
     </footer>

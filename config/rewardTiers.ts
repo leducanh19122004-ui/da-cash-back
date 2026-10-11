@@ -74,32 +74,27 @@ export function exchangesWithTiers(): string[] {
 }
 
 /**
- * DEMO ONLY — static fixtures to preview the milestone ladder locally.
- * Rendered only when NODE_ENV !== 'production' AND the URL has ?demo=1, and
- * always with a visible "DEMO ONLY — not real milestones" tag. These numbers
- * are NOT real milestones and must never be published.
+ * Programme facts shared by every tier passed in. A field is returned only
+ * when all tiers agree on a non-null value, so the UI never generalises a
+ * value that differs between exchanges.
  */
-export const DEMO_TIERS: readonly RewardTier[] = [
-  ['bingx', 'd1', 50_000, 5],
-  ['bingx', 'd2', 250_000, 30],
-  ['bingx', 'd3', 1_000_000, 150],
-  ['bingx', 'd4', 5_000_000, 900],
-  ['bitunix', 'd1', 100_000, 10],
-  ['bitunix', 'd2', 500_000, 60],
-  ['bitunix', 'd3', 2_000_000, 280],
-].map(([exchangeId, tierId, volumeThreshold, rewardAmount]) => ({
-  exchangeId: exchangeId as string,
-  tierId: tierId as string,
-  volumeThreshold: volumeThreshold as number,
-  volumeCurrency: 'USD' as const,
-  rewardAmount: rewardAmount as number,
-  rewardCurrency: 'USDT' as const,
-  volumePeriod: 'monthly' as const,
-  eligibleProductTypes: ['futures'] as ProductType[],
-  calculationBasis: 'Demo fixture',
-  payoutMethod: 'Demo fixture',
-  payoutWindow: { days: 7 },
-  effectiveFrom: '2026-01-01',
-  effectiveTo: null,
-  verificationStatus: 'NOT_AVAILABLE' as const,
-}));
+export function tierFacts(tiers: readonly RewardTier[]) {
+  const same = <T>(pick: (t: RewardTier) => T | null): T | null => {
+    if (tiers.length === 0) return null;
+    const first = pick(tiers[0]);
+    const key = JSON.stringify(first);
+    return first !== null && tiers.every((t) => JSON.stringify(pick(t)) === key) ? first : null;
+  };
+  return {
+    volumePeriod: same((t) => t.volumePeriod),
+    eligibleProductTypes: same((t) => t.eligibleProductTypes),
+    calculationBasis: same((t) => t.calculationBasis),
+    payoutMethod: same((t) => t.payoutMethod),
+    payoutDays: same((t) => t.payoutWindow?.days ?? null),
+    volumeCurrency: same((t) => t.volumeCurrency),
+    tokenizedCounts: tiers.some((t) => t.eligibleProductTypes?.includes('tokenized-stocks')),
+  };
+}
+
+/** All published tiers across exchanges. */
+export const allPublishedTiers = () => rewardTiers.filter((t) => isPublishedTier(t));
