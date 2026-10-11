@@ -2,12 +2,12 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { BRAND, SITE_URL } from '@/config/ecosystem';
-import { availableExchanges } from '@/config/exchanges';
+import { registrableExchanges } from '@/config/exchanges';
 
-const TITLE = `${BRAND.cashback} — Trader benefits by ${BRAND.network}`;
-const DESCRIPTION = `${BRAND.cashback} is the trader membership of ${BRAND.network}: fee rewards at volume milestones, a daily market plan, a member community, learning and support. Available now on ${availableExchanges
+const TITLE = `${BRAND.cashback} — Trading fee rebates by ${BRAND.network}`;
+const DESCRIPTION = `Get part of your trading fees back. Register on a supported exchange through a DA partner link, submit your UID and receive a rebate on eligible trading fees. Open for registration: ${registrableExchanges
   .map((e) => e.name)
-  .join(', ')}.`;
+  .join(', ')}. Rates, eligible products and payout timing are confirmed per exchange.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
