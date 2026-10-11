@@ -1,5 +1,6 @@
 /**
- * Reward record metrics. Mirrors DA-ECOSYSTEM-V3-SHARED-SPEC.md §3 — update there first.
+ * Cashback record metrics. Mirrors DA-ECOSYSTEM-V3-SHARED-SPEC.md §3 and
+ * DA-ECOSYSTEM-V3.1-SHARED-SPEC.md §3 (money terms) — update there first.
  *
  * Render rule: a value is public only if `value !== null && publish &&
  * verificationStatus ∈ {RECONCILED, VERIFIED}`. Otherwise the UI shows
@@ -19,12 +20,20 @@ export interface Metric {
   lastUpdated: string | null; // ISO date
   publish: boolean;
   kind: 'real' | 'demo';
+  /**
+   * Payment state for money metrics (V3.1 §3): accrued → approved → paid.
+   * States are never mixed or summed; only 'paid' totals are rendered as
+   * "Cashback paid". null for non-money metrics (e.g. account counts).
+   */
+  paymentState: PaymentState | null;
 }
+
+export type PaymentState = 'accrued' | 'approved' | 'paid';
 
 export const isPublicMetric = (m: Metric) =>
   m.kind === 'real' && m.value !== null && m.publish && PUBLISHABLE_STATUSES.includes(m.verificationStatus);
 
-const pending = (id: string, label: string, unit: string | null): Metric => ({
+const pending = (id: string, label: string, unit: string | null, paymentState: PaymentState | null): Metric => ({
   id,
   label,
   value: null,
@@ -35,13 +44,23 @@ const pending = (id: string, label: string, unit: string | null): Metric => ({
   lastUpdated: null,
   publish: false,
   kind: 'real',
+  paymentState,
 });
 
-/** The three figures in the "Reward record" section (milestone model). */
-export const rewardRecord: readonly Metric[] = [
-  pending('total-rewards-sent', 'Total rewards sent', 'USDT'),
-  pending('verified-members', 'Verified members', 'members'),
-  pending('milestones-this-month', 'Milestones reached this month', 'milestones'),
+/** The three figures in the "Cashback record" section. */
+export const cashbackRecord: readonly Metric[] = [
+  pending('cashback-paid-total', 'Cashback paid (total)', 'USDT', 'paid'),
+  pending('cashback-paid-month', 'Cashback paid this month', 'USDT', 'paid'),
+  pending('verified-accounts', 'Verified accounts', 'accounts', null),
+];
+
+/**
+ * Accrued and approved cashback are tracked separately from paid cashback
+ * and are NOT rendered. Never add them to a "paid" figure.
+ */
+export const cashbackPipeline: readonly Metric[] = [
+  pending('cashback-accrued', 'Cashback accrued (not yet approved)', 'USDT', 'accrued'),
+  pending('cashback-approved', 'Cashback approved (not yet paid)', 'USDT', 'approved'),
 ];
 
 /**
@@ -50,7 +69,7 @@ export const rewardRecord: readonly Metric[] = [
  * Note: These exact values are also the seed constants of the old random demo
  * generator (`DEFAULT_STATS` in the old lib/cashback.ts). Do not publish
  * without reconciliation evidence. Owner decides whether to keep them as a
- * cumulative figure or recount under the milestone model.
+ * cumulative figure or recount under the current rebate terms.
  */
 export const legacyProgram = {
   model: 'percentage-rebate (pre-V3)',
@@ -67,6 +86,8 @@ export const legacyProgram = {
       lastUpdated: null,
       publish: false,
       kind: 'real',
+      // Unknown whether this was accrued, approved or paid — do not assume.
+      paymentState: null,
     },
     {
       id: 'legacy-accounts',
@@ -79,6 +100,7 @@ export const legacyProgram = {
       lastUpdated: null,
       publish: false,
       kind: 'real',
+      paymentState: null,
     },
   ] satisfies Metric[],
 } as const;

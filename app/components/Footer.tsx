@@ -6,7 +6,7 @@ import { useLang } from '../contexts/LanguageContext';
 import { Lang } from '../translations';
 import { langLabels } from '../translations/ui';
 import { cn } from './ui';
-import { BRAND, URLS, networkUrl } from '@/config/ecosystem';
+import { BRAND, URLS, networkUrl, tradersUrl } from '@/config/ecosystem';
 import { supportEmail, telegramContact } from '@/config/contact';
 
 const LANGS: Lang[] = ['vi', 'en', 'ko', 'th', 'id'];
@@ -29,12 +29,11 @@ export default function Footer() {
   const href = (id: string) => (isHome ? `#${id}` : `/#${id}`);
 
   const navLinks = [
+    { id: 'how-it-works', label: n.how },
     { id: 'exchanges', label: n.exchanges },
-    { id: 'rewards', label: n.rewards },
-    { id: 'join', label: n.join },
-    { id: 'progress', label: n.progress },
+    { id: 'lookup', label: n.status },
+    { id: 'record', label: n.record },
     { id: 'safety', label: n.safety },
-    { id: 'compare', label: copy.compare.title },
     { id: 'faq', label: n.faq },
     { id: 'contact', label: n.contact },
   ];
@@ -45,6 +44,7 @@ export default function Footer() {
   ];
   const ecosystem = [
     { href: networkUrl(lang), label: cf.network },
+    { href: tradersUrl(lang), label: cf.traders },
     { href: URLS.affiliate, label: cf.affiliate },
     { href: URLS.signalTracking, label: cf.tracking },
   ];

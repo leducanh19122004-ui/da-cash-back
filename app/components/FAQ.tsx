@@ -1,7 +1,7 @@
 'use client';
 import { useLang } from '../contexts/LanguageContext';
 import { telegramContact } from '@/config/contact';
-import { allPublishedTiers, tierFacts } from '@/config/rewardTiers';
+import { publishedTerms } from '@/config/rebateTerms';
 import { ArrowRight, Plus, Reveal, Section, SectionHeader } from './ui';
 
 function More({ className, text, cta }: { className: string; text: string; cta: string }) {
@@ -19,17 +19,12 @@ function More({ className, text, cta }: { className: string; text: string; cta: 
 export default function FAQ() {
   const { copy } = useLang();
   const f = copy.faq;
-  const tiers = allPublishedTiers();
-  const facts = tierFacts(tiers);
+  const terms = publishedTerms();
   const items = f.items({
-    period: facts.volumePeriod ? copy.rewards.periods[facts.volumePeriod] : null,
-    payoutDays: facts.payoutDays,
-    products: facts.eligibleProductTypes?.map((p) => copy.rewards.products[p] ?? p).join(' and ') ?? null,
-    tokenizedCounts: facts.tokenizedCounts,
-    hasTiers: tiers.length > 0,
+    hasPublishedTerms: terms.length > 0,
+    tokenizedConfirmed: terms.some((t) => t.eligibleProducts?.includes('tokenized-stocks')),
     telegram: telegramContact.handle,
   });
-
 
   return (
     <Section id="faq" labelledBy="faq-title">

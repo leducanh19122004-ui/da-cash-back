@@ -10,7 +10,7 @@ import { langLabels } from '../translations/ui';
 import { ArrowUpRight, Check, ChevronDown, Cross, Globe, Menu, cn } from './ui';
 
 const LANGS: Lang[] = ['vi', 'en', 'ko', 'th', 'id'];
-const NAV_IDS = ['exchanges', 'rewards', 'join', 'progress', 'safety', 'faq', 'contact'] as const;
+const NAV_IDS = ['how-it-works', 'exchanges', 'lookup', 'record', 'safety', 'faq', 'contact'] as const;
 type NavId = (typeof NAV_IDS)[number];
 
 function LanguageSwitcher() {
@@ -107,10 +107,10 @@ export default function Header() {
   const networkUrl = hubUrl(lang);
 
   const navLinks: { id: NavId; label: string }[] = [
+    { id: 'how-it-works', label: n.how },
     { id: 'exchanges', label: n.exchanges },
-    { id: 'rewards', label: n.rewards },
-    { id: 'join', label: n.join },
-    { id: 'progress', label: n.progress },
+    { id: 'lookup', label: n.status },
+    { id: 'record', label: n.record },
     { id: 'safety', label: n.safety },
     { id: 'faq', label: n.faq },
     { id: 'contact', label: n.contact },
@@ -234,11 +234,11 @@ export default function Header() {
             <span className="sr-only"> ({ui.newTab})</span>
           </a>
           <LanguageSwitcher />
-          <a href={href('progress')} className="btn btn-sm btn-secondary hidden whitespace-nowrap md:inline-flex">
-            {n.ctaProgress}
+          <a href={href('lookup')} className="btn btn-sm btn-secondary hidden whitespace-nowrap md:inline-flex">
+            {n.ctaStatus}
           </a>
-          <a href={href('join')} className="btn btn-sm btn-gold hidden whitespace-nowrap md:inline-flex">
-            {n.ctaJoin}
+          <a href={href('exchanges')} className="btn btn-sm btn-gold hidden whitespace-nowrap md:inline-flex">
+            {n.ctaStart}
           </a>
           <button
             ref={menuButton}
@@ -276,11 +276,11 @@ export default function Header() {
               ))}
             </ul>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              <a href={href('join')} onClick={() => setOpen(false)} className="btn btn-gold">
-                {n.ctaJoin}
+              <a href={href('exchanges')} onClick={() => setOpen(false)} className="btn btn-gold">
+                {n.ctaStart}
               </a>
-              <a href={href('progress')} onClick={() => setOpen(false)} className="btn btn-secondary">
-                {n.ctaProgress}
+              <a href={href('lookup')} onClick={() => setOpen(false)} className="btn btn-secondary">
+                {n.ctaStatus}
               </a>
             </div>
 

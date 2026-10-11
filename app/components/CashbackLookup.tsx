@@ -1,27 +1,29 @@
 'use client';
 import { useRef, useState } from 'react';
 import { useLang } from '../contexts/LanguageContext';
-import { availableExchanges, exchangeById } from '@/config/exchanges';
+import { exchangeById, registrableExchanges } from '@/config/exchanges';
 import { telegramContact } from '@/config/contact';
-import { lookupMilestoneProgress, type MilestoneLookupResult } from '../lib/milestoneLookup';
+import { lookupCashbackStatus, type CashbackLookupResult } from '../lib/cashbackLookup';
 import { ArrowUpRight, Reveal, Section, SectionHeader } from './ui';
 
 const maskUid = (uid: string) => (uid.length <= 4 ? '••••' : `••••${uid.slice(-4)}`);
-const num = (n: number) => n.toLocaleString('en-US');
+const money = (a: { amount: number; currency: string } | null, none: string) =>
+  a ? `${a.amount.toLocaleString('en-US', { maximumFractionDigits: 2 })} ${a.currency}` : none;
 
-export default function ProgressLookup() {
+/** Lists only exchanges open for registration. The adapter sends nothing anywhere while not connected. */
+export default function CashbackLookup() {
   const { copy, ui } = useLang();
-  const p = copy.progress;
+  const p = copy.lookup;
   const [exchangeId, setExchangeId] = useState('');
   const [uid, setUid] = useState('');
   const [errors, setErrors] = useState<{ exchange?: string; uid?: string }>({});
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{ exchange: string; uid: string; data: MilestoneLookupResult } | null>(null);
+  const [result, setResult] = useState<{ exchange: string; uid: string; data: CashbackLookupResult } | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
 
   const validate = () => {
     const next: { exchange?: string; uid?: string } = {};
-    if (!exchangeId || !availableExchanges.some((e) => e.id === exchangeId)) next.exchange = p.exchangeError;
+    if (!exchangeId || !registrableExchanges.some((e) => e.id === exchangeId)) next.exchange = p.exchangeError;
     const u = uid.trim();
     if (!u) next.uid = p.uidError;
     else if (u.length < 4) next.uid = p.uidShort;
@@ -36,7 +38,7 @@ export default function ProgressLookup() {
     setResult(null);
     try {
       // The adapter makes no network request while the lookup is not connected.
-      const data = await lookupMilestoneProgress(exchangeId, uid.trim());
+      const data = await lookupCashbackStatus(exchangeId, uid.trim());
       setResult({ exchange: exchangeById(exchangeId)?.name ?? exchangeId, uid: maskUid(uid.trim()), data });
     } finally {
       setLoading(false);
@@ -45,22 +47,22 @@ export default function ProgressLookup() {
   };
 
   return (
-    <Section id="progress" labelledBy="progress-title" tone="raised">
+    <Section id="lookup" labelledBy="lookup-title" tone="raised">
       <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
-        <SectionHeader id="progress-title" eyebrow={p.eyebrow} title={p.title} lead={p.lead} />
+        <SectionHeader id="lookup-title" eyebrow={p.eyebrow} title={p.title} lead={p.lead} />
 
         <Reveal>
           <form onSubmit={onSubmit} noValidate className="rounded-[var(--radius-md)] border border-line bg-ink-0 p-5 md:p-8">
             <div className="grid gap-6">
               <div>
-                <label htmlFor="progress-exchange" className="field-label">
+                <label htmlFor="lookup-exchange" className="field-label">
                   {p.exchangeLabel}
                 </label>
                 <select
-                  id="progress-exchange"
+                  id="lookup-exchange"
                   value={exchangeId}
                   aria-invalid={!!errors.exchange}
-                  aria-describedby={errors.exchange ? 'progress-exchange-err' : undefined}
+                  aria-describedby={errors.exchange ? 'lookup-exchange-err' : undefined}
                   onChange={(e) => {
                     setExchangeId(e.target.value);
                     setErrors((x) => ({ ...x, exchange: undefined }));
@@ -68,25 +70,25 @@ export default function ProgressLookup() {
                   className="field cursor-pointer"
                 >
                   <option value="">{p.exchangePlaceholder}</option>
-                  {availableExchanges.map((ex) => (
+                  {registrableExchanges.map((ex) => (
                     <option key={ex.id} value={ex.id}>
                       {ex.name}
                     </option>
                   ))}
                 </select>
                 {errors.exchange ? (
-                  <p id="progress-exchange-err" className="field-error">
+                  <p id="lookup-exchange-err" className="field-error">
                     {errors.exchange}
                   </p>
                 ) : null}
               </div>
 
               <div>
-                <label htmlFor="progress-uid" className="field-label">
+                <label htmlFor="lookup-uid" className="field-label">
                   {p.uidLabel}
                 </label>
                 <input
-                  id="progress-uid"
+                  id="lookup-uid"
                   type="text"
                   inputMode="numeric"
                   autoComplete="off"
@@ -95,7 +97,7 @@ export default function ProgressLookup() {
                   value={uid}
                   placeholder={p.uidPlaceholder}
                   aria-invalid={!!errors.uid}
-                  aria-describedby={errors.uid ? 'progress-uid-err progress-uid-hint' : 'progress-uid-hint'}
+                  aria-describedby={errors.uid ? 'lookup-uid-err lookup-uid-hint' : 'lookup-uid-hint'}
                   onChange={(e) => {
                     setUid(e.target.value);
                     setErrors((x) => ({ ...x, uid: undefined }));
@@ -103,11 +105,11 @@ export default function ProgressLookup() {
                   className="field font-mono"
                 />
                 {errors.uid ? (
-                  <p id="progress-uid-err" className="field-error">
+                  <p id="lookup-uid-err" className="field-error">
                     {errors.uid}
                   </p>
                 ) : null}
-                <p id="progress-uid-hint" className="field-hint">
+                <p id="lookup-uid-hint" className="field-hint">
                   {p.uidHint}
                 </p>
               </div>
@@ -131,39 +133,20 @@ export default function ProgressLookup() {
                         <dd className="text-right font-mono font-medium">{v}</dd>
                       </div>
                     ))}
-                    {result.data.status === 'ok' ? (
-                      <>
-                        <div className="flex items-baseline justify-between gap-4 border-b border-line py-3 text-sm">
-                          <dt className="text-muted">{p.resultVolume}</dt>
-                          <dd className="text-right font-medium tabular-nums">
-                            {num(result.data.eligibleVolume.amount)} {result.data.eligibleVolume.currency} ·{' '}
-                            {result.data.eligibleVolume.period}
-                          </dd>
-                        </div>
-                        <div className="flex items-baseline justify-between gap-4 border-b border-line py-3 text-sm">
-                          <dt className="text-muted">{p.resultCurrent}</dt>
-                          <dd className="text-right font-medium tabular-nums">
-                            {result.data.currentTier ? num(result.data.currentTier.volumeThreshold) : p.none}
-                          </dd>
-                        </div>
-                        <div className="flex items-baseline justify-between gap-4 border-b border-line py-3 text-sm">
-                          <dt className="text-muted">{p.resultNext}</dt>
-                          <dd className="text-right font-medium tabular-nums">
-                            {result.data.nextMilestone
-                              ? `${num(result.data.nextMilestone.volumeThreshold)} → ${num(result.data.nextMilestone.rewardAmount)} ${result.data.nextMilestone.rewardCurrency}`
-                              : p.none}
-                          </dd>
-                        </div>
-                        <div className="flex items-baseline justify-between gap-4 border-b border-line py-3 text-sm">
-                          <dt className="text-muted">{p.resultHistory}</dt>
-                          <dd className="text-right font-medium tabular-nums">
-                            {result.data.rewardHistory.length
-                              ? result.data.rewardHistory.map((h) => `${h.date}: ${num(h.amount)} ${h.currency}`).join(' · ')
-                              : p.none}
-                          </dd>
-                        </div>
-                      </>
-                    ) : null}
+                    {result.data.status === 'ok'
+                      ? [
+                          [p.resultLinked, result.data.accountLinked ? p.yes : p.no],
+                          [p.resultPeriod, result.data.period],
+                          [p.resultAccrued, money(result.data.accrued, p.none)],
+                          [p.resultApproved, money(result.data.approved, p.none)],
+                          [p.resultPaid, money(result.data.paid, p.none)],
+                        ].map(([k, v]) => (
+                          <div key={k} className="flex items-baseline justify-between gap-4 border-b border-line py-3 text-sm">
+                            <dt className="text-muted">{k}</dt>
+                            <dd className="text-right font-medium tabular-nums">{v}</dd>
+                          </div>
+                        ))
+                      : null}
                   </dl>
 
                   {result.data.status === 'unavailable' ? (

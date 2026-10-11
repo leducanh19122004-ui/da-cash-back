@@ -15,21 +15,15 @@ export const supportResponseTime: string | null = null;
 /** e.g. "Mon–Fri, 09:00–18:00 (GMT+7)". */
 export const supportHours: string | null = null;
 
-/** How members submit their UID. Today: manually to the DA team on Telegram. */
+/**
+ * How traders submit their UID. Interim: manually to the DA team on Telegram
+ * (@jacksondz), not yet confirmed as the permanent channel.
+ */
 export const uidSubmission: {
   method: 'form' | 'telegram-bot' | 'admin';
   url: string;
   confirmed: boolean;
 } = { method: 'admin', url: URLS.telegramContact, confirmed: false };
-
-/**
- * DA Scalping Telegram channel and the member community invite. Hidden while null
- * (the benefit / join step then render without a link).
- */
-export const memberChannels = {
-  dailyPlanChannel: null as string | null,
-  memberCommunity: null as string | null,
-};
 
 /**
  * Social profiles. Telegram/X/Threads/Facebook are intended to be active but

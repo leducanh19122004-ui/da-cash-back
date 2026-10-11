@@ -1,6 +1,6 @@
 'use client';
 import { useLang } from '../contexts/LanguageContext';
-import { isPublicMetric, rewardRecord, type Metric } from '@/config/metrics';
+import { cashbackRecord, isPublicMetric, type Metric } from '@/config/metrics';
 import { Reveal, Section, SectionHeader, cn } from './ui';
 
 const fmt = (m: Metric) =>
@@ -8,7 +8,8 @@ const fmt = (m: Metric) =>
     ? `${m.value.toLocaleString('en-US', { maximumFractionDigits: 2 })}${m.unit === 'USDT' ? ' USDT' : ''}`
     : String(m.value);
 
-export default function RewardRecord() {
+/** Paid cashback totals and verified accounts — public only after reconciliation (config/metrics.ts). */
+export default function CashbackRecord() {
   const { copy } = useLang();
   const r = copy.record;
 
@@ -23,7 +24,7 @@ export default function RewardRecord() {
           <span>{r.colStatus}</span>
         </div>
         <dl>
-          {rewardRecord.map((m) => {
+          {cashbackRecord.map((m) => {
             const live = isPublicMetric(m);
             const status = !live
               ? r.pendingStatus

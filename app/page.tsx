@@ -2,15 +2,12 @@ import type { Metadata } from 'next';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Benefits from './components/Benefits';
-import Rewards from './components/Rewards';
+import HowItWorks from './components/HowItWorks';
 import Exchanges from './components/Exchanges';
-import HowToJoin from './components/HowToJoin';
-import RewardRecord from './components/RewardRecord';
-import ProgressLookup from './components/ProgressLookup';
-import SignalRecord from './components/SignalRecord';
+import CashbackLookup from './components/CashbackLookup';
+import CashbackRecord from './components/CashbackRecord';
 import AccountSafety from './components/AccountSafety';
-import MemberFeedback from './components/MemberFeedback';
-import Compare from './components/Compare';
+import TraderBenefitsLink from './components/TraderBenefitsLink';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -19,9 +16,9 @@ import Footer from './components/Footer';
 export const metadata: Metadata = { alternates: { canonical: '/' } };
 
 /**
- * V3 order (owner doc): hero → what you get → how rewards work → exchanges →
- * how to join → reward record → progress → signal record → safety →
- * member feedback (hidden while empty) → comparison → FAQ → contact.
+ * V3.1 order (fee-rebate platform): hero → what you get → how cashback works →
+ * exchanges → status lookup → cashback record → safety → DA Network for
+ * traders cross-link → FAQ → contact.
  */
 export default function HomePage() {
   return (
@@ -30,15 +27,12 @@ export default function HomePage() {
       <main id="main">
         <Hero />
         <Benefits />
-        <Rewards />
+        <HowItWorks />
         <Exchanges />
-        <HowToJoin />
-        <RewardRecord />
-        <ProgressLookup />
-        <SignalRecord />
+        <CashbackLookup />
+        <CashbackRecord />
         <AccountSafety />
-        <MemberFeedback />
-        <Compare />
+        <TraderBenefitsLink />
         <FAQ />
         <Contact />
       </main>

@@ -1,15 +1,17 @@
 'use client';
 import { useLang } from '../contexts/LanguageContext';
-import { availableExchanges, pausedExchanges } from '@/config/exchanges';
-import { allPublishedTiers } from '@/config/rewardTiers';
+import { exchangeCounts, registrableExchanges } from '@/config/exchanges';
 import { ArrowRight, Check } from './ui';
 
 export default function Hero() {
   const { copy } = useLang();
   const h = copy.hero;
-  const b = copy.benefits.items;
-  const hasTiers = allPublishedTiers().length > 0;
-  const included = [b.feeRewards.title, b.dailyPlan.title, b.community.title, b.learning.title, b.support.title];
+  const c = exchangeCounts;
+  const secondary = [
+    c.linkUpdating ? h.linkUpdating(c.linkUpdating) : null,
+    c.newPartners ? h.newPartners(c.newPartners) : null,
+    h.paused(c.paused),
+  ].filter((x): x is string => !!x);
 
   return (
     <section
@@ -31,7 +33,7 @@ export default function Hero() {
             <span className="block">{h.title1}</span> <span className="block text-fg/70">{h.title2}</span>
           </h1>
           <p className="measure mt-7 text-lg leading-relaxed text-pretty text-muted md:text-xl">
-            {hasTiers ? h.subLive : h.subPending}
+            {h.sub}
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">
@@ -39,7 +41,7 @@ export default function Hero() {
               {h.ctaPrimary}
               <ArrowRight className="btn-icon size-4" />
             </a>
-            <a href="#rewards" className="btn btn-secondary">
+            <a href="#how-it-works" className="btn btn-secondary">
               {h.ctaSecondary}
             </a>
           </div>
@@ -60,7 +62,7 @@ export default function Hero() {
           </p>
         </div>
 
-        {/* Membership summary: counts are derived from config/exchanges.ts; no rates or totals. */}
+        {/* Exchange summary: counts are derived from config/exchanges.ts; no rates or totals. */}
         <aside aria-labelledby="hero-summary" className="rounded-[var(--radius-md)] border border-line bg-ink-1/80">
           <div className="flex items-center justify-between gap-4 border-b border-line px-5 py-4 md:px-6">
             <h2 id="hero-summary" className="label">
@@ -70,27 +72,24 @@ export default function Hero() {
           </div>
 
           <div className="border-b border-line px-5 py-5 md:px-6">
-            <p className="text-2xl font-semibold tracking-tight md:text-[1.75rem]">
-              {h.availableNow(availableExchanges.length)}
-            </p>
-            <p className="mt-1 font-mono text-[0.6875rem] tracking-[0.08em] text-faint uppercase">
-              {availableExchanges.map((e) => e.name).join(' · ')}
-            </p>
-            <p className="mt-3 text-sm text-muted">{h.paused(pausedExchanges.length)}</p>
-          </div>
-
-          <div className="px-5 py-5 md:px-6">
-            <p className="label">{h.includedLabel}</p>
-            <ul className="mt-3">
-              {included.map((item, i) => (
-                <li key={item} className="flex items-baseline gap-4 border-b border-line py-2.5 text-[0.9375rem] last:border-b-0">
-                  <span aria-hidden className="w-5 font-mono text-[0.6875rem] text-faint tabular-nums">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
+            <p className="text-2xl font-semibold tracking-tight md:text-[1.75rem]">{h.open(c.open)}</p>
+            {registrableExchanges.length ? (
+              <p className="mt-1 font-mono text-[0.6875rem] tracking-[0.08em] text-faint uppercase">
+                {registrableExchanges.map((e) => e.name).join(' · ')}
+              </p>
+            ) : null}
+            <ul className="mt-4">
+              {secondary.map((item) => (
+                <li key={item} className="border-b border-line py-2.5 text-[0.9375rem] text-muted last:border-b-0">
                   {item}
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div className="px-5 py-5 md:px-6">
+            <p className="label">{h.termsLabel}</p>
+            <p className="mt-2 text-[0.9375rem] text-muted">{h.termsBody}</p>
           </div>
         </aside>
       </div>

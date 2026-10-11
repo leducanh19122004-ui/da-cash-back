@@ -1,167 +1,149 @@
 /**
- * DA Cashback V3 page copy (source: V3-SOURCE-DA-Cashback-content-EN.md, owner doc 2026-10-09).
+ * DA Cashback page copy — V3.1 fee-rebate positioning
+ * (DA-ECOSYSTEM-V3.1-SHARED-SPEC.md §1: DA Cashback is an independent
+ * trading-fee rebate platform, part of DA Network — NOT the trader membership).
  *
- * ENGLISH ONLY for now. vi / ko / th / id fall back to English for every V3
+ * ENGLISH ONLY for now. vi / ko / th / id fall back to English for every
  * section, so non-English pages are MIXED and NOT RELEASABLE until these
  * strings are translated (add a per-language object to `v3Copy` below).
  *
- * Rules: no figures, thresholds, rates, response times or payout windows in
- * copy — those come from config/* and are omitted while null. No "earn" for
- * traders' rewards; no banned wording (spec §8).
+ * Rules: no rates, figures, payout windows or response times in copy — those
+ * come from config/* and are omitted while null. Daily plans, signals,
+ * community, learning and Volume Rewards belong to the hub Trader page and are
+ * only mentioned in the cross-link block and the FAQ "difference" answer.
+ * No "earn" for traders' rebates; no banned wording (V3 spec §8).
  */
 import type { Lang } from './index';
 import { BRAND, DISCLAIMERS } from '@/config/ecosystem';
 
 export interface FaqContext {
-  period: string | null;
-  payoutDays: number | null;
-  products: string | null;
-  tokenizedCounts: boolean;
-  hasTiers: boolean;
+  hasPublishedTerms: boolean;
+  tokenizedConfirmed: boolean;
   telegram: string;
 }
 
+const RESPONSIBLE =
+  'Rebates return part of the fees you pay. They do not make a losing trade profitable — never trade more just for rebates.';
+
 const en = {
   nav: {
+    how: 'How it works',
     exchanges: 'Exchanges',
-    rewards: 'Rewards',
-    join: 'How to join',
-    progress: 'Progress',
+    status: 'Check status',
+    record: 'Record',
     safety: 'Safety',
     faq: 'FAQ',
     contact: 'Contact',
-    ctaJoin: 'Join',
-    ctaProgress: 'Check progress',
+    ctaStart: 'Get started',
+    ctaStatus: 'Check status',
   },
   hero: {
-    eyebrow: 'DA Network · Trader benefits',
-    title1: 'Trade with a plan.',
-    title2: 'Get part of your fees back.',
-    /** Used once at least one milestone is published (doc wording). */
-    subLive:
-      'DA Cashback is the trader side of DA Network. Register through our partner link, submit your UID, and receive fee rewards at every volume milestone — plus a daily plan, a community and real support.',
-    /** Used while no milestone is published yet. */
-    subPending:
-      'DA Cashback is the trader side of DA Network. Register through our partner link and submit your UID. Fee rewards come at volume milestones, published here once confirmed with each exchange — plus a daily plan, a community and real support.',
+    eyebrow: `${BRAND.network} · Trading fee rebates`,
+    title1: 'Get part of your',
+    title2: 'trading fees back.',
+    sub: 'Register through a DA partner link, submit your UID, and receive a rebate on eligible trading fees. Rates, eligible products and payout timing are confirmed per exchange.',
     ctaPrimary: 'See supported exchanges',
-    ctaSecondary: 'How rewards work',
+    ctaSecondary: 'How cashback works',
     trust: ['UID only', 'No passwords', 'We never hold your funds'],
     trustNote: 'We may also need the exchange name, a way to contact you and confirmation that you registered through our link.',
-    cardTitle: 'Membership',
+    cardTitle: 'Exchange status',
     cardBrand: BRAND.cashback,
-    availableNow: (n: number) => `${n} available now`,
+    open: (n: number) => `${n} open for registration`,
+    linkUpdating: (n: number) => `${n} registration link updating`,
+    newPartners: (n: number) => `${n} new partners being set up`,
     paused: (n: number) => `${n} partnership paused`,
-    includedLabel: 'Included',
+    termsLabel: 'Rebate terms',
+    termsBody: 'Published per exchange once confirmed.',
   },
   benefits: {
     eyebrow: 'What you get',
-    title: 'Cashback is one part. The plan, the community and the support are the rest.',
-    items: {
-      feeRewards: {
-        title: 'Fee rewards',
-        body: 'Reach a volume milestone and DA sends a reward to your exchange account, where the exchange supports it.',
-      },
-      dailyPlan: { title: 'Daily plan', body: `A morning market plan and signals on the ${BRAND.scalping} Telegram channel.` },
-      community: { title: 'Member community', body: 'A chat group with other DA traders and the team.' },
-      learning: {
-        title: 'Learning',
-        body: 'Free guides on crypto and US stocks, from market basics to trade planning.',
-        link: 'Open DA Network Learn',
-      },
-      support: {
-        title: 'Support',
-        body: (responseTime: string | null) =>
-          responseTime ? `A real person from the DA team replies ${responseTime}.` : 'Support from the DA team — a real person answers your questions.',
-      },
-    },
-    open: 'Open',
-  },
-  rewards: {
-    eyebrow: 'How fee rewards work',
-    title: 'Rewards at volume milestones',
-    lead: (period: string | null) =>
-      `Eligible trades you place through a DA partner link count toward your ${period ? `${period} ` : ''}trading volume. Reach a milestone and DA sends your reward to your exchange account.`,
-    ladderTitle: 'Milestone ladder',
-    pendingTitle: 'Milestones are being confirmed',
-    pendingBody: 'Milestones for each exchange are published here once confirmed with the exchange partner programme.',
-    howSteps: [
-      { t: 'Trade through a DA partner link', d: 'Your eligible volume is counted on the exchange account you registered with DA.' },
-      { t: 'Reach a milestone', d: 'Each published milestone is a volume level for the period.' },
-      { t: 'Receive the reward', d: 'DA sends the reward to your exchange account, where the exchange supports it.' },
+    title: 'A rebate on the trading fees you already pay.',
+    items: [
+      { title: 'Fee rebates', body: 'Get part of the fees back on eligible trades, under each exchange’s confirmed terms.' },
+      { title: 'Exchanges you trade on', body: 'Rebates work through DA partner links on supported exchanges — you keep trading where you trade.' },
+      { title: 'UID-only setup', body: 'We only need your exchange UID. DA never holds your funds or touches your account.' },
+      { title: 'A clear record', body: 'Cashback totals are published only after they are reconciled with exchange data.' },
+      { title: 'Cashback support', body: 'A person from the DA team answers questions about your UID and your rebates.' },
     ],
-    colMilestone: (period: string | null, currency: string) =>
-      `Milestone (${period ? `${period} ` : ''}trading volume, ${currency})`,
-    colReward: 'Reward',
-    exchangeTabs: 'Choose an exchange',
-    // Detail bullets — each only when its config value exists.
-    bulletBasis: (basis: string, products: string | null) =>
-      `Volume is counted from ${basis}${products ? `, on ${products}` : ''}.`,
-    bulletPayout: (days: number) =>
-      `Rewards are sent within ${days} days after a milestone is confirmed, straight to your exchange account by UID.`,
-    bulletBelowFirst: (policy: string) => `Below the first milestone: ${policy}`,
-    // Neutral wording while those values are not confirmed.
-    neutralBasis: 'Which products count toward volume, and how it is measured, is confirmed per exchange.',
-    neutralPayout: 'Payout timing is confirmed per exchange. Ask the team for the current schedule.',
-    rates: DISCLAIMERS.rates,
-    boxTitle: 'Trade for your plan, not for the milestone.',
-    boxBody:
-      'Milestones reward the volume you already trade. The fees you pay to reach a milestone are usually larger than the reward, so never add trades just to hit one.',
-    demoTag: 'DEMO ONLY — not real milestones',
+  },
+  how: {
+    eyebrow: 'How cashback works',
+    title: 'Five steps, then trade as usual',
+    steps: (uidStep: string) => [
+      { t: 'Pick an exchange open for registration.', d: 'Only exchanges with a Register button accept new sign-ups through DA today.' },
+      { t: 'Register through the DA partner link.', d: 'The link connects your new exchange account to DA Cashback.' },
+      { t: 'Submit your UID.', d: uidStep },
+      { t: 'Trade as usual.', d: 'Keep trading according to your own plan. Nothing changes on the exchange side.' },
+      { t: 'Receive your rebates.', d: 'Rebates are sent according to the exchange’s confirmed terms.' },
+    ],
+    uidAdmin: (handle: string) => `Send your UID, the exchange name and a way to contact you to the DA team on Telegram (${handle}).`,
+    uidBot: 'Send your UID to the DA Telegram bot.',
+    uidForm: 'Submit your UID through the DA form.',
+    uidLink: 'Open Telegram',
+    termsTitle: 'Rebate terms by exchange',
+    termsPending: 'Rebate terms are published per exchange once confirmed.',
+    termsRebate: 'Rebate',
+    termsProducts: 'Eligible products',
+    termsPayout: 'Payout timing',
+    termsMethod: 'Payout method',
+    termsAsk: 'Confirmed per exchange — ask the team',
     products: { spot: 'spot', futures: 'futures', 'tokenized-stocks': 'tokenized stocks' } as Record<string, string>,
-    periods: { monthly: 'monthly', weekly: 'weekly' } as Record<string, string>,
+    responsibleTitle: 'Trade for your plan, not for the rebate.',
+    responsible: RESPONSIBLE,
+    cta: 'See supported exchanges',
   },
   exchanges: {
     eyebrow: 'Partner exchanges',
     title: 'Supported exchanges',
-    lead: 'Register through a DA partner link to join. "Partnership paused" means we are not registering new members on that exchange right now.',
-    count: (available: number, paused: number) => `${available} available now · ${paused} partnership paused`,
-    groupAvailable: 'Available',
+    lead: 'Register through a DA partner link to receive rebates. "Partnership paused" means we are not registering new accounts on that exchange right now.',
+    count: (c: { open: number; linkUpdating: number; newPartners: number; paused: number }) =>
+      [
+        `${c.open} open for registration`,
+        c.linkUpdating ? `${c.linkUpdating} link updating` : null,
+        c.newPartners ? `${c.newPartners} new partners being set up` : null,
+        `${c.paused} partnership paused`,
+      ]
+        .filter(Boolean)
+        .join(' · '),
+    groupPartners: 'Partner exchanges',
+    groupNew: 'New partners',
     groupPaused: 'Partnership paused',
-    statusAvailable: 'Available',
-    statusPaused: 'Partnership paused',
+    partnership: {
+      active: 'Partner',
+      new_deal_pending: 'New partner · setup in progress',
+      paused: 'Partnership paused',
+    } as Record<string, string>,
+    link: {
+      awaiting_update: 'Registration link updating',
+      awaiting_link: 'Registration link coming',
+    } as Record<string, string>,
     colExchange: 'Exchange',
     colMarket: 'Market',
     colStatus: 'Status',
-    colAction: 'Action',
+    colAction: 'Registration',
     market: { crypto: 'Crypto', forex: 'Forex' } as Record<string, string>,
+    marketUnknown: 'To be confirmed',
     register: 'Register',
-    viewMilestones: 'View milestones',
     note: 'Registration happens on the exchange itself. DA never asks for your exchange password.',
   },
-  join: {
-    eyebrow: 'How to join',
-    title: 'Five steps, then trade as usual',
-    steps: (uidStep: string) => [
-      { t: 'Pick an available exchange.', d: 'Only exchanges marked "Available" are open to new members.' },
-      { t: 'Register through the DA partner link.', d: 'The link connects your new account to DA Cashback.' },
-      { t: 'Submit your UID.', d: uidStep },
-      { t: 'Join the member community and the daily plan channel.', d: null },
-      { t: 'Trade as usual and check your milestone progress with your UID.', d: null },
-    ],
-    uidAdmin: (handle: string) => `Send your UID to the DA team on Telegram (${handle}).`,
-    uidBot: 'Send your UID to the DA Telegram bot.',
-    uidForm: 'Submit your UID through the DA form.',
-    uidLink: 'Open Telegram',
-    cta: 'Get part of your fees back',
-  },
   record: {
-    eyebrow: 'Reward record',
-    title: 'Reward record',
-    lead: 'We publish totals only after reconciling with partner exchanges. Nothing here is estimated.',
+    eyebrow: 'Cashback record',
+    title: 'Cashback record',
+    lead: 'We publish cashback totals only after reconciling them with partner exchange data. Nothing here is estimated.',
     colMetric: 'Metric',
     colValue: 'Value',
     colStatus: 'Status',
     pendingValue: 'Not yet published',
     pendingStatus: 'Published after reconciliation',
     verified: 'Verified',
-    reconciled: 'Reconciled',
+    reconciled: 'Checked against exchange data by the DA team',
     period: (p: string) => `Period: ${p}`,
     updated: (d: string) => `Updated ${d}`,
   },
-  progress: {
-    eyebrow: 'Member tools',
-    title: 'Check your milestone progress',
-    lead: 'Select your exchange, enter your UID and see your volume this month, your next milestone and the rewards you have received.',
+  lookup: {
+    eyebrow: 'Cashback tools',
+    title: 'Check your cashback status',
+    lead: 'Select your exchange and enter your UID. Online status checks are not connected yet — the DA team answers status questions on Telegram.',
     exchangeLabel: 'Exchange',
     exchangePlaceholder: 'Select an exchange',
     exchangeError: 'Select an exchange.',
@@ -170,28 +152,21 @@ const en = {
     uidHint: 'Your UID is in the profile section of your exchange account.',
     uidError: 'Enter your UID.',
     uidShort: 'UID must be at least 4 characters.',
-    submit: 'Check progress',
+    submit: 'Check status',
     checking: 'Checking…',
-    unavailableTitle: 'Online progress lookup isn’t connected yet',
-    unavailableBody:
-      'Send your exchange and UID to the DA team on Telegram — your details have not been sent anywhere.',
+    unavailableTitle: 'Online status lookup isn’t connected yet',
+    unavailableBody: 'Send your exchange and UID to the DA team on Telegram — your details have not been sent anywhere.',
     contactCta: (handle: string) => `Message ${handle} on Telegram`,
     summaryExchange: 'Exchange',
     summaryUid: 'UID',
-    resultVolume: 'Eligible volume',
-    resultCurrent: 'Current milestone',
-    resultNext: 'Next milestone',
-    resultHistory: 'Rewards received',
+    resultLinked: 'Linked to DA',
+    resultPeriod: 'Period',
+    resultAccrued: 'Accrued',
+    resultApproved: 'Approved',
+    resultPaid: 'Paid',
+    yes: 'Yes',
+    no: 'Not confirmed',
     none: 'None yet',
-  },
-  signals: {
-    eyebrow: BRAND.signalTracking,
-    title: 'Every signal on the record',
-    bodyLive:
-      'We post plans and signals every day. Each one is recorded against real exchange prices, wins and losses alike.',
-    bodyBuilding: `${BRAND.scalping}'s plans and signals are being moved onto a public record where each signal is logged with its entry, stop and outcome — wins and losses alike.`,
-    cta: 'Verify the record',
-    disclaimer: DISCLAIMERS.signal,
   },
   safety: {
     eyebrow: 'Account safety',
@@ -211,111 +186,85 @@ const en = {
       'A private key',
       'An API key with withdrawal rights',
       'A transfer to any personal wallet',
-      'A deposit to “unlock” rewards',
+      'A deposit to “unlock” rebates',
     ],
     warnTitle: 'Impersonation warning',
     warnBody: 'If anyone claiming to be DA Cashback asks for any of the above, stop and contact us at Telegram',
   },
-  testimonials: {
-    eyebrow: 'Members',
-    title: 'What members say',
-    via: (exchange: string) => `Trades on ${exchange}`,
-  },
-  compare: {
-    eyebrow: 'Compare',
-    title: 'Two ways to trade with DA',
-    lead: 'Pick the one that fits how you trade.',
-    colA: BRAND.cashback,
-    colB: `${BRAND.affiliate} — Trader offering`,
-    rows: [
-      {
-        k: 'Best for',
-        a: 'Traders who want a plan, a community and support',
-        b: 'Experienced, higher-volume traders who only want signals',
-      },
-      {
-        k: 'Fee return',
-        a: 'Rewards at volume milestones',
-        b: 'A fixed commission rate on your own eligible trading fees, where the exchange programme supports it',
-      },
-      {
-        k: 'How it’s paid',
-        a: 'Sent by DA to your exchange account, where the exchange supports it',
-        b: 'Credited by the exchange’s affiliate system, where supported',
-      },
-      { k: 'Included', a: 'Daily plan, member community, learning, support', b: 'Signal-only channel' },
-    ],
-    cta: `Trading at higher volume? See ${BRAND.affiliate}`,
+  traders: {
+    eyebrow: `${BRAND.network} for traders`,
+    title: 'Looking for daily plans, signals and Volume Rewards?',
+    body: `Those are part of ${BRAND.network}’s trader benefits, a separate programme from ${BRAND.cashback}.`,
+    cta: `See ${BRAND.network} for traders`,
   },
   faq: {
     eyebrow: 'FAQ',
     title: 'Frequently asked questions',
     noAnswer: 'Can’t find your answer?',
     contact: 'Contact the team',
-    /** Answers that depend on unconfirmed facts use the neutral, true wording until config is set. */
     items: (c: FaqContext) => [
       {
         q: 'What is DA Cashback?',
-        a: 'The trader membership of DA Network. You get fee rewards at volume milestones, plus a daily plan, a member community, learning and support.',
+        a: `A trading-fee rebate platform, part of ${BRAND.network}. Register on a supported exchange through a DA partner link, submit your UID, and receive a rebate on eligible trading fees.`,
       },
       {
-        q: 'How do fee rewards work?',
-        a: `Eligible trades placed through a DA partner link count toward your ${c.period ? `${c.period} ` : ''}volume. Each milestone you reach comes with a reward, sent by DA to your exchange account where the exchange supports it. ${
-          c.hasTiers
-            ? 'The current milestones are listed in the rewards section above.'
-            : 'Milestones for each exchange are published on this page once confirmed with the exchange partner programme.'
+        q: 'How do rebates work?',
+        a: `When you trade on an account registered through a DA partner link, part of the eligible trading fees you pay comes back to you as a rebate. The rate, eligible products and payout timing are set per exchange and confirmed with its partner programme. ${
+          c.hasPublishedTerms
+            ? 'Confirmed terms are listed in “How cashback works” above.'
+            : 'Rebate terms are published per exchange once confirmed — ask the team for the exchange you use.'
         }`,
-      },
-      {
-        q: 'Do I need to deposit money with DA?',
-        a: 'No. You trade directly on the exchange. DA Cashback is not an exchange and never holds your funds.',
       },
       {
         q: 'What do you need from me?',
         a: 'Your exchange UID, the exchange name, a way to contact you (email or Telegram) and confirmation that you registered through our link. Never share your password, 2FA code, private key or seed phrase.',
       },
       {
-        q: 'When are rewards sent?',
-        a: c.payoutDays
-          ? `Within ${c.payoutDays} days after a milestone is confirmed with the exchange.`
-          : 'After a milestone is confirmed with the exchange. The exact timing is confirmed per exchange — ask the team for the current schedule.',
+        q: 'Which exchanges are supported?',
+        a: 'The list above shows every exchange and its status. Exchanges with a Register button are open for registration. “Registration link updating” means we are still a partner but the DA link is being replaced — check back or ask the team. “New partner · setup in progress” means the partnership is being set up and the registration link is not ready yet.',
+      },
+      {
+        q: 'When are rebates paid?',
+        a: 'Payout timing is confirmed per exchange. Ask the team for the current schedule on your exchange.',
       },
       {
         q: 'I already have an account on this exchange. Can I join?',
         a: 'It depends on the exchange’s partner programme rules, which are confirmed per exchange. Ask the team before you register a new account.',
       },
       {
-        q: 'Which trading products count toward milestones?',
-        a: c.products
-          ? `Volume on ${c.products} counts toward milestones. Details can differ by exchange.`
-          : 'Which products count (for example spot or futures) is confirmed per exchange with its partner programme. Ask the team for the exchange you use.',
-      },
-      {
-        q: 'Does trading tokenized US stocks count?',
-        a: `${
-          c.tokenizedCounts
-            ? 'On some exchanges, yes — check the milestone details for your exchange.'
-            : 'This has not been confirmed for any exchange yet, so do not count on it. Ask the team before relying on it.'
+        q: 'Which trading products are eligible? Do tokenized stocks count?',
+        a: `Eligible products (for example spot or futures) are confirmed per exchange. ${
+          c.tokenizedConfirmed
+            ? 'On some exchanges tokenized stocks are eligible — check the terms for your exchange.'
+            : 'Tokenized stocks have not been confirmed as eligible on any exchange yet, so do not count on it.'
         } ${DISCLAIMERS.tokenized}`,
       },
       {
+        q: 'Do I need to deposit money with DA?',
+        a: 'No. You trade directly on the exchange. DA Cashback is not an exchange and never holds your funds.',
+      },
+      {
         q: 'Does DA Cashback guarantee profits?',
-        a: 'No. Rewards return part of the fees you paid. They do not make a losing trade profitable.',
+        a: `No. ${RESPONSIBLE}`,
       },
       {
         q: 'What does “Partnership paused” mean?',
-        a: 'We are not registering new members on that exchange right now.',
+        a: 'We are not registering new accounts on that exchange right now.',
+      },
+      {
+        q: `What is the difference between DA Cashback and ${BRAND.network} Volume Rewards?`,
+        a: `They are separate programmes. ${BRAND.cashback} is a trading-fee rebate. Volume Rewards are a ${BRAND.network} trader benefit: milestone-based rewards funded by a portion of ${BRAND.network}’s partner commission, run on the ${BRAND.network} Trader page.`,
       },
       {
         q: 'How do I know a message is really from DA?',
-        a: `DA will never ask for your password, 2FA code, seed phrase, private key, an API key with withdrawal rights, a transfer to a personal wallet or a deposit to “unlock” rewards. If anyone does, stop and contact us at Telegram ${c.telegram}.`,
+        a: `DA will never ask for your password, 2FA code, seed phrase, private key, an API key with withdrawal rights, a transfer to a personal wallet or a deposit to “unlock” rebates. If anyone does, stop and contact us at Telegram ${c.telegram}.`,
       },
     ],
   },
   contact: {
     eyebrow: 'Support',
     title: 'Contact',
-    lead: 'Questions about joining, your UID or a reward? Message the DA team.',
+    lead: 'Questions about registering, your UID or your cashback? Message the DA team.',
     channels: 'Contact channels',
     telegram: 'Telegram',
     email: 'Email',
@@ -325,12 +274,12 @@ const en = {
     formNote: 'Do not include passwords, 2FA codes, seed phrases or private keys in your message.',
   },
   footer: {
-    desc: 'The trader membership of DA Network: fee rewards at volume milestones, plus a daily plan, a member community, learning and support.',
-    disclaimer:
-      "DA Cashback is part of DA Network. It is not an exchange, does not hold client funds and does not give investment advice. Trading crypto and stocks carries a risk of loss. Do your own research before making any decision. Reward tiers may change according to each exchange's policy and partner program.",
+    desc: `A trading-fee rebate platform, part of ${BRAND.network}. Register through a DA partner link, submit your UID and get part of your trading fees back.`,
+    disclaimer: `${BRAND.cashback} is part of ${BRAND.network}. It is not an exchange, does not hold client funds and does not give investment advice. Trading crypto and stocks carries a risk of loss. Do your own research before making any decision. Rebate terms may change according to each exchange's policy and partner program.`,
     sections: 'Sections',
     ecosystem: 'DA Network ecosystem',
     network: BRAND.network,
+    traders: `${BRAND.network} for traders`,
     affiliate: BRAND.affiliate,
     tracking: BRAND.signalTracking,
     copyright: (year: number) => `© ${year} ${BRAND.cashback}. Part of ${BRAND.network}.`,
