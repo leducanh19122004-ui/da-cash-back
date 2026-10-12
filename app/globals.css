@@ -38,25 +38,33 @@
 /* ─── Design tokens ───────────────────────────────────────────────────────
    The site is dark-only by brand decision; all tokens are centralised here. */
 @theme {
-  --color-ink-0: #080808; /* primary background */
-  --color-ink-1: #111111; /* secondary background */
-  --color-ink-2: #171717; /* elevated surfaces */
-  --color-ink-3: #1f1f1f; /* hover on elevated */
+  /* V3.2: graphite tuning of the hub tokens — surfaces a touch lighter,
+     gold a slightly softer champagne. Same roles, same names. */
+  --color-ink-0: #0b0b0c; /* primary background — graphite black (hub #080808) */
+  --color-ink-1: #141416; /* secondary background (hub #111111) */
+  --color-ink-2: #1b1b1e; /* elevated surfaces (hub #171717) */
+  --color-ink-3: #242428; /* hover on elevated (hub #1f1f1f) */
   --color-fg: #f5f5f3; /* primary text */
-  --color-muted: #989898; /* secondary text */
-  --color-faint: #707070; /* tertiary text / metadata */
-  --color-gold: #d7ad52; /* accent */
-  --color-gold-soft: #e6c886;
+  --color-muted: #a3a3a3; /* secondary text (hub #989898, +contrast) */
+  --color-faint: #7c7c7c; /* tertiary text / metadata (hub #707070, +contrast) */
+  --color-gold: #d6b672; /* accent — softer champagne (hub #d7ad52) */
+  --color-gold-soft: #e9d4a4;
   --color-line: rgb(255 255 255 / 0.08);
   --color-line-strong: rgb(255 255 255 / 0.16);
-  --color-gold-line: rgb(215 173 82 / 0.35);
+  --color-gold-line: rgb(214 182 114 / 0.35);
+
+  /* Subtle product accents for the DA ecosystem cards (small marks only). */
+  --color-accent-network: #d6b672;
+  --color-accent-affiliate: #8fbfae;
+  --color-accent-signal: #93a9d4;
 
   --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, monospace;
 
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 6px;
+  /* V3.2: 6–10px radius scale (hub 2/4/6px). */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
 
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
@@ -105,7 +113,7 @@
   }
 
   ::selection {
-    background: rgb(215 173 82 / 0.3);
+    background: rgb(214 182 114 / 0.3);
     color: var(--color-fg);
   }
 
@@ -293,8 +301,9 @@
 
 /* ═══════════════════════════════════════════════════════════════════════
    DA CASHBACK — product layer.
-   Everything above this line is copied verbatim from the DA Network hub
-   (da-network-hub, branch main, src/app/globals.css). Everything below
+   Everything above this line comes from the DA Network hub
+   (da-network-hub, branch main, src/app/globals.css); V3.2 tunes the
+   colour and radius token VALUES (marked "V3.2") without renaming them. Everything below
    only composes those tokens; do not introduce new brand colours here.
    ═══════════════════════════════════════════════════════════════════════ */
 
@@ -326,12 +335,14 @@
     padding-inline: 1rem;
     font-size: 0.875rem;
   }
+  /* V3.2: primary is a solid champagne fill (strongest action on the page). */
   .btn-primary {
-    background: var(--color-fg);
+    background: var(--color-gold);
     color: var(--color-ink-0);
+    font-weight: 600;
   }
   .btn-primary:hover {
-    background: #fff;
+    background: var(--color-gold-soft);
   }
   .btn-secondary {
     border: 1px solid var(--color-line-strong);
@@ -342,7 +353,7 @@
     background: rgb(255 255 255 / 0.03);
   }
   .btn-gold {
-    border: 1px solid rgb(215 173 82 / 0.6);
+    border: 1px solid rgb(214 182 114 / 0.6);
     color: var(--color-gold);
   }
   .btn-gold:hover {
@@ -426,6 +437,95 @@
     margin-top: 0.4rem;
     font-size: 0.8125rem;
     color: var(--color-faint);
+  }
+
+  /* V3.2 surfaces: thin border, soft shadow, 10px radius. */
+  .card {
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: var(--color-ink-1);
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.02) inset,
+      0 10px 30px -18px rgb(0 0 0 / 0.7);
+  }
+  .card-raised {
+    background: var(--color-ink-2);
+  }
+  .icon-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-ink-2);
+    color: var(--color-gold);
+  }
+  .chip {
+    display: inline-flex;
+    min-height: 2.5rem;
+    align-items: center;
+    gap: 0.375rem;
+    padding-inline: 0.875rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    transition:
+      color var(--dur-fast) ease-out,
+      border-color var(--dur-fast) ease-out,
+      background-color var(--dur-fast) ease-out;
+  }
+  .chip:hover {
+    color: var(--color-fg);
+  }
+  .chip[aria-pressed='true'] {
+    border-color: var(--color-gold-line);
+    background: rgb(214 182 114 / 0.1);
+    color: var(--color-gold-soft);
+  }
+  /* Accessible switch built on a native checkbox (role="switch"). */
+  .switch {
+    appearance: none;
+    position: relative;
+    width: 2.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 9999px;
+    background: var(--color-ink-2);
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) ease-out,
+      border-color var(--dur-fast) ease-out;
+  }
+  .switch::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0.1875rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 9999px;
+    background: var(--color-muted);
+    transform: translateY(-50%);
+    transition:
+      transform var(--dur-fast) ease-out,
+      background-color var(--dur-fast) ease-out;
+  }
+  .switch:checked {
+    border-color: var(--color-gold-line);
+    background: rgb(214 182 114 / 0.2);
+  }
+  .switch:checked::after {
+    background: var(--color-gold);
+    transform: translate(1rem, -50%);
+  }
+  /* Disclosure panel opened by a button (aria-expanded). */
+  .panel-in {
+    animation: disclosure-in var(--dur-base) var(--ease-standard);
   }
 
   /* Small spinner for pending states */
