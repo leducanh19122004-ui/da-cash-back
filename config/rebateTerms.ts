@@ -14,6 +14,14 @@ export type ProductType = 'spot' | 'futures' | 'tokenized-stocks';
 
 export interface RebateTerms {
   exchangeId: string;
+  /**
+   * Rebate rate exactly as confirmed with the exchange's partner programme,
+   * e.g. "X% of eligible trading fees". Rendered ONLY when the terms pass
+   * `isPublishedTerms`. Never fill from an estimate or the old % model.
+   */
+  rebateRate: string | null;
+  /** How the rebate is calculated, e.g. "On trading fees paid, net of exchange discounts". */
+  calculationBasis: string | null;
   /** Plain-language rebate description as confirmed with the exchange, e.g. "A share of the trading fees you pay". */
   rebateDescription: string | null;
   eligibleProducts: ProductType[] | null;
@@ -29,6 +37,8 @@ export interface RebateTerms {
 
 const unconfirmed = (exchangeId: string): RebateTerms => ({
   exchangeId,
+  rebateRate: null,
+  calculationBasis: null,
   rebateDescription: null,
   eligibleProducts: null,
   payoutTiming: null,
