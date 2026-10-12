@@ -4,13 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useLang } from '../contexts/LanguageContext';
-import { BRAND, networkUrl as hubUrl } from '@/config/ecosystem';
+import { BRAND, URLS, networkUrl as hubUrl, tradersUrl } from '@/config/ecosystem';
 import { Lang } from '../translations';
 import { langLabels } from '../translations/ui';
 import { ArrowUpRight, Check, ChevronDown, Cross, Globe, Menu, cn } from './ui';
 
 const LANGS: Lang[] = ['vi', 'en', 'ko', 'th', 'id'];
-const NAV_IDS = ['how-it-works', 'exchanges', 'lookup', 'record', 'safety', 'faq', 'contact'] as const;
+const NAV_IDS = ['exchanges', 'how-it-works', 'rebates', 'guides', 'faq', 'contact'] as const;
 type NavId = (typeof NAV_IDS)[number];
 
 function LanguageSwitcher() {
@@ -91,6 +91,82 @@ function LanguageSwitcher() {
   );
 }
 
+type EcoLink = { href: string; label: string; desc: string };
+
+/** Desktop "Ecosystem" disclosure menu (external DA products). */
+function EcosystemMenu({ label, menuLabel, links }: { label: string; menuLabel: string; links: EcoLink[] }) {
+  const { ui } = useLang();
+  const [open, setOpen] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (!root.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        root.current?.querySelector<HTMLButtonElement>('button')?.focus();
+      }
+    };
+    const onFocus = (e: FocusEvent) => {
+      if (!root.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('focusin', onFocus);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('focusin', onFocus);
+    };
+  }, [open]);
+
+  return (
+    <div ref={root} className="relative">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls="ecosystem-menu"
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center gap-1 px-2.5 py-2 text-sm whitespace-nowrap text-muted transition-colors hover:text-fg"
+      >
+        {label}
+        <ChevronDown className={cn('size-3 transition-transform', open && 'rotate-180')} />
+      </button>
+      {open ? (
+        <div
+          id="ecosystem-menu"
+          className="absolute top-full left-0 mt-2 w-80 rounded-[var(--radius-lg)] border border-line bg-ink-2 p-1.5 shadow-2xl shadow-black/60"
+        >
+          <p className="sr-only">{menuLabel}</p>
+          <ul>
+            {links.map((l) => (
+              <li key={l.href}>
+                <a
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setOpen(false)}
+                  className="block rounded-[var(--radius-md)] px-3.5 py-3 transition-colors hover:bg-ink-3 focus-visible:bg-ink-3"
+                >
+                  <span className="flex items-center gap-1 text-sm font-medium text-fg">
+                    {l.label}
+                    <ArrowUpRight className="size-3 text-faint" />
+                  </span>
+                  <span className="mt-0.5 block text-[0.8125rem] leading-snug text-muted">{l.desc}</span>
+                  <span className="sr-only"> ({ui.newTab})</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export default function Header() {
   const { copy, ui, lang, setLang } = useLang();
   const n = copy.nav;
@@ -107,14 +183,18 @@ export default function Header() {
   const networkUrl = hubUrl(lang);
 
   const navLinks: { id: NavId; label: string }[] = [
-    { id: 'how-it-works', label: n.how },
     { id: 'exchanges', label: n.exchanges },
-    { id: 'lookup', label: n.status },
-    { id: 'record', label: n.record },
-    { id: 'safety', label: n.safety },
+    { id: 'how-it-works', label: n.how },
+    { id: 'rebates', label: n.rebates },
+    { id: 'guides', label: n.guides },
     { id: 'faq', label: n.faq },
     { id: 'contact', label: n.contact },
   ];
+  const ecoLinks: EcoLink[] = copy.ecosystem.items.map((it) => ({
+    href: it.id === 'network' ? tradersUrl(lang) : it.id === 'affiliate' ? URLS.affiliate : URLS.signalTracking,
+    label: it.name,
+    desc: it.tag,
+  }));
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -219,6 +299,9 @@ export default function Header() {
                 </a>
               </li>
             ))}
+            <li>
+              <EcosystemMenu label={n.ecosystem} menuLabel={n.ecosystemMenu} links={ecoLinks} />
+            </li>
           </ul>
         </nav>
 
@@ -234,10 +317,7 @@ export default function Header() {
             <span className="sr-only"> ({ui.newTab})</span>
           </a>
           <LanguageSwitcher />
-          <a href={href('lookup')} className="btn btn-sm btn-secondary hidden whitespace-nowrap md:inline-flex">
-            {n.ctaStatus}
-          </a>
-          <a href={href('exchanges')} className="btn btn-sm btn-gold hidden whitespace-nowrap md:inline-flex">
+          <a href={href('exchanges')} className="btn btn-sm btn-primary hidden whitespace-nowrap md:inline-flex">
             {n.ctaStart}
           </a>
           <button
@@ -275,14 +355,33 @@ export default function Header() {
                 </li>
               ))}
             </ul>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              <a href={href('exchanges')} onClick={() => setOpen(false)} className="btn btn-gold">
+            <div className="mt-8">
+              <a href={href('exchanges')} onClick={() => setOpen(false)} className="btn btn-primary w-full sm:w-auto">
                 {n.ctaStart}
               </a>
-              <a href={href('lookup')} onClick={() => setOpen(false)} className="btn btn-secondary">
-                {n.ctaStatus}
-              </a>
             </div>
+
+            <p className="label mt-10">{n.ecosystem}</p>
+            <ul className="mt-3 border-t border-line">
+              {ecoLinks.map((l) => (
+                <li key={l.href} className="border-b border-line">
+                  <a
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setOpen(false)}
+                    className="flex min-h-14 items-center justify-between gap-4 py-2"
+                  >
+                    <span>
+                      <span className="block text-lg font-medium">{l.label}</span>
+                      <span className="block text-sm text-muted">{l.desc}</span>
+                    </span>
+                    <ArrowUpRight className="size-4 shrink-0 text-faint" />
+                    <span className="sr-only"> ({ui.newTab})</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
 
             <p className="label mt-10">{ui.language}</p>
             <ul className="mt-3 flex flex-wrap gap-2">

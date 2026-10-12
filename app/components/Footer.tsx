@@ -29,10 +29,11 @@ export default function Footer() {
   const href = (id: string) => (isHome ? `#${id}` : `/#${id}`);
 
   const navLinks = [
-    { id: 'how-it-works', label: n.how },
     { id: 'exchanges', label: n.exchanges },
-    { id: 'lookup', label: n.status },
-    { id: 'record', label: n.record },
+    { id: 'how-it-works', label: n.how },
+    { id: 'rebates', label: n.rebates },
+    { id: 'guides', label: n.guides },
+    { id: 'ecosystem', label: n.ecosystem },
     { id: 'safety', label: n.safety },
     { id: 'faq', label: n.faq },
     { id: 'contact', label: n.contact },

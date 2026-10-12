@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import Benefits from './components/Benefits';
-import HowItWorks from './components/HowItWorks';
 import Exchanges from './components/Exchanges';
-import CashbackLookup from './components/CashbackLookup';
-import CashbackRecord from './components/CashbackRecord';
+import HowItWorks from './components/HowItWorks';
+import Rebates from './components/Rebates';
+import Guides from './components/Guides';
+import Ecosystem from './components/Ecosystem';
 import AccountSafety from './components/AccountSafety';
-import TraderBenefitsLink from './components/TraderBenefitsLink';
 import FAQ from './components/FAQ';
+import Disclosures from './components/Disclosures';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
@@ -16,9 +16,8 @@ import Footer from './components/Footer';
 export const metadata: Metadata = { alternates: { canonical: '/' } };
 
 /**
- * V3.1 order (fee-rebate platform): hero → what you get → how cashback works →
- * exchanges → status lookup → cashback record → safety → DA Network for
- * traders cross-link → FAQ → contact.
+ * V3.2 order: hero → exchanges → how it works → rebates & payout history →
+ * guides → DA ecosystem → account safety → FAQ → disclosures → contact.
  */
 export default function HomePage() {
   return (
@@ -26,14 +25,14 @@ export default function HomePage() {
       <Header />
       <main id="main">
         <Hero />
-        <Benefits />
-        <HowItWorks />
         <Exchanges />
-        <CashbackLookup />
-        <CashbackRecord />
+        <HowItWorks />
+        <Rebates />
+        <Guides />
+        <Ecosystem />
         <AccountSafety />
-        <TraderBenefitsLink />
         <FAQ />
+        <Disclosures />
         <Contact />
       </main>
       <Footer />

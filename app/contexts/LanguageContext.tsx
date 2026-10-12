@@ -8,7 +8,7 @@ interface LangContextType {
   lang: Lang;
   t: Translations;
   ui: UiStrings;
-  /** V3 page copy (English for every language until translated). */
+  /** Page copy: EN canonical, VI translated; ko/th/id fall back to EN. */
   copy: V3Copy;
   setLang: (l: Lang) => void;
 }

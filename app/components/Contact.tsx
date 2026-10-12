@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useLang } from '../contexts/LanguageContext';
 import { contactForm, supportEmail, supportHours, supportResponseTime, telegramContact } from '@/config/contact';
 import { CONTACT_LIMITS } from '../lib/contactLimits';
-import { Check, Section, SectionHeader } from './ui';
+import { ArrowUpRight, Check, Section, SectionHeader, Send } from './ui';
 
 const EMPTY = { name: '', contact: '', message: '' };
 
@@ -90,10 +90,16 @@ export default function Contact() {
               </div>
             ))}
           </dl>
+          <a href={telegramContact.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary mt-8">
+            <Send className="size-4" />
+            {c.telegramCta}
+            <ArrowUpRight className="btn-icon size-3.5" />
+            <span className="sr-only"> ({ui.newTab})</span>
+          </a>
         </div>
 
         {contactForm.enabled ? (
-          <div className="rounded-[var(--radius-md)] border border-line bg-ink-0 p-5 md:p-8">
+          <div className="card bg-ink-0 p-5 md:p-8">
             {submitted ? (
               <div role="status" className="py-8">
                 <span className="inline-flex size-10 items-center justify-center rounded-full border border-gold/60 text-gold">
@@ -189,7 +195,7 @@ export default function Contact() {
                   </p>
                 ) : null}
 
-                <button type="submit" disabled={sending} className="btn btn-primary w-full">
+                <button type="submit" disabled={sending} className="btn btn-secondary w-full">
                   {sending ? (
                     <>
                       <span className="spinner" aria-hidden />
