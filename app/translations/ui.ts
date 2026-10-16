@@ -9,7 +9,6 @@ export interface UiStrings {
   primaryNav: string;
   newTab: string;
   partOf: string;
-  networkLink: string;
   contact: { sending: string; sendError: string };
   footer: { support: string; languages: string };
 }
@@ -22,7 +21,6 @@ const vi: UiStrings = {
   primaryNav: 'Điều hướng chính',
   newTab: 'mở trong thẻ mới',
   partOf: 'Một sản phẩm của DA Network',
-  networkLink: 'DA Network',
   contact: { sending: 'Đang gửi…', sendError: 'Gửi thất bại. Vui lòng thử lại hoặc liên hệ qua Telegram.' },
   footer: { support: 'Hỗ trợ', languages: 'Ngôn ngữ' },
 };
@@ -35,7 +33,6 @@ const en: UiStrings = {
   primaryNav: 'Primary navigation',
   newTab: 'opens in a new tab',
   partOf: 'A DA Network product',
-  networkLink: 'DA Network',
   contact: { sending: 'Sending…', sendError: 'Sending failed. Please try again or contact us on Telegram.' },
   footer: { support: 'Support', languages: 'Languages' },
 };
@@ -48,7 +45,6 @@ const ko: UiStrings = {
   primaryNav: '주요 메뉴',
   newTab: '새 탭에서 열림',
   partOf: 'DA Network의 서비스',
-  networkLink: 'DA Network',
   contact: { sending: '전송 중…', sendError: '전송에 실패했습니다. 다시 시도하시거나 텔레그램으로 문의해 주세요.' },
   footer: { support: '고객지원', languages: '언어' },
 };
@@ -61,7 +57,6 @@ const th: UiStrings = {
   primaryNav: 'เมนูหลัก',
   newTab: 'เปิดในแท็บใหม่',
   partOf: 'ผลิตภัณฑ์ของ DA Network',
-  networkLink: 'DA Network',
   contact: { sending: 'กำลังส่ง…', sendError: 'ส่งไม่สำเร็จ กรุณาลองใหม่หรือติดต่อทาง Telegram' },
   footer: { support: 'ฝ่ายสนับสนุน', languages: 'ภาษา' },
 };
@@ -74,7 +69,6 @@ const id: UiStrings = {
   primaryNav: 'Navigasi utama',
   newTab: 'terbuka di tab baru',
   partOf: 'Produk DA Network',
-  networkLink: 'DA Network',
   contact: { sending: 'Mengirim…', sendError: 'Gagal mengirim. Silakan coba lagi atau hubungi kami via Telegram.' },
   footer: { support: 'Dukungan', languages: 'Bahasa' },
 };
