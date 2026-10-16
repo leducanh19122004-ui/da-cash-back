@@ -10,8 +10,8 @@
  * referralUrl starts with https:// (see `canRegister`). Referral links must
  * stay byte-identical.
  *
- * BingX: when the owner sends the new link, set `referralUrl` and change
- * `referralLinkStatus` to 'available'. That is the only change needed.
+ * To change a link: edit `referralUrl` + `referralCode` only (links updated 2026-10-16:
+ * BingX QQ4KIN, OKX, PrimeXBT, Vantage).
  */
 
 export type PartnershipStatus = 'active' | 'new_deal_pending' | 'paused';
@@ -25,8 +25,10 @@ export interface Exchange {
   market: ExchangeMarket | null;
   partnershipStatus: PartnershipStatus;
   referralLinkStatus: ReferralLinkStatus;
-  /** DA partner registration link. */
+  /** DA partner registration link — byte-identical to what the owner supplied. */
   referralUrl: string | null;
+  /** Partner / invite code exactly as the owner supplied it (some links carry it in the path). */
+  referralCode: string | null;
   /** Initials shown in the monogram mark. */
   initials: string;
   /**
@@ -42,21 +44,21 @@ export interface Exchange {
 }
 
 export const exchanges: readonly Exchange[] = [
-  { id: 'bingx', name: 'BingX', market: 'crypto', partnershipStatus: 'active', referralLinkStatus: 'awaiting_update', referralUrl: null, initials: 'BX', brandColor: '#2A5BF6', logoSrc: null },
-  { id: 'bitunix', name: 'Bitunix', market: 'crypto', partnershipStatus: 'active', referralLinkStatus: 'available', referralUrl: 'https://www.bitunix.com/register?vipCode=Gw77', initials: 'BU', brandColor: null, logoSrc: null },
-  { id: 'ourbit', name: 'Ourbit', market: 'crypto', partnershipStatus: 'active', referralLinkStatus: 'available', referralUrl: 'https://www.ourbit.com/register?inviteCode=SY7QT9', initials: 'OB', brandColor: null, logoSrc: null },
-  { id: 'okx', name: 'OKX', market: 'crypto', partnershipStatus: 'new_deal_pending', referralLinkStatus: 'awaiting_link', referralUrl: null, initials: 'OK', brandColor: null, logoSrc: null },
-  { id: 'primexbt', name: 'PrimeXBT', market: null, partnershipStatus: 'new_deal_pending', referralLinkStatus: 'awaiting_link', referralUrl: null, initials: 'PX', brandColor: null, logoSrc: null },
-  // A deal with Vantage does NOT activate Forex anywhere on this site.
-  { id: 'vantage', name: 'Vantage', market: 'forex', partnershipStatus: 'new_deal_pending', referralLinkStatus: 'awaiting_link', referralUrl: null, initials: 'VT', brandColor: null, logoSrc: null },
-  { id: 'binance', name: 'Binance', market: 'crypto', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, initials: 'BN', brandColor: '#F0B90B', logoSrc: null },
-  { id: 'bybit', name: 'Bybit', market: 'crypto', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, initials: 'BB', brandColor: '#F7A600', logoSrc: null },
-  { id: 'mexc', name: 'MEXC', market: 'crypto', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, initials: 'MX', brandColor: null, logoSrc: null },
-  { id: 'bitget', name: 'Bitget', market: 'crypto', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, initials: 'BG', brandColor: '#00C8D7', logoSrc: null },
-  { id: 'gate', name: 'Gate.io', market: 'crypto', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, initials: 'GT', brandColor: null, logoSrc: null },
-  { id: 'kucoin', name: 'KuCoin', market: 'crypto', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, initials: 'KC', brandColor: '#23AF91', logoSrc: null },
-  { id: 'exness', name: 'Exness', market: 'forex', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, initials: 'EX', brandColor: '#FFCF01', logoSrc: null },
-  { id: 'xm', name: 'XM', market: 'forex', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, initials: 'XM', brandColor: null, logoSrc: null },
+  { id: 'bingx', name: 'BingX', market: 'crypto', partnershipStatus: 'active', referralLinkStatus: 'available', referralUrl: 'https://bingxdao.com/invite/QQ4KIN/', referralCode: 'QQ4KIN', initials: 'BX', brandColor: '#2A5BF6', logoSrc: null },
+  { id: 'bitunix', name: 'Bitunix', market: 'crypto', partnershipStatus: 'active', referralLinkStatus: 'available', referralUrl: 'https://www.bitunix.com/register?vipCode=Gw77', referralCode: 'Gw77', initials: 'BU', brandColor: null, logoSrc: null },
+  { id: 'ourbit', name: 'Ourbit', market: 'crypto', partnershipStatus: 'active', referralLinkStatus: 'available', referralUrl: 'https://www.ourbit.com/register?inviteCode=SY7QT9', referralCode: 'SY7QT9', initials: 'OB', brandColor: null, logoSrc: null },
+  { id: 'okx', name: 'OKX', market: 'crypto', partnershipStatus: 'active', referralLinkStatus: 'available', referralUrl: 'https://okx.com/join/HE63PH2H', referralCode: 'HE63PH2H', initials: 'OK', brandColor: null, logoSrc: null },
+  { id: 'primexbt', name: 'PrimeXBT', market: null, partnershipStatus: 'active', referralLinkStatus: 'available', referralUrl: 'https://go.primexbt.direct/visit/?bta=56672&brand=primexbt', referralCode: '56672', initials: 'PX', brandColor: null, logoSrc: null },
+  // Owner supplied the Vantage registration link on 2026-10-16 → open for registration.
+  { id: 'vantage', name: 'Vantage', market: 'forex', partnershipStatus: 'active', referralLinkStatus: 'available', referralUrl: 'https://vigco.co/la-com-inv/vi/sDT0SDFC', referralCode: 'sDT0SDFC', initials: 'VT', brandColor: null, logoSrc: null },
+  { id: 'binance', name: 'Binance', market: 'crypto', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, referralCode: null, initials: 'BN', brandColor: '#F0B90B', logoSrc: null },
+  { id: 'bybit', name: 'Bybit', market: 'crypto', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, referralCode: null, initials: 'BB', brandColor: '#F7A600', logoSrc: null },
+  { id: 'mexc', name: 'MEXC', market: 'crypto', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, referralCode: null, initials: 'MX', brandColor: null, logoSrc: null },
+  { id: 'bitget', name: 'Bitget', market: 'crypto', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, referralCode: null, initials: 'BG', brandColor: '#00C8D7', logoSrc: null },
+  { id: 'gate', name: 'Gate.io', market: 'crypto', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, referralCode: null, initials: 'GT', brandColor: null, logoSrc: null },
+  { id: 'kucoin', name: 'KuCoin', market: 'crypto', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, referralCode: null, initials: 'KC', brandColor: '#23AF91', logoSrc: null },
+  { id: 'exness', name: 'Exness', market: 'forex', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, referralCode: null, initials: 'EX', brandColor: '#FFCF01', logoSrc: null },
+  { id: 'xm', name: 'XM', market: 'forex', partnershipStatus: 'paused', referralLinkStatus: 'none', referralUrl: null, referralCode: null, initials: 'XM', brandColor: null, logoSrc: null },
 ];
 
 /** The only condition under which a Register CTA (or the status lookup) is offered. */
@@ -81,6 +83,7 @@ export const pausedExchanges = exchanges.filter((e) => e.partnershipStatus === '
 const CODE_PARAMS = ['vipCode', 'inviteCode', 'ref', 'referralCode', 'code'] as const;
 export function partnerCode(e: Exchange): string | null {
   if (!canRegister(e)) return null;
+  if (e.referralCode) return e.referralCode;
   try {
     const q = new URL(e.referralUrl).searchParams;
     for (const k of CODE_PARAMS) {

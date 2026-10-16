@@ -232,7 +232,8 @@ export default function Exchanges() {
           {c.shown(list.length)}
         </p>
 
-        {market === 'forex' ? (
+        {/* Only while no Forex exchange is open for registration. */}
+        {market === 'forex' && !exchanges.some((e) => e.market === 'forex' && canRegister(e)) ? (
           <p className="flex items-start gap-2.5 border-b border-line bg-ink-0/40 px-4 py-3 text-sm text-muted md:px-6">
             <Info className="mt-0.5 size-4 shrink-0 text-gold" />
             {c.forexNote}
