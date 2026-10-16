@@ -1,9 +1,10 @@
 'use client';
 import { useLang } from '../contexts/LanguageContext';
 import { telegramContact } from '@/config/contact';
-import { Ban, IdCard, Key, Lock, Shield, Smartphone, Vault } from './ui';
+import { telegramLinkProps } from '../lib/track';
+import { Ban, IdCard, Key, Shield } from './ui';
 
-const ICONS = [IdCard, Lock, Smartphone, Key, Vault, Ban];
+const ICONS = [IdCard, Key, Ban];
 
 /** One compact safety strip + the impersonation note. */
 export default function AccountSafety() {
@@ -23,7 +24,7 @@ export default function AccountSafety() {
             </h2>
           </div>
 
-          <ul className="mt-6 grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-6 grid gap-x-6 gap-y-3 md:grid-cols-3">
             {s.items.map((item, i) => {
               const Icon = ICONS[i] ?? Shield;
               return (
@@ -37,7 +38,7 @@ export default function AccountSafety() {
 
           <p role="note" className="mt-6 border-t border-line pt-5 text-[0.9375rem] leading-relaxed text-muted">
             {s.warnBody}{' '}
-            <a href={telegramContact.url} target="_blank" rel="noopener noreferrer" className="link-underline font-medium">
+            <a {...telegramLinkProps('safety')} className="link-underline font-medium">
               {telegramContact.handle}
               <span className="sr-only"> ({ui.newTab})</span>
             </a>

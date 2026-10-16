@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useLang } from '../contexts/LanguageContext';
 import { contactForm, supportEmail, supportHours, supportResponseTime, telegramContact } from '@/config/contact';
 import { CONTACT_LIMITS } from '../lib/contactLimits';
+import { telegramLinkProps } from '../lib/track';
 import { ArrowUpRight, Check, Section, SectionHeader, Send } from './ui';
 
 const EMPTY = { name: '', contact: '', message: '' };
@@ -90,7 +91,7 @@ export default function Contact() {
               </div>
             ))}
           </dl>
-          <a href={telegramContact.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary mt-8">
+          <a {...telegramLinkProps('contact')} className="btn btn-primary mt-8">
             <Send className="size-4" />
             {c.telegramCta}
             <ArrowUpRight className="btn-icon size-3.5" />

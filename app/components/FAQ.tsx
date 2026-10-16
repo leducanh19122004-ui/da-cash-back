@@ -24,7 +24,6 @@ export default function FAQ() {
   const terms = publishedTerms();
   const items = f.items({
     hasPublishedTerms: terms.length > 0,
-    tokenizedConfirmed: terms.some((t) => t.eligibleProducts?.includes('tokenized-stocks')),
     telegram: telegramContact.handle,
   });
   const [open, setOpen] = useState<number | null>(null);

@@ -4,8 +4,8 @@
  * The owner has NOT provided rebate rates, eligible products or payout
  * timing for any exchange, so every field is null. Do not fill a field from
  * an estimate or an old % rate. Terms render only when `isPublishedTerms`
- * passes; otherwise the site shows "Rebate terms are published per exchange
- * once confirmed."
+ * passes; otherwise each exchange card shows "Rate pending confirmation" and
+ * the calculator shows estimated fees only (no rebate estimate).
  */
 import { PUBLISHABLE_STATUSES, type VerificationStatus } from './ecosystem';
 import { exchangeById } from './exchanges';
@@ -20,6 +20,12 @@ export interface RebateTerms {
    * `isPublishedTerms`. Never fill from an estimate or the old % model.
    */
   rebateRate: string | null;
+  /**
+   * The same confirmed rate as a number: percent of eligible trading fees
+   * returned (e.g. 30 → "30% of eligible fees" and "≈ $30 back per $100 in
+   * fees"). Drives the card headline and the calculator. null = not confirmed.
+   */
+  rebatePct: number | null;
   /** How the rebate is calculated, e.g. "On trading fees paid, net of exchange discounts". */
   calculationBasis: string | null;
   /** Plain-language rebate description as confirmed with the exchange, e.g. "A share of the trading fees you pay". */
@@ -38,6 +44,7 @@ export interface RebateTerms {
 const unconfirmed = (exchangeId: string): RebateTerms => ({
   exchangeId,
   rebateRate: null,
+  rebatePct: null,
   calculationBasis: null,
   rebateDescription: null,
   eligibleProducts: null,
@@ -48,8 +55,15 @@ const unconfirmed = (exchangeId: string): RebateTerms => ({
   verificationStatus: 'NOT_AVAILABLE',
 });
 
-/** One entry per partner exchange (partnershipStatus 'active'). */
-export const rebateTerms: readonly RebateTerms[] = [unconfirmed('bingx'), unconfirmed('bitunix'), unconfirmed('ourbit')];
+/** One entry per exchange open for registration. Nothing is confirmed yet. */
+export const rebateTerms: readonly RebateTerms[] = [
+  unconfirmed('bingx'),
+  unconfirmed('bitunix'),
+  unconfirmed('ourbit'),
+  unconfirmed('okx'),
+  unconfirmed('primexbt'),
+  unconfirmed('vantage'),
+];
 
 export function isPublishedTerms(t: RebateTerms, today = new Date().toISOString().slice(0, 10)): boolean {
   const ex = exchangeById(t.exchangeId);
@@ -64,4 +78,16 @@ export function isPublishedTerms(t: RebateTerms, today = new Date().toISOString(
 }
 
 export const termsFor = (exchangeId: string) => rebateTerms.find((t) => t.exchangeId === exchangeId) ?? null;
+
+/** Published terms for an exchange, or null while pending. */
+export function confirmedTerms(exchangeId: string): RebateTerms | null {
+  const t = termsFor(exchangeId);
+  return t && isPublishedTerms(t) ? t : null;
+}
+
+/** Confirmed numeric rate (percent of eligible fees), or null. Never estimated. */
+export function confirmedRebatePct(exchangeId: string): number | null {
+  const pct = confirmedTerms(exchangeId)?.rebatePct;
+  return typeof pct === 'number' && Number.isFinite(pct) && pct > 0 ? pct : null;
+}
 export const publishedTerms = () => rebateTerms.filter((t) => isPublishedTerms(t));

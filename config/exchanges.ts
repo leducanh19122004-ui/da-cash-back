@@ -70,10 +70,22 @@ export const exchangeById = (id: string) => exchanges.find((e) => e.id === id);
 /** Open for registration today (Register CTA + lookup). */
 export const registrableExchanges = exchanges.filter(canRegister);
 
-/** Groups by partnership status, data order kept (BingX stays first among partners). */
-export const partnerExchanges = exchanges.filter((e) => e.partnershipStatus === 'active');
-export const newPartnerExchanges = exchanges.filter((e) => e.partnershipStatus === 'new_deal_pending');
-export const pausedExchanges = exchanges.filter((e) => e.partnershipStatus === 'paused');
+/**
+ * What a trader can do today (the availability badge):
+ *   open        — canRegister → "Open for registration"
+ *   linkPending — still a partner, DA link not ready → "Registration link pending"
+ *   unavailable — paused / no link → "Temporarily unavailable"
+ */
+export type Availability = 'open' | 'linkPending' | 'unavailable';
+export function availability(e: Exchange): Availability {
+  if (canRegister(e)) return 'open';
+  if (
+    e.partnershipStatus !== 'paused' &&
+    (e.referralLinkStatus === 'awaiting_update' || e.referralLinkStatus === 'awaiting_link')
+  )
+    return 'linkPending';
+  return 'unavailable';
+}
 
 /**
  * Partner / invite code, read from the referral URL query (real data — it is
@@ -99,7 +111,7 @@ export function partnerCode(e: Exchange): string | null {
 /** Derived counts — never hardcode them in copy. */
 export const exchangeCounts = {
   open: registrableExchanges.length,
-  linkUpdating: exchanges.filter((e) => !canRegister(e) && e.referralLinkStatus === 'awaiting_update').length,
-  newPartners: newPartnerExchanges.length,
-  paused: pausedExchanges.length,
+  linkPending: exchanges.filter((e) => availability(e) === 'linkPending').length,
+  unavailable: exchanges.filter((e) => availability(e) === 'unavailable').length,
 };
+export type ExchangeCounts = typeof exchangeCounts;

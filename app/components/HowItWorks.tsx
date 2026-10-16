@@ -1,9 +1,10 @@
 'use client';
 import { useLang } from '../contexts/LanguageContext';
 import { telegramContact, uidSubmission } from '@/config/contact';
-import { ArrowUpRight, Building, ChartLine, IdCard, InView, Rebate, Section, SectionHeader } from './ui';
+import { telegramLinkProps, track, trackAttrs } from '../lib/track';
+import { ArrowUpRight, Building, IdCard, InView, Rebate, Refresh, Section, SectionHeader, Send } from './ui';
 
-const ICONS = [Building, IdCard, ChartLine, Rebate];
+const ICONS = [Building, IdCard, Rebate];
 
 export default function HowItWorks() {
   const { copy, ui } = useLang();
@@ -19,10 +20,10 @@ export default function HowItWorks() {
   const steps = h.steps(uidStep);
 
   return (
-    <Section id="how-it-works" labelledBy="how-title" tone="raised">
+    <Section id="how-it-works" labelledBy="how-title">
       <SectionHeader id="how-title" eyebrow={h.eyebrow} title={h.title} />
 
-      <InView as="ol" className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <InView as="ol" className="mt-12 grid gap-4 md:grid-cols-3">
         {steps.map((s, i) => {
           const Icon = ICONS[i];
           return (
@@ -45,7 +46,9 @@ export default function HowItWorks() {
                   href={uidSubmission.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="link-underline mt-auto inline-flex min-h-10 items-center gap-1 pt-3 text-sm"
+                  {...trackAttrs('telegram_support_click', { placement: 'how_uid' })}
+                  onClick={() => track('telegram_support_click', { placement: 'how_uid' })}
+                  className="link-underline mt-auto inline-flex min-h-10 items-center gap-1 self-start pt-3 text-sm"
                 >
                   {h.uidLink}
                   <ArrowUpRight className="size-3.5" />
@@ -57,9 +60,31 @@ export default function HowItWorks() {
         })}
       </InView>
 
-      <div role="note" className="mt-6 rounded-[var(--radius-md)] border-l-2 border-gold bg-ink-0 px-5 py-4 md:px-6">
-        <p className="text-[0.9375rem] font-semibold text-gold-soft">{h.responsibleTitle}</p>
-        <p className="mt-1 text-[0.9375rem] leading-relaxed text-fg/85">{h.responsible}</p>
+      {/* Existing exchange users: separate from the 3-step new-account flow. Targeted by #existing-account. */}
+      <div
+        id="existing-account"
+        className="mt-6 flex scroll-mt-24 flex-col gap-5 rounded-[var(--radius-lg)] border border-line bg-ink-1 p-5 md:flex-row md:items-start md:justify-between md:gap-10 md:p-6"
+      >
+        <div className="flex gap-4">
+          <span className="icon-tile">
+            <Refresh />
+          </span>
+          <div>
+            <h3 className="text-lg font-semibold">{h.existingTitle}</h3>
+            <ul className="mt-2 grid gap-1.5">
+              {h.existingPoints.map((p) => (
+                <li key={p} className="text-[0.9375rem] leading-relaxed text-muted">
+                  {p}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <a {...telegramLinkProps('how_existing')} className="btn btn-secondary shrink-0 self-start">
+          <Send className="size-4" />
+          {h.existingCta}
+          <span className="sr-only"> ({ui.newTab})</span>
+        </a>
       </div>
     </Section>
   );

@@ -8,6 +8,7 @@ import { langLabels } from '../translations/ui';
 import { cn } from './ui';
 import { BRAND, URLS, networkUrl, tradersUrl } from '@/config/ecosystem';
 import { supportEmail, telegramContact } from '@/config/contact';
+import { telegramLinkProps } from '../lib/track';
 
 const LANGS: Lang[] = ['vi', 'en', 'ko', 'th', 'id'];
 const linkCls = 'inline-flex min-h-9 items-center text-sm text-muted transition-colors hover:text-fg';
@@ -30,12 +31,11 @@ export default function Footer() {
 
   const navLinks = [
     { id: 'exchanges', label: n.exchanges },
+    { id: 'calculator', label: n.calculator },
     { id: 'how-it-works', label: n.how },
-    { id: 'rebates', label: n.rebates },
-    { id: 'guides', label: n.guides },
-    { id: 'ecosystem', label: n.ecosystem },
-    { id: 'safety', label: n.safety },
+    { id: 'payouts', label: n.payouts },
     { id: 'faq', label: n.faq },
+    { id: 'guides', label: n.guides },
     { id: 'contact', label: n.contact },
   ];
   const legalLinks = [
@@ -79,12 +79,7 @@ export default function Footer() {
                 <div>
                   <dt className="text-faint">{copy.contact.telegram}</dt>
                   <dd>
-                    <a
-                      href={telegramContact.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="link-underline inline-flex min-h-9 items-center"
-                    >
+                    <a {...telegramLinkProps('footer')} className="link-underline inline-flex min-h-9 items-center">
                       {telegramContact.handle}
                       <span className="sr-only"> ({ui.newTab})</span>
                     </a>

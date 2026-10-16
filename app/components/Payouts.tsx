@@ -1,8 +1,10 @@
 'use client';
 import { useLang } from '../contexts/LanguageContext';
 import { telegramContact } from '@/config/contact';
+import { exchangeCounts } from '@/config/exchanges';
 import { cashbackRecord, isPublicMetric, type Metric } from '@/config/metrics';
-import { Clock, Info, Lock, Search, Section, SectionHeader, Send, cn } from './ui';
+import { telegramLinkProps } from '../lib/track';
+import { Check, Clock, Info, Lock, Search, Section, SectionHeader, Send, cn } from './ui';
 
 const fmt = (m: Metric) =>
   typeof m.value === 'number'
@@ -10,23 +12,32 @@ const fmt = (m: Metric) =>
     : String(m.value);
 
 /**
- * Rebate status + payout history.
- * - No lookup form: there is no real lookup, and a UID alone must never
- *   reveal account data (see app/lib/cashbackLookup.ts for the required design).
- * - Payout history: the three payment states are explained as a legend only.
- *   Figures render only for public 'paid' metrics (config/metrics.ts); the
- *   accrued/approved pipeline is never rendered or summed.
+ * Payouts — the trust section. Only supportable facts: the derived count of
+ * exchanges open for registration, the three payout states, and payout
+ * figures ONLY for public 'paid' metrics (config/metrics.ts). The
+ * accrued/approved pipeline is never rendered or summed.
+ * No lookup form: a UID alone must never reveal account data
+ * (see app/lib/cashbackLookup.ts for the required design).
  */
-export default function Rebates() {
+export default function Payouts() {
   const { copy, ui } = useLang();
-  const r = copy.rebates;
+  const r = copy.payouts;
   const published = cashbackRecord.filter(isPublicMetric);
 
   return (
-    <Section id="rebates" labelledBy="rebates-title">
-      <SectionHeader id="rebates-title" eyebrow={r.eyebrow} title={r.title} />
+    <Section id="payouts" labelledBy="payouts-title" tone="raised">
+      <SectionHeader id="payouts-title" eyebrow={r.eyebrow} title={r.title} />
 
-      <div className="mt-12 grid gap-4 lg:grid-cols-2">
+      <ul className="mt-8 flex flex-col gap-x-7 gap-y-2 text-[0.9375rem] text-fg/90 sm:flex-row sm:flex-wrap">
+        {r.facts(exchangeCounts.open).map((f) => (
+          <li key={f} className="inline-flex items-center gap-2">
+            <Check className="size-4 shrink-0 text-gold" />
+            {f}
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-10 grid gap-4 lg:grid-cols-[1fr_1.4fr]">
         {/* Rebate status */}
         <div className="card flex flex-col p-5 md:p-7">
           <div className="flex items-center gap-3">
@@ -35,7 +46,10 @@ export default function Rebates() {
             </span>
             <h3 className="text-xl font-semibold">{r.lookupTitle}</h3>
           </div>
-          <p role="status" className="mt-6 inline-flex items-center gap-2 self-start rounded-[var(--radius-sm)] border border-line-strong bg-ink-2 px-3 py-1.5 text-sm text-fg">
+          <p
+            role="status"
+            className="mt-6 inline-flex items-center gap-2 self-start rounded-[var(--radius-sm)] border border-line-strong bg-ink-2 px-3 py-1.5 text-sm text-fg"
+          >
             <Info className="size-4 text-gold" />
             {r.lookupStatus}
           </p>
@@ -44,7 +58,7 @@ export default function Rebates() {
             {r.lookupBody}
           </p>
           <div className="mt-auto pt-6">
-            <a href={telegramContact.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+            <a {...telegramLinkProps('payouts')} className="btn btn-primary">
               <Send className="size-4" />
               {r.lookupCta} ({telegramContact.handle})
               <span className="sr-only"> ({ui.newTab})</span>
@@ -52,7 +66,7 @@ export default function Rebates() {
           </div>
         </div>
 
-        {/* Payout history */}
+        {/* Payout states + published figures */}
         <div className="card flex flex-col p-5 md:p-7">
           <div className="flex items-center gap-3">
             <span className="icon-tile">

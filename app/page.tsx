@@ -2,12 +2,13 @@ import type { Metadata } from 'next';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Exchanges from './components/Exchanges';
+import Calculator from './components/Calculator';
 import HowItWorks from './components/HowItWorks';
-import Rebates from './components/Rebates';
-import Guides from './components/Guides';
-import Ecosystem from './components/Ecosystem';
+import Payouts from './components/Payouts';
 import AccountSafety from './components/AccountSafety';
 import FAQ from './components/FAQ';
+import Guides from './components/Guides';
+import Ecosystem from './components/Ecosystem';
 import Disclosures from './components/Disclosures';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -16,8 +17,9 @@ import Footer from './components/Footer';
 export const metadata: Metadata = { alternates: { canonical: '/' } };
 
 /**
- * V3.2 order: hero → exchanges → how it works → rebates & payout history →
- * guides → DA ecosystem → account safety → FAQ → disclosures → contact.
+ * V3.3 conversion order: compact hero → exchanges (the central element) →
+ * rebate calculator → how it works (+ existing accounts) → payouts → account
+ * safety → FAQ → guides → DA ecosystem → disclosures → contact.
  */
 export default function HomePage() {
   return (
@@ -26,12 +28,13 @@ export default function HomePage() {
       <main id="main">
         <Hero />
         <Exchanges />
+        <Calculator />
         <HowItWorks />
-        <Rebates />
-        <Guides />
-        <Ecosystem />
+        <Payouts />
         <AccountSafety />
         <FAQ />
+        <Guides />
+        <Ecosystem />
         <Disclosures />
         <Contact />
       </main>

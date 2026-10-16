@@ -1,12 +1,12 @@
 'use client';
 import { useId, useState } from 'react';
 import { useLang } from '../contexts/LanguageContext';
-import { telegramContact } from '@/config/contact';
 import { exchangeById } from '@/config/exchanges';
 import { videoGuides } from '@/config/guides';
-import { ArrowUpRight, ChevronDown, IdCard, Play, Refresh, Section, SectionHeader, Send, UserPlus, cn } from './ui';
+import { telegramLinkProps } from '../lib/track';
+import { ArrowUpRight, ChevronDown, IdCard, Play, Section, SectionHeader, Send, UserPlus, cn } from './ui';
 
-const ICONS = { register: UserPlus, uid: IdCard, existing: Refresh } as Record<string, (p: { className?: string }) => React.JSX.Element>;
+const ICONS = { register: UserPlus, uid: IdCard } as Record<string, (p: { className?: string }) => React.JSX.Element>;
 
 function GuideCard({ item }: { item: { id: string; title: string; summary: string; steps: string[] } }) {
   const { copy } = useLang();
@@ -57,10 +57,10 @@ export default function Guides() {
   const videos = videoGuides();
 
   return (
-    <Section id="guides" labelledBy="guides-title" tone="raised">
+    <Section id="guides" labelledBy="guides-title" rhythm="quiet">
       <SectionHeader id="guides-title" eyebrow={g.eyebrow} title={g.title} />
 
-      <ul className="mt-12 grid items-start gap-4 md:grid-cols-3">
+      <ul className="mt-10 grid items-start gap-4 md:grid-cols-2">
         {g.items.map((item) => (
           <GuideCard key={item.id} item={item} />
         ))}
@@ -88,12 +88,7 @@ export default function Guides() {
         ) : (
           <p className="text-sm text-muted">{g.perExchange}</p>
         )}
-        <a
-          href={telegramContact.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn btn-secondary self-start md:self-auto"
-        >
+        <a {...telegramLinkProps('guides')} className="btn btn-secondary self-start md:self-auto">
           <Send className="size-4" />
           {g.ask}
           <ArrowUpRight className="btn-icon size-3.5" />
