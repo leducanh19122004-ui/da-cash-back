@@ -1,11 +1,11 @@
 /**
  * Trading-fee rebate terms, per exchange.
  *
- * The owner has NOT provided rebate rates, eligible products or payout
- * timing for any exchange, so every field is null. Do not fill a field from
- * an estimate or an old % rate. Terms render only when `isPublishedTerms`
- * passes; otherwise each exchange card shows "Rate pending confirmation" and
- * the calculator shows estimated fees only (no rebate estimate).
+ * Rebate rates confirmed by the owner on 2026-10-19 (BingX, Bitunix, Ourbit,
+ * OKX). Eligible products and payout timing are still not provided, so those
+ * fields stay null. Do not fill a field from an estimate. Terms render only
+ * when `isPublishedTerms` passes; otherwise the card shows "Rate pending
+ * confirmation" and the calculator shows estimated fees only.
  */
 import { PUBLISHABLE_STATUSES, type VerificationStatus } from './ecosystem';
 import { exchangeById } from './exchanges';
@@ -55,12 +55,24 @@ const unconfirmed = (exchangeId: string): RebateTerms => ({
   verificationStatus: 'NOT_AVAILABLE',
 });
 
-/** One entry per exchange open for registration. Nothing is confirmed yet. */
+/** A rate the owner confirmed for an exchange's partner programme (rate only). */
+const ownerConfirmedRate = (exchangeId: string, pct: number, effectiveFrom: string): RebateTerms => ({
+  ...unconfirmed(exchangeId),
+  rebateRate: `${pct}% of trading fees`,
+  rebatePct: pct,
+  rebateDescription: `${pct}% of the trading fees you pay`,
+  effectiveFrom,
+  verificationStatus: 'VERIFIED',
+});
+
+/** One entry per exchange open for registration. */
 export const rebateTerms: readonly RebateTerms[] = [
-  unconfirmed('bingx'),
-  unconfirmed('bitunix'),
-  unconfirmed('ourbit'),
-  unconfirmed('okx'),
+  // Rates confirmed by the owner on 2026-10-19.
+  ownerConfirmedRate('bingx', 50, '2026-10-19'),
+  ownerConfirmedRate('bitunix', 60, '2026-10-19'),
+  ownerConfirmedRate('ourbit', 60, '2026-10-19'),
+  ownerConfirmedRate('okx', 50, '2026-10-19'),
+  // No rate provided yet.
   unconfirmed('primexbt'),
   unconfirmed('vantage'),
 ];
