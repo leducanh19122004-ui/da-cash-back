@@ -134,7 +134,11 @@ function Card({ e }: { e: Exchange }) {
                 <p className="mt-1.5 text-2xl leading-tight font-semibold text-gold-soft tabular-nums">
                   {pct !== null ? c.rateValue(formatPct(pct)) : (terms.rebateRate ?? terms.rebateDescription)}
                 </p>
-                {pct !== null ? <p className="mt-1 text-sm text-muted">{c.per100(formatUsd(pct))}</p> : null}
+                {terms.rebatePerLotUsd !== null ? (
+                  <p className="mt-1 text-sm text-muted">{c.perLot(formatUsd(terms.rebatePerLotUsd))}</p>
+                ) : pct !== null ? (
+                  <p className="mt-1 text-sm text-muted">{c.per100(formatUsd(pct))}</p>
+                ) : null}
               </>
             ) : (
               <p className="mt-1.5 text-[1.0625rem] font-medium text-muted">{c.ratePending}</p>
